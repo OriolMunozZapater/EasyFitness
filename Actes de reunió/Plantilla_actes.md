@@ -14,5 +14,5 @@
 
 ![Acta de la reunió](https://images.cooltext.com/5654758.png)
 
-DESCRIPCIO DE LA REUNIO
+- DESCRIPCIO DE LA REUNIO
 ---
