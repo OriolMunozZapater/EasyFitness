@@ -7,10 +7,10 @@
 
     <!-- Título de la App -->
     <TextView
-        android:id="@+id/tvEasyFitness"
+        android:id="@+id/tvCreateAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EasyFitness"
+        android:text="Create Account"
         android:textSize="24sp"
         android:textColor="@color/orange"
         android:textStyle="bold"
@@ -19,12 +19,12 @@
 
     <!-- Campo de Email -->
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etNewEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:layout_below="@id/tvEasyFitness"
+        android:layout_below="@id/tvCreateAccount"
         android:layout_marginTop="40dp"
         android:textColor="@android:color/white"
         android:textColorHint="@color/orange"
@@ -32,37 +32,39 @@
 
     <!-- Campo de Password -->
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etNewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_below="@id/etEmail"
+        android:layout_below="@id/etNewEmail"
         android:layout_marginTop="20dp"
         android:textColor="@android:color/white"
         android:textColorHint="@color/orange"
         android:backgroundTint="@color/orange"/>
 
-    <!-- Botón de Login -->
-    <Button
-        android:id="@+id/btnLogin"
+    <!-- Campo de Confirm Password -->
+    <EditText
+        android:id="@+id/etConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:backgroundTint="@color/orange"
-        android:textColor="@color/black"
-        android:layout_below="@id/etPassword"
-        android:layout_marginTop="20dp"/>
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:layout_below="@id/etNewPassword"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/orange"
+        android:backgroundTint="@color/orange"/>
 
     <!-- Botón de Crear Cuenta -->
     <Button
-        android:id="@+id/btnCreateAccount"
+        android:id="@+id/btnSubmitCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create Account"
-        android:background="@android:color/transparent"
-        android:textColor="@color/orange"
-        android:layout_below="@id/btnLogin"
-        android:layout_marginTop="16dp"/>
+        android:backgroundTint="@color/orange"
+        android:textColor="@color/black"
+        android:layout_below="@id/etConfirmPassword"
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>
