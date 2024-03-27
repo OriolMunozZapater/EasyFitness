@@ -1,17 +1,79 @@
 package com.uablis.easyfitness;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
 import android.view.View;
-import android.content.Intent;
+import androidx.appcompat.app.AlertDialog;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 public class CreateAccountActivity extends AppCompatActivity {
+
+    private EditText etNewEmail, etNewPassword, etConfirmPassword;
+    private Button btnSubmitCreateAccount;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
+        etNewEmail = findViewById(R.id.etNewEmail);
+        etNewPassword = findViewById(R.id.etNewPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmPassword);
+        btnSubmitCreateAccount = findViewById(R.id.btnSubmitCreateAccount);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        btnSubmitCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etNewEmail.getText().toString().trim();
+                String password = etNewPassword.getText().toString().trim();
+                String confirmPassword = etConfirmPassword.getText().toString().trim();
+                createAccount(email, password, confirmPassword);
+            }
+        });
     }
+
+    private void createAccount(String email, String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            showAlert("Error", "Passwords do not match.");
+            return;
+        }
+
+        if (password.length() < 6) {
+            showAlert("Error", "Password must be at least 6 characters long.");
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            showAlert("Success", "Account created successfully.");
+                            finish();
+                        } else {
+                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "An error occurred";
+                            showAlert("Registration Failed", errorMessage);
+                        }
+                    }
+                });
+    }
+
+    private void showAlert(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this, R.style.AlertDialogTheme);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 }

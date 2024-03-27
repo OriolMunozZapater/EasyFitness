@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1078902162523",
+    "project_id": "easyfitness-ac842",
+    "storage_bucket": "easyfitness-ac842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078902162523:android:bfd1934de893365ed8ab7e",
+        "android_client_info": {
+          "package_name": "com.uablis.easyfitness"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcmQo71pYFVy0DMrGpNbJL8H6SJ878oHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
