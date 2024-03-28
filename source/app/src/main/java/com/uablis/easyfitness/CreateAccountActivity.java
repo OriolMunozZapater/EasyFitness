@@ -42,6 +42,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void createAccount(String email, String password, String confirmPassword) {
+
+        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            showAlert("Error", "All fields are required.");
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
             showAlert("Error", "Passwords do not match.");
             return;

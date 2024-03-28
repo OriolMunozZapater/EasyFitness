@@ -10,16 +10,20 @@ import android.view.View;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin, btnCreateAccount;
+    private TextView tvRecoverPassword;
     private FirebaseAuth mAuth;
 
     @Override
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
-
+        tvRecoverPassword = findViewById(R.id.tvRecoverPassword);
         mAuth = FirebaseAuth.getInstance();
 
         // Listener para el botón de Login
@@ -48,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openCreateAccountScreen();
+            }
+        });
+
+        tvRecoverPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PasswordRecoveryActivity.class);
+                startActivity(intent);
             }
         });
     }
