@@ -2,69 +2,84 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    android:padding="32dp">
+    android:background="#202020">
 
-    <!-- Título de la App -->
-    <TextView
-        android:id="@+id/tvCreateAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:textSize="24sp"
-        android:textColor="@color/orange"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
-
-    <!-- Campo de Email -->
-    <EditText
-        android:id="@+id/etNewEmail"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_below="@id/tvCreateAccount"
-        android:layout_marginTop="40dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/orange"
-        android:backgroundTint="@color/orange"/>
+        android:layout_height="90dp"
+        android:background="#A8711D"
+        android:padding="32dp">
 
-    <!-- Campo de Password -->
-    <EditText
-        android:id="@+id/etNewPassword"
+        <!-- Create account -->
+        <TextView
+            android:id="@+id/tvCreateAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_below="@id/etNewEmail"
-        android:layout_marginTop="20dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/orange"
-        android:backgroundTint="@color/orange"/>
+        android:layout_height="match_parent"
+        android:background="#202020"
+        android:padding="32dp"
+        android:layout_below="@id/layout1">
 
-    <!-- Campo de Confirm Password -->
-    <EditText
-        android:id="@+id/etConfirmPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"
-        android:layout_below="@id/etNewPassword"
-        android:layout_marginTop="20dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/orange"
-        android:backgroundTint="@color/orange"/>
+        <!-- Campo de Email -->
+        <EditText
+            android:id="@+id/etNewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="40dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#A8711D"
+            android:backgroundTint="#A8711D"/>
 
-    <!-- Botón de Crear Cuenta -->
-    <Button
-        android:id="@+id/btnSubmitCreateAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create Account"
-        android:backgroundTint="@color/orange"
-        android:textColor="@color/black"
-        android:layout_below="@id/etConfirmPassword"
-        android:layout_marginTop="20dp"/>
+        <!-- Campo de Password -->
+        <EditText
+            android:id="@+id/etNewPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:layout_below="@id/etNewEmail"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#A8711D"
+            android:backgroundTint="#A8711D"/>
 
+        <!-- Campo de Confirm Password -->
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:layout_below="@id/etNewPassword"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#A8711D"
+            android:backgroundTint="#A8711D"/>
+
+        <!-- Botón de Crear Cuenta -->
+        <Button
+            android:id="@+id/btnSubmitCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:backgroundTint="#A8711D"
+            android:textColor="@color/black"
+            android:layout_below="@id/etConfirmPassword"
+            android:layout_marginTop="20dp"/>
+
+    </RelativeLayout>
 </RelativeLayout>
