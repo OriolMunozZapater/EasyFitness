@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Login", "signInWithEmail:success");
-                            openHomeScreen(); // Método para abrir la pantalla de inicio
+                            openHomeScreen();
                         } else {
                             Log.w("Login", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",

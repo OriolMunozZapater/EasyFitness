@@ -1,10 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:background="@color/black"
+    android:padding="32dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Título de la App -->
+    <TextView
+        android:id="@+id/tvEasyFitness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EasyFitness"
+        android:textSize="24sp"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Campo de Email -->
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/tvEasyFitness"
+        android:layout_marginTop="40dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/orange"
+        android:backgroundTint="@color/orange"/>
+
+    <!-- Campo de Password -->
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_below="@id/etEmail"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/orange"
+        android:backgroundTint="@color/orange"/>
+
+    <!-- Botón de Login -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:backgroundTint="@color/orange"
+        android:textColor="@color/black"
+        android:layout_below="@id/etPassword"
+        android:layout_marginTop="20dp"/>
+
+    <!-- TextView para la recuperación de contraseña -->
+    <TextView
+        android:id="@+id/tvRecoverPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot Password?"
+        android:textColor="@color/orange"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/btnLogin"
+        android:layout_centerHorizontal="true" />
+
+
+    <!-- Botón de Crear Cuenta -->
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLogin"
+        android:layout_marginTop="54dp"
+        android:background="@android:color/transparent"
+        android:text="Create Account"
+        android:textColor="@color/orange" />
+
+
+</RelativeLayout>
