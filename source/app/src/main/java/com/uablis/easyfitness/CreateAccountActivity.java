@@ -2,10 +2,16 @@ package com.uablis.easyfitness;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
 import android.view.View;
+import android.widget.ImageView;
+
+
 import androidx.appcompat.app.AlertDialog;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +22,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText etNewEmail, etNewPassword, etConfirmPassword;
     private Button btnSubmitCreateAccount;
+    private Toolbar toolbar;
+    ImageView backArrow;
     private FirebaseAuth mAuth;
 
     @Override
@@ -28,7 +36,16 @@ public class CreateAccountActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         btnSubmitCreateAccount = findViewById(R.id.btnSubmitCreateAccount);
 
+        toolbar = findViewById(R.id.toolbar);
+        backArrow = findViewById(R.id.back_arrow);
+
         mAuth = FirebaseAuth.getInstance();
+
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                backPressed();
+            }
+        });
 
         btnSubmitCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +58,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    private void backPressed() {
+        Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
     private void createAccount(String email, String password, String confirmPassword) {
 
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {

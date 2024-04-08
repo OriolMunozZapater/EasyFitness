@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,19 +28,31 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private Button btnLogin, btnCreateAccount;
     private TextView tvRecoverPassword;
+    private Toolbar toolbar;
+    private ImageView backArrow;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
+        etEmail = findViewById(R.id.etNewEmail);
+        etPassword = findViewById(R.id.etNewPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnCreateAccount = findViewById(R.id.btnCreateAccount);
         tvRecoverPassword = findViewById(R.id.tvRecoverPassword);
+
+        toolbar = findViewById(R.id.toolbar);
+        backArrow = findViewById(R.id.back_arrow);
         mAuth = FirebaseAuth.getInstance();
 
+        //listener back arrow
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backPressed();
+            }
+        });
         // Listener para el botón de Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +106,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void openCreateAccountScreen() {
         Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
+        startActivity(intent);
+    }
+
+    private void backPressed() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }
