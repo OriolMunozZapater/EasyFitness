@@ -40,7 +40,7 @@
         android:layout_below="@id/toolbar"
         android:orientation="vertical"
         android:padding="32dp"
-        android:background="#202020">
+        android:background="@android:color/black">
 
         <!-- Campo de Email -->
         <EditText
