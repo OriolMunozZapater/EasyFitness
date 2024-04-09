@@ -30,13 +30,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- Create Account Activity -->
         <activity
             android:name=".CreateAccountActivity"
             android:exported="true">
-
         </activity>
+        <!-- first login activity -->
+        <activity
+            android:name=".FirstLoginActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

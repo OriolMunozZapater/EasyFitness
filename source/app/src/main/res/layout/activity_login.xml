@@ -38,24 +38,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        android:paddingTop="0dp"
-        android:paddingBottom="32dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
+        android:padding="32dp"
         android:layout_below="@id/toolbar">
 
         <TextView
-            android:id="@+id/IniciSessió"
-            android:layout_width="wrap_content"
+            android:id="@+id/textLogIn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar Sessió"
-            android:textSize="20sp"
+            android:text="Log In"
+            android:textSize="20dp"
             android:textColor="#A8711D"
-            android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"/>
+            android:textAlignment="center" />
 
         <!-- Campo de Email -->
         <EditText
@@ -68,7 +61,7 @@
             android:textColor="@android:color/white"
             android:textColorHint="#A8711D"
             android:backgroundTint="#A8711D"
-            android:layout_below="@id/IniciSessió"/>
+            android:layout_below="@id/textLogIn"/>
 
         <!-- camp password -->
         <EditText
@@ -95,24 +88,23 @@
             android:layout_marginTop="20dp"/>
 
         <!-- TextView para la recuperación de contraseña -->
-        <TextView
-            android:id="@+id/tvRecoverPassword"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnRecoverPassword"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Forgot Password?"
-            android:textColor="#A8711D"
-            android:layout_marginTop="16dp"
             android:layout_below="@id/btnLogin"
-            android:layout_centerHorizontal="true" />
-
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:text="Recover Password"
+            android:textColor="#A8711D" />
 
         <!-- Botón de Crear Cuenta -->
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnLogin"
-            android:layout_marginTop="54dp"
+            android:layout_below="@id/btnRecoverPassword"
+            android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
             android:text="Create Account"
             android:textColor="#A8711D" />
