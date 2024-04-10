@@ -23,7 +23,7 @@ CREATE TABLE usuario (
   nombre VARCHAR(255) NOT NULL,
   apellido VARCHAR(255) NOT NULL,
   correo VARCHAR(255) UNIQUE NOT NULL,
-  contraseña VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
   sexo VARCHAR(10) NOT NULL,
   peso_actual DECIMAL(5,2) NOT NULL,
   altura INT NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE rutina_ejercicio (
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE rutina_ejercicio (
+CREATE TABLE rutina_compartida (
   rutinaID INT NOT NULL,
   usuarioID INT NOT NULL,
   FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID),
