@@ -94,7 +94,7 @@ CREATE TABLE rutina_ejercicio (
 
 CREATE TABLE rutina_compartida (
   rutinaID INT NOT NULL,
-  usuarioID INT NOT NULL,
+  userID INT NOT NULL,
   FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID),
-  FOREIGN KEY (usuarioID) REFERENCES usuario(usuarioID)
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
