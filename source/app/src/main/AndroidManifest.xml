@@ -39,6 +39,9 @@
         <activity
             android:name=".FirstLoginActivity"
             android:exported="true" />
+        <activity
+            android:name=".TrainingRoutinesActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
