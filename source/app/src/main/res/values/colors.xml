@@ -5,4 +5,7 @@
     <color name="orange">#FFA500</color>
     <color name="lightBlack">#424242</color>
     <color name="transparent">#00000000</color>
+    <color name="colorSpinnerBackground">#202020</color>
+    <color name="EasyFitnessColor">#A8711D</color>
+
 </resources>

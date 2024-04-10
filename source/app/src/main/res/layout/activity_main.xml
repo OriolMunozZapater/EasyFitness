@@ -2,20 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/backmain"> <!-- Asume que backmain es el fondo de tu pantalla -->
 
-    <!-- Título de la App en un rectángulo naranja en la parte superior -->
-    <TextView
-        android:id="@+id/tvEasyFitness"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="EasyFitness"
-        android:background="@color/orange"
-        android:gravity="center"
-        android:textSize="24sp"
-        android:textColor="@color/black"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
+        android:layout_height="70dp"
+        android:background="#A8711D"
+        app:titleEnabled="false">
+
+        <!-- TextView personalizado para el título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EASY FITNESS"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Contenedor con fondo semi-transparente y bordes redondeados -->
     <RelativeLayout
@@ -23,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_alert_background"
-    android:padding="24dp">
+        android:padding="24dp">
 
     <!-- Mensaje de bienvenida -->
     <TextView
@@ -48,5 +55,5 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp" />
 
-</RelativeLayout>
     </RelativeLayout>
+</RelativeLayout>

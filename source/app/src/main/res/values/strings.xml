@@ -4,4 +4,13 @@
     <string name="welcome_message">Bienvenido a Easy Fitness!\nComienza creando una cuenta o iniciando sesión en una existente</string>
     <string name="login_button">Iniciar Sesión</string>
 
+    <string-array name="gender_options">
+        <item>Sexo</item>
+        <item>Masculino</item>
+        <item>Femenino</item>
+        <item>Otro</item>
+        <item>Croissant</item>
+    </string-array>
+
+
 </resources>
