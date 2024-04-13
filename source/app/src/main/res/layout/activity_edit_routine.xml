@@ -68,14 +68,16 @@
                         android:gravity="center_vertical"
                         android:layout_weight="1" />
 
-                    <ImageView
+                    <ImageButton
+                        android:id="@+id/eliminate_cross"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|right|center_vertical"
                         android:paddingLeft="20dp"
-                        android:paddingRight="0dp"
+                        android:paddingRight="-30dp"
                         android:src="@drawable/ic_cross"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:background="@null" />
 
                 </LinearLayout>
             </ScrollView>
