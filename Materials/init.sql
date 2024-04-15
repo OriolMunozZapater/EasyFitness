@@ -14,7 +14,7 @@ SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 
 CREATE TABLE objetivo (
   objetivoID INT AUTO_INCREMENT PRIMARY KEY,
-  peso_objetivo DECIMAL(5,2) NOT NULL,
+  pesoObjetivo DECIMAL(5,2) NOT NULL,
   descripcion VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -25,21 +25,21 @@ CREATE TABLE usuario (
   correo VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   sexo VARCHAR(10) NOT NULL,
-  peso_actual DECIMAL(5,2) NOT NULL,
+  pesoActual DECIMAL(5,2) NOT NULL,
   altura INT NOT NULL,
   foto BLOB,
   descripcion VARCHAR(255),
-  redes_sociales VARCHAR(255),
-  tiempo_entrenamiento TIME,
+  redesSociales VARCHAR(255),
+  tiempoEntrenamiento TIME,
   objetivoID INT,
   FOREIGN KEY (objetivoID) REFERENCES objetivo(objetivoID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE usuarios_seguidos (
-  usuarioID INT NOT NULL,
+  userID INT NOT NULL,
   seguidoID INT NOT NULL,
-  PRIMARY KEY (usuarioID, seguidoID),
-  FOREIGN KEY (usuarioID) REFERENCES usuario(userID),
+  PRIMARY KEY (userID, seguidoID),
+  FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (seguidoID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -47,9 +47,9 @@ CREATE TABLE rutina (
   rutinaID INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
-  user_ID INT NOT NULL,
+  userID INT NOT NULL,
   publico BOOLEAN,
-  FOREIGN KEY (user_ID) REFERENCES usuario(userID)
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE ejercicio (
