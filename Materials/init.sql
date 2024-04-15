@@ -52,6 +52,7 @@ CREATE TABLE ejercicio (
   valoracion DOUBLE,
   grupoMuscular VARCHAR(50),
   video BLOB
+  FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
