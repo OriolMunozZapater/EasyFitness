@@ -22,13 +22,19 @@ public class Ejercicio {
   @Column(nullable = false)
   private String nombre;
 
-  @Column(nullable = false)
   private Double valoracion;
 
   @Column(nullable = false)
   private String grupoMuscular;
 
+  private byte[] video;
+
   //Setters
+
+  public void setVideo(byte[] video) {
+    this.video = video;
+  }
+
   public void setEjercicioID(Integer ejercicioID) {
     this.ejercicioID = ejercicioID;
   }
@@ -58,6 +64,10 @@ public class Ejercicio {
   }
 
   // Getters
+  public byte[] getVideo() {
+    return this.video;
+  }
+
   public Integer getEjercicioID() {
     return ejercicioID;
   }

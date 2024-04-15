@@ -46,6 +46,8 @@ public class EjercicioController {
           existingEjercicio.setValoracion(ejercicioDetails.getValoracion());
           existingEjercicio.setGrupoMuscular(ejercicioDetails.getGrupoMuscular());
           existingEjercicio.setRutinaID(ejercicioDetails.getRutinaID());
+          existingEjercicio.setVideo(ejercicioDetails.getVideo());
+
 
           return ResponseEntity.ok(ejercicioRepository.save(existingEjercicio));
         }).orElseGet(() -> ResponseEntity.notFound().build());
