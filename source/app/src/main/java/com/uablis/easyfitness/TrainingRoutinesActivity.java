@@ -1,7 +1,9 @@
 package com.uablis.easyfitness;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,5 +29,17 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
         btnAddRoutine = findViewById(R.id.btnAddRoutine);
+
+        btnAddRoutine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScreenMain();
+            }
+        });
+    }
+
+    public void ScreenMain() {
+        Intent intent = new Intent(TrainingRoutinesActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

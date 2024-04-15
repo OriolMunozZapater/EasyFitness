@@ -2,7 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CreateRoutineActivity">
+        <State />
+      </entry>
       <entry key="FirstLoginActivity">
+        <State />
+      </entry>
+      <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="PasswordRecoveryActivity">
         <State />
       </entry>
       <entry key="TrainingRoutinesActivity">
