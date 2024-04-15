@@ -67,9 +67,10 @@ CREATE TABLE serie (
 CREATE TABLE valoracion_ejercicio (
   userID INT NOT NULL,
   ejercicioID INT NOT NULL,
+  valoracionID INT NOT NULL,
   valoracion INT,
   comentario VARCHAR(255),
-  PRIMARY KEY (userID, ejercicioID),
+  PRIMARY KEY (valoracionID),
   FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
