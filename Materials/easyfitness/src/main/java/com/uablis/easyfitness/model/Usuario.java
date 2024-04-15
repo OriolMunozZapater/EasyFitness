@@ -3,6 +3,7 @@ package com.uablis.easyfitness.model;
 
 import jakarta.persistence.*;
 import java.util.Arrays;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -44,13 +45,32 @@ public class Usuario {
   private String redes_sociales;
 
   @Column
-  private String tiempo_entrenamiento; // Consider using java.time.Duration or a Long for seconds/milliseconds
+  private String tiempo_entrenamiento;
+
+  @ManyToMany
+  @JoinTable(
+      name = "usuarios_seguidos",
+      joinColumns = @JoinColumn(name = "usuarioID"),
+      inverseJoinColumns = @JoinColumn(name = "seguidoID")
+  )
+  private Set<Usuario> seguidos;
+
+  @ManyToMany(mappedBy = "seguidos")
+  private Set<Usuario> seguidores;
 
   @OneToOne
   @JoinColumn(name = "objetivoID")
   private Objetivo objetivo;
 
   // Getters y setters
+
+  public Set<Usuario> getSeguidos() {
+    return seguidos;
+  }
+
+  public void setSeguidos(Set<Usuario> seguidos) {
+    this.seguidos = seguidos;
+  }
   public Integer getUserID() {
     return userID;
   }
