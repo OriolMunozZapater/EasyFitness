@@ -14,7 +14,7 @@ SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 
 CREATE TABLE objetivo (
   objetivoID INT AUTO_INCREMENT PRIMARY KEY,
-  peso_objetivo DECIMAL(5,2) NOT NULL,
+  pesoObjetivo DECIMAL(5,2) NOT NULL,
   descripcion VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -25,43 +25,53 @@ CREATE TABLE usuario (
   correo VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   sexo VARCHAR(10) NOT NULL,
-  peso_actual DECIMAL(5,2) NOT NULL,
+  pesoActual DECIMAL(5,2) NOT NULL,
   altura INT NOT NULL,
   foto BLOB,
   descripcion VARCHAR(255),
-  redes_sociales VARCHAR(255),
-  tiempo_entrenamiento TIME,
+  redesSociales VARCHAR(255),
+  tiempoEntrenamiento TIME,
   objetivoID INT,
   FOREIGN KEY (objetivoID) REFERENCES objetivo(objetivoID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE usuarios_seguidos (
-  usuarioID INT NOT NULL,
+  userID INT NOT NULL,
   seguidoID INT NOT NULL,
-  PRIMARY KEY (usuarioID, seguidoID),
-  FOREIGN KEY (usuarioID) REFERENCES usuario(userID),
+  PRIMARY KEY (userID, seguidoID),
+  FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (seguidoID) REFERENCES usuario(userID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE rutina (
+  rutinaID INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion VARCHAR(255),
+  userID INT NOT NULL,
+  publico BOOLEAN,
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
-  descripción VARCHAR(255),
+  descripcion VARCHAR(255),
   tipo VARCHAR(50),
-  valoración DOUBLE,
-  grupo_muscular VARCHAR(50),
-  video BLOB
+  valoracion DOUBLE,
+  grupoMuscular VARCHAR(50),
+  video BLOB,
+  FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
   serieID INT AUTO_INCREMENT PRIMARY KEY,
-  ejercicio_ID INT NOT NULL,
-  n_repeticiones INT,
+  ejercicioID INT NOT NULL,
+  nRepeticiones INT,
   peso INT,
-  comentario_serie VARCHAR(255),
+  comentarioSerie VARCHAR(255),
   tipo VARCHAR(50),
-  FOREIGN KEY (ejercicio_ID) REFERENCES ejercicio(ejercicioID)
+  FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE valoracion_ejercicio (
@@ -73,15 +83,6 @@ CREATE TABLE valoracion_ejercicio (
   PRIMARY KEY (valoracionID),
   FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE rutina (
-  rutinaID INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  descripcion VARCHAR(255),
-  user_ID INT NOT NULL,
-  publico BOOLEAN,
-  FOREIGN KEY (user_ID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE rutina_ejercicio (
