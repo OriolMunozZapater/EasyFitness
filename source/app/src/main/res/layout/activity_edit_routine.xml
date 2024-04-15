@@ -78,7 +78,7 @@
                             android:id="@+id/eliminate_cross"
                             android:layout_width="40dp"  android:layout_height="40dp"  android:layout_gravity="center"
                             android:src="@drawable/ic_cross"
-                            android:background="null"/>
+                            android:background="@null"/>
                     </FrameLayout>
 
 
