@@ -34,8 +34,8 @@ public class Serie {
     return nRepeticiones;
   }
 
-  public void setNRepeticiones(Integer nNepeticiones) {
-    this.nRepeticiones = nNepeticiones;
+  public void setNRepeticiones(Integer nRepeticiones) {
+    this.nRepeticiones = nRepeticiones;
   }
 
   public Double getPeso() {
