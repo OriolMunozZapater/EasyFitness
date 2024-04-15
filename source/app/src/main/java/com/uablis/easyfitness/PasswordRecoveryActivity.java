@@ -15,7 +15,6 @@ public class PasswordRecoveryActivity extends AppCompatActivity {
     private EditText etRecoveryEmail;
     private Button btnSendRecoveryEmail;
     private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
