@@ -40,6 +40,8 @@ public class ValoracionEjercicioController {
   public ResponseEntity<ValoracionEjercicio> updateValoracionEjercicio(@PathVariable Integer id, @RequestBody ValoracionEjercicio valoracionEjercicioDetails) {
     return valoracionEjercicioRepository.findById(id)
         .map(existingValoracionEjercicio -> {
+          existingValoracionEjercicio.setUserID(valoracionEjercicioDetails.getUserID());
+          existingValoracionEjercicio.setEjercicioID(valoracionEjercicioDetails.getEjercicioID());
           existingValoracionEjercicio.setValoracion(valoracionEjercicioDetails.getValoracion());
           existingValoracionEjercicio.setComentario(valoracionEjercicioDetails.getComentario());
           return ResponseEntity.ok(valoracionEjercicioRepository.save(existingValoracionEjercicio));
