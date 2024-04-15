@@ -47,21 +47,21 @@ CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
-  descripción VARCHAR(255),
+  descripcion VARCHAR(255),
   tipo VARCHAR(50),
-  valoración DOUBLE,
-  grupo_muscular VARCHAR(50),
+  valoracion DOUBLE,
+  grupoMuscular VARCHAR(50),
   video BLOB
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
   serieID INT AUTO_INCREMENT PRIMARY KEY,
-  ejercicio_ID INT NOT NULL,
-  n_repeticiones INT,
+  ejercicioID INT NOT NULL,
+  nRepeticiones INT,
   peso INT,
-  comentario_serie VARCHAR(255),
+  comentarioSerie VARCHAR(255),
   tipo VARCHAR(50),
-  FOREIGN KEY (ejercicio_ID) REFERENCES ejercicio(ejercicioID)
+  FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE valoracion_ejercicio (
