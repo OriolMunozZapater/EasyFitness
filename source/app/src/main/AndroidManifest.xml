@@ -43,9 +43,12 @@
             android:name=".TrainingRoutinesActivity"
             android:exported="true" />
         <activity
+<<<<<<< HEAD
             android:name=".ChooseExerciseActivity"
             android:exported="true" />
         <activity
+=======
+>>>>>>> 29f58202a7dc7d16c0a9cbdaee7b9efe2f15299a
             android:name=".EditRoutineActivity"
             android:exported="true" />
     </application>
