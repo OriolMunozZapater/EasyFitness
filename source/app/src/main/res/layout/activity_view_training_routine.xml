@@ -46,15 +46,15 @@
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/EasyFitnessColor"/>
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingRight="20dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:background="@color/EasyFitnessColor" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -63,7 +63,7 @@
                             android:text="Bench Press"
                             android:textColor="@color/EasyFitnessColor"
                             android:textSize="18sp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="30dp"
                             android:layout_marginBottom="20dp"/>
 
                         <ImageButton
@@ -76,11 +76,6 @@
                             android:layout_centerVertical="true"/>
 
                     </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/EasyFitnessColor"/>
 
                 </LinearLayout>
             </ScrollView>

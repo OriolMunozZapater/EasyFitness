@@ -28,6 +28,7 @@ public class EditExerciseActivity extends AppCompatActivity {
     private EditText exDesc;
     private EditText exTipo;
     private RatingBar exExerciseRatingBar;
+    private ImageView home, training_routines, training, profile;
     private Button btnAddExercise;
     private Toolbar toolbar;
     private ImageView backArrow;
@@ -69,7 +70,7 @@ public class EditExerciseActivity extends AppCompatActivity {
     }
 
     public void backPressed() {
-        Intent intent = new Intent(EditExerciseActivity.this, HomeActivity.class);
+        Intent intent = new Intent(EditExerciseActivity.this, EditRoutineActivity.class);
         startActivity(intent);
     }
 }

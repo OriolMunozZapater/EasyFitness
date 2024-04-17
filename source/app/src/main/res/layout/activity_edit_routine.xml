@@ -63,6 +63,7 @@
                         android:layout_marginBottom="20dp"/>
 
                     <LinearLayout
+                        android:id="@+id/routine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -81,7 +82,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Pecho, Triceps, Hombro"
+                            android:text="Bench Press"
                             android:textColor="@color/EasyFitnessColor"
                             android:textSize="16sp"
                             android:gravity="center_horizontal"
