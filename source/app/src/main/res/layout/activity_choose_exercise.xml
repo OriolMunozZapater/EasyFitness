@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,52 +13,77 @@
         android:background="#A8711D"
         app:titleEnabled="false">
 
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Back Arrow" />
+
         <!-- TextView personalizado para el título -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MY ROUTINES"
+            android:text="CHOOSE EXERCISE"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_gravity="center" />
 
     </androidx.appcompat.widget.Toolbar>
+
     <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:background="@color/black">
 
         <LinearLayout
-            android:id="@+id/layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="32dp">
 
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/exerciseSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Search Exercise" />
+
+            <Button
+                android:id="@+id/selectMuscle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buton_background"
+                android:text="Muscle"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="20dp"/>
+
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="450dp">
+                android:layout_height="400dp">
 
-                <!-- Aixo és cada rutina-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@color/EasyFitnessColor"/>
-
-                    <RelativeLayout
+                    <!-- Cada un d'aquests és un exercici-->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingRight="20dp">
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Bench Press"
@@ -66,35 +92,16 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="20dp"/>
 
-                        <ImageButton
-                            android:id="@+id/menu_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow"
-                            android:background="@color/transparent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"/>
-
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@color/EasyFitnessColor"/>
 
+
                 </LinearLayout>
             </ScrollView>
-
-            <Button
-                android:id="@+id/btnAddRoutine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:background="@drawable/buton_background"
-                android:backgroundTint="@color/EasyFitnessColor"
-                android:text="+ Add routine"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -102,54 +109,53 @@
             android:id="@+id/layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_below="@id/layout"
-            android:layout_alignParentBottom="true">
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/lowBar"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
+                android:layout_gravity="bottom"
                 android:background="#A8711D"
-                app:titleEnabled="false"
-                android:layout_gravity="bottom">
+                app:titleEnabled="false">
 
                 <ImageView
                     android:id="@+id/home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_home"
                     android:layout_gravity="start"
                     android:paddingLeft="20dp"
-                    android:paddingRight="25dp"/>
+                    android:paddingRight="25dp"
+                    android:src="@drawable/ic_home" />
 
                 <ImageView
                     android:id="@+id/training_routines"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_training_routines"
                     android:layout_gravity="start|right"
                     android:paddingLeft="20dp"
-                    android:paddingRight="25dp"/>
+                    android:paddingRight="25dp"
+                    android:src="@drawable/ic_training_routines" />
 
                 <ImageView
                     android:id="@+id/training_session"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_training"
                     android:layout_gravity="left|end"
                     android:paddingLeft="25dp"
-                    android:paddingRight="20dp"/>
+                    android:paddingRight="20dp"
+                    android:src="@drawable/ic_training" />
 
                 <ImageView
                     android:id="@+id/profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_profile"
                     android:layout_gravity="end"
+                    android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingLeft="20dp"/>
+                    android:src="@drawable/ic_profile" />
 
             </androidx.appcompat.widget.Toolbar>
 

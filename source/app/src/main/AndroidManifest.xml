@@ -42,6 +42,9 @@
         <activity
             android:name=".TrainingRoutinesActivity"
             android:exported="true" />
+        <activity
+            android:name=".ChooseExerciseActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
