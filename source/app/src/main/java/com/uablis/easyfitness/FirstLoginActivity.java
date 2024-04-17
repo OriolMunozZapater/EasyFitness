@@ -23,7 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.Calendar;
 
 public class FirstLoginActivity extends AppCompatActivity {
-    private EditText etWeight;
+    private EditText etWeight, etName, etSecondName, etHeight;
     private Button btnSexSelect;
     private ImageView forwardArrow;
     private TextView etDateOfBirth, textViewSex;
@@ -42,6 +42,9 @@ public class FirstLoginActivity extends AppCompatActivity {
         btnSexSelect = findViewById(R.id.btnSexSelect);
         textViewSex = findViewById(R.id.textViewSex);
         forwardArrow = findViewById(R.id.forwardArrow);
+        etHeight = findViewById(R.id.etHeight);
+        etName = findViewById(R.id.etName);
+        etSecondName = findViewById(R.id.etSecondName);
 
         toolbar = findViewById(R.id.toolbar);
 
@@ -51,7 +54,6 @@ public class FirstLoginActivity extends AppCompatActivity {
                 nextScreen();
             }
         });
-
 
         etDateOfBirth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +100,7 @@ public class FirstLoginActivity extends AppCompatActivity {
         String birthDate = etDateOfBirth.getText().toString().trim();
         String sex = btnSexSelect.getText().toString().trim();
 
-        Intent intent = new Intent(FirstLoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
         startActivity(intent);
     }
 }
