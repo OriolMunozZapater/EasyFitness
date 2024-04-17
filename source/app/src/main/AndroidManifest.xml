@@ -48,6 +48,10 @@
         <activity
             android:name=".EditRoutineActivity"
             android:exported="true" />
+        <activity
+            android:name=".EditExerciseActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
