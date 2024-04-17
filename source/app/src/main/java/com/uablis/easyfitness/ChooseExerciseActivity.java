@@ -50,7 +50,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     }
 
     public void backScreen() {
-        Intent intent = new Intent(ChooseExerciseActivity.this, LoginActivity.class);
+        Intent intent = new Intent(ChooseExerciseActivity.this, EditRoutineActivity.class);
         startActivity(intent);
     }
 

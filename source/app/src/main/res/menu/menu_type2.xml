@@ -4,5 +4,6 @@
         android:title="Create from scratch"/>
     <item
         android:id="@+id/precreated"
-        android:title="Select precreated routine"/>
+        android:title="Select precreated routine"
+        android:overlapAnchor="true"/>
 </menu>

@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CHOOSE EXERCISE"
+            android:text="ROUTINE NAME"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -47,26 +47,31 @@
             android:orientation="vertical"
             android:padding="32dp">
 
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/exerciseSearch"
+            <EditText
+                android:id="@+id/etEditRoutineName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Search Exercise" />
+                android:text="ROUTINE NAME"
+                android:textColor="@color/EasyFitnessColor"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:layout_marginBottom="30dp"/>
 
             <Button
-                android:id="@+id/selectMuscle"
+                android:id="@+id/btnAddExercise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
                 android:background="@drawable/buton_background"
-                android:text="Muscle"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="20dp"/>
+                android:backgroundTint="@color/EasyFitnessColor"
+                android:text="+ Add exercise"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="400dp"
+                android:layout_marginTop="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
