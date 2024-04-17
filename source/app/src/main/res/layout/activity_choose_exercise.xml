@@ -58,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/buton_background"
+                app:backgroundTint="@color/EasyFitnessColor"
                 android:text="Muscle"
                 android:textColor="@color/white"
                 android:textSize="17sp"

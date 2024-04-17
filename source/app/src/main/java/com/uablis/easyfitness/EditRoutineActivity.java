@@ -32,6 +32,7 @@ public class EditRoutineActivity extends AppCompatActivity {
     private ImageButton eliminateCross;
     private ImageView home, training_routines, training, profile;
     private LinearLayout routine;
+    private EditText etEditRoutineName;
     private ImageView backArrow;
     private Button btnAddExercise;
 
@@ -49,7 +50,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         home = findViewById(R.id.home);
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
-
+        etEditRoutineName = findViewById(R.id.etEditRoutineName);
         training_routines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

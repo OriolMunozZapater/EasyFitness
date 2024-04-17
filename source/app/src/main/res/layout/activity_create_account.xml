@@ -94,7 +94,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create Account"
-            android:backgroundTint="#A8711D"
+            android:background="@drawable/buton_background"
+            app:backgroundTint="@color/EasyFitnessColor"
             android:textColor="@color/black"
             android:layout_below="@id/etConfirmPassword"
             android:layout_marginTop="20dp"/>

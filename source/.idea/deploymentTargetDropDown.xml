@@ -2,10 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="EditExerciseActivity">
+      <entry key="EditRoutineActivity">
         <State />
       </entry>
-      <entry key="EditRoutineActivity">
+      <entry key="NewRoutineActivity">
         <State />
       </entry>
     </value>

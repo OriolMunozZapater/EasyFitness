@@ -1,5 +1,5 @@
 <!-- boton_esquinas_personalizadas.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/EasyFitnessColor"/>
+    <solid android:color="@color/lightBlack" />
     <corners android:radius="10dp"/> <!-- Cambia el radio de las esquinas según tu preferencia -->
 </shape>

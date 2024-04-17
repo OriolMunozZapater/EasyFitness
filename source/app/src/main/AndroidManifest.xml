@@ -46,10 +46,16 @@
             android:name=".ChooseExerciseActivity"
             android:exported="true" />
         <activity
+            android:name=".NewRoutineActivity"
+            android:exported="true" />
+        <activity
             android:name=".EditRoutineActivity"
             android:exported="true" />
         <activity
             android:name=".EditExerciseActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChoosePreselectedRoutineActivity"
             android:exported="true" />
 
     </application>

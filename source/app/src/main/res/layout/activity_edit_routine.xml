@@ -45,10 +45,18 @@
             android:orientation="vertical"
             android:padding="32dp">
 
-
+            <EditText
+                android:id="@+id/etEditRoutineName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ROUTINE NAME"
+                android:textColor="@color/EasyFitnessColor"
+                android:textSize="18sp"
+                android:textAlignment="center"/>
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="450dp">
+                android:layout_height="410dp"
+                android:layout_marginBottom="20dp">
 
                 <!-- Aixo és cada rutina-->
                 <LinearLayout
@@ -118,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
                 android:background="@drawable/buton_background"
-                android:backgroundTint="@color/EasyFitnessColor"
+                app:backgroundTint="@color/EasyFitnessColor"
                 android:text="+ Add exercise"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
