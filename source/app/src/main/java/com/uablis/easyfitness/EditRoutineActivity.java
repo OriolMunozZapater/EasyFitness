@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.ImageButton;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -27,19 +29,43 @@ import com.google.firebase.auth.FirebaseAuth;
 public class EditRoutineActivity extends AppCompatActivity {
 
     private ImageButton eliminateCross;
+    private ImageView backArrow;
+    private Button btnAddExercise;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_routine);
 
         eliminateCross = findViewById(R.id.eliminate_cross);
+        backArrow = findViewById(R.id.back_arrow);
+        btnAddExercise = findViewById(R.id.btnAddExercise1);
+
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToScreen();
+            }
+        });
         eliminateCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteExercise();
             }
         });
+
+        btnAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToAddExerciseScreen();
+            }
+        });
+    }
+
+    public void backToScreen() {
+        Intent intent = new Intent(EditRoutineActivity.this, TrainingRoutinesActivity.class);
+        startActivity(intent);
     }
 
     public void deleteExercise() {
@@ -59,5 +85,10 @@ public class EditRoutineActivity extends AppCompatActivity {
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void goToAddExerciseScreen() {
+        Intent intent = new Intent(EditRoutineActivity.this, ChooseExerciseActivity.class);
+        startActivity(intent);
     }
 }

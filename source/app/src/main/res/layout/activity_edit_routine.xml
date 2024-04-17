@@ -12,11 +12,20 @@
         android:background="#A8711D"
         app:titleEnabled="false">
 
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Back Arrow" />
+
         <!-- TextView personalizado para el título -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WELCOME TO EASY FITNESS"
+            android:text="EDIT ROUTINE"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -84,7 +93,9 @@
 
                             <ImageButton
                                 android:id="@+id/eliminate_cross"
-                                android:layout_width="40dp"  android:layout_height="40dp"  android:layout_gravity="center"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
                                 android:src="@drawable/ic_cross"
                                 android:background="@null"/>
                         </FrameLayout>
@@ -101,14 +112,15 @@
             </ScrollView>
 
             <Button
-                android:id="@+id/btnAddRoutine"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:id="@+id/btnAddExercise1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
+                android:background="@drawable/buton_background"
                 android:backgroundTint="@color/EasyFitnessColor"
-                android:text="+"
+                android:text="+ Add exercise"
                 android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
