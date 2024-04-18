@@ -3,6 +3,8 @@ package com.uablis.easyfitness;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
@@ -17,8 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -37,4 +37,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 }

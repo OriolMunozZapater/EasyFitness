@@ -1,28 +1,40 @@
 package com.uablis.easyfitness;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.Button;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 public class PasswordRecoveryActivity extends AppCompatActivity {
-
+    private ImageView backArrow;
     private EditText etRecoveryEmail;
     private Button btnSendRecoveryEmail;
     private FirebaseAuth mAuth;
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_recovery);
 
+        backArrow = findViewById(R.id.back_arrow);
         etRecoveryEmail = findViewById(R.id.etRecoveryEmail);
         btnSendRecoveryEmail = findViewById(R.id.btnSendRecoveryEmail);
+
         mAuth = FirebaseAuth.getInstance();
+
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
 
         btnSendRecoveryEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +61,7 @@ public class PasswordRecoveryActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 builder.setMessage("Recovery email sent. Please check your email.");
                 builder.setTitle("Email Sent");
+                back();
             } else {
                 String errorMessage = task.getException() != null ? task.getException().getMessage() : "An unknown error occurred";
                 builder.setMessage("Failed to send recovery email: " + errorMessage);
@@ -57,5 +70,10 @@ public class PasswordRecoveryActivity extends AppCompatActivity {
 
             builder.show();
         });
+    }
+
+    public void back() {
+        Intent intent = new Intent(PasswordRecoveryActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

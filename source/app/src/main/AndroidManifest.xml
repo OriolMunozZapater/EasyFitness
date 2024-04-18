@@ -13,15 +13,6 @@
         android:theme="@style/Theme.EasyFitness"
         tools:targetApi="31">
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PasswordRecoveryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -30,13 +21,46 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PasswordRecoveryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
         <!-- Create Account Activity -->
         <activity
             android:name=".CreateAccountActivity"
             android:exported="true">
-
         </activity>
+        <!-- first login activity -->
+        <activity
+            android:name=".FirstLoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TrainingRoutinesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChooseExerciseActivity"
+            android:exported="true" />
+        <activity
+            android:name=".NewRoutineActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EditRoutineActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EditExerciseActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChoosePreselectedRoutineActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CreateNewExercise"
+            android:exported="true" />
+
     </application>
 
 </manifest>
