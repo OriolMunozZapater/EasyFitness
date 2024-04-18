@@ -16,26 +16,27 @@ public class ValoracionEjercicioController {
   @Autowired
   private ValoracionEjercicioRepository valoracionEjercicioRepository;
 
-  // Obtener las valoraciones
+  // Obtener todas las valoraciones de ejercicio
   @GetMapping
   public List<ValoracionEjercicio> getAllValoracionEjercicios() {
     return valoracionEjercicioRepository.findAll();
   }
 
-  // Obtener una valoracion por ID
+  // Obtener una valoracion de ejercicio por ID
   @GetMapping("/{id}")
   public ResponseEntity<ValoracionEjercicio> getValoracionEjercicioById(@PathVariable Integer id) {
     Optional<ValoracionEjercicio> valoracionEjercicio = valoracionEjercicioRepository.findById(id);
     return valoracionEjercicio.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  // Crear una nueva valoracion
+  // Crear una nueva valoracion de ejercicio
   @PostMapping
-  public ValoracionEjercicio createValoracionEjercicio(@RequestBody ValoracionEjercicio valoracionEjercicio) {
-    return valoracionEjercicioRepository.save(valoracionEjercicio);
+  public ResponseEntity<ValoracionEjercicio> createValoracionEjercicio(@RequestBody ValoracionEjercicio valoracionEjercicio) {
+    ValoracionEjercicio newValoracion = valoracionEjercicioRepository.save(valoracionEjercicio);
+    return ResponseEntity.ok(newValoracion);
   }
 
-  // Actualizar una serie
+  // Actualizar una valoracion de ejercicio
   @PutMapping("/{id}")
   public ResponseEntity<ValoracionEjercicio> updateValoracionEjercicio(@PathVariable Integer id, @RequestBody ValoracionEjercicio valoracionEjercicioDetails) {
     return valoracionEjercicioRepository.findById(id)
@@ -48,7 +49,7 @@ public class ValoracionEjercicioController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  // Eliminar una valoracion
+  // Eliminar una valoracion de ejercicio
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteValoracionEjercicio(@PathVariable Integer id) {
     return valoracionEjercicioRepository.findById(id)

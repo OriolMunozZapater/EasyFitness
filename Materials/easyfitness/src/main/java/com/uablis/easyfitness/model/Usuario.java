@@ -1,5 +1,6 @@
 package com.uablis.easyfitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import java.util.Arrays;
@@ -47,16 +48,18 @@ public class Usuario {
   @Column
   private String tiempo_entrenamiento;
 
+  @JsonIgnore
+  @ManyToMany(mappedBy = "seguidos")
+  private Set<Usuario> seguidores;
+
+  @JsonIgnore
   @ManyToMany
   @JoinTable(
       name = "usuarios_seguidos",
-      joinColumns = @JoinColumn(name = "usuarioID"),
-      inverseJoinColumns = @JoinColumn(name = "seguidoID")
+      joinColumns = @JoinColumn(name = "seguidoID"),
+      inverseJoinColumns = @JoinColumn(name = "usuarioID")
   )
   private Set<Usuario> seguidos;
-
-  @ManyToMany(mappedBy = "seguidos")
-  private Set<Usuario> seguidores;
 
   @OneToOne
   @JoinColumn(name = "objetivoID")
@@ -71,6 +74,15 @@ public class Usuario {
   public void setSeguidos(Set<Usuario> seguidos) {
     this.seguidos = seguidos;
   }
+
+  public Set<Usuario> getSeguidores() {
+    return seguidores;
+  }
+
+  public void setSeguidores(Set<Usuario> seguidores) {
+    this.seguidores = seguidores;
+  }
+
   public Integer getUserID() {
     return userID;
   }

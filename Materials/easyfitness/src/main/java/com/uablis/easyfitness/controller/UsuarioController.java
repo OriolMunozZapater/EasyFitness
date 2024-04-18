@@ -43,10 +43,21 @@ public class UsuarioController {
         .map(existingUsuario -> {
           existingUsuario.setNombre(usuarioDetails.getNombre());
           existingUsuario.setApellido(usuarioDetails.getApellido());
-          // Setear el resto de propiedades que desees actualizar
+          existingUsuario.setCorreo(usuarioDetails.getCorreo());
+          existingUsuario.setPassword(usuarioDetails.getPassword());
+          existingUsuario.setSexo(usuarioDetails.getSexo());
+          existingUsuario.setPeso_actual(usuarioDetails.getPeso_actual());
+          existingUsuario.setAltura(usuarioDetails.getAltura());
+          // El campo foto se manejaría de manera especial si se actualiza a través de un formulario multipart/form-data
+          // existingUsuario.setFoto(usuarioDetails.getFoto());
+          existingUsuario.setDescripcion(usuarioDetails.getDescripcion());
+          existingUsuario.setRedes_sociales(usuarioDetails.getRedes_sociales());
+          existingUsuario.setTiempo_entrenamiento(usuarioDetails.getTiempo_entrenamiento());
+
           return ResponseEntity.ok(usuarioRepository.save(existingUsuario));
         }).orElseGet(() -> ResponseEntity.notFound().build());
   }
+
 
   // Eliminar un usuario
   @DeleteMapping("/{id}")

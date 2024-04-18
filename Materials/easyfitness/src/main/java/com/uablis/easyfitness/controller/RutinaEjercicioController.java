@@ -1,7 +1,9 @@
 package com.uablis.easyfitness.controller;
 
+import com.uablis.easyfitness.model.RutinaCompartida;
 import com.uablis.easyfitness.model.RutinaEjercicio;
 import com.uablis.easyfitness.repository.RutinaEjercicioRepository;
+import com.uablis.easyfitness.repository.RutinaCompartidaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +15,8 @@ import java.util.Optional;
 @RequestMapping("/api/rutina_ejercicios")
 public class RutinaEjercicioController {
 
-    @Autowired
-    private RutinaEjercicioRepository rutinaEjercicioRepository;
+  @Autowired
+  private RutinaEjercicioRepository rutinaEjercicioRepository;
 
     // Obtener todos los registros de rutina_ejercicio
     @GetMapping
@@ -31,8 +33,9 @@ public class RutinaEjercicioController {
 
     // Crear un nuevo registro de rutina_ejercicio
     @PostMapping
-    public RutinaEjercicio createRutinaEjercicio(@RequestBody RutinaEjercicio rutinaEjercicio) {
-        return rutinaEjercicioRepository.save(rutinaEjercicio);
+    public ResponseEntity<RutinaEjercicio> createRutinaEjercicio(@RequestBody RutinaEjercicio rutinaEjercicio) {
+      RutinaEjercicio savedRutinaEjercicio = rutinaEjercicioRepository.save(rutinaEjercicio);
+      return ResponseEntity.ok(savedRutinaEjercicio);
     }
 
     // Actualizar un registro de rutina_ejercicio
@@ -58,5 +61,6 @@ public class RutinaEjercicioController {
     }
 
     // Métodos personalizados:
+
 }
 

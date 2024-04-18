@@ -51,12 +51,25 @@ public class RutinaController {
     // Eliminar una rutina
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRutina(@PathVariable Integer id) {
-        return rutinaRepository.findById(id)
-                .map(rutina -> {
-                    rutinaRepository.delete(rutina);
-                    return ResponseEntity.ok().<Void>build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+      Optional<Rutina> rutinaOpt = rutinaRepository.findById(id);
+      if (rutinaOpt.isPresent()) {
+        Rutina rutina = rutinaOpt.get();
+        rutinaRepository.delete(rutina);
+        return ResponseEntity.ok().build();
+      } else {
+        return ResponseEntity.notFound().build();
+      }
     }
 
+
     // Métodos personalizados:
+
+  @GetMapping("/usuario/{userId}")
+  public ResponseEntity<List<Rutina>> getRutinasByUserId(@PathVariable Integer userId) {
+    List<Rutina> rutinas = rutinaRepository.findAllByUserID(userId);
+    if(rutinas.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(rutinas);
+  }
 }

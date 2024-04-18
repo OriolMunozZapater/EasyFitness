@@ -1,11 +1,11 @@
 package com.uablis.easyfitness.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "valoracion_ejercicio")
-public class ValoracionEjercicio{
+public class ValoracionEjercicio {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer valoracionID;
@@ -18,9 +18,18 @@ public class ValoracionEjercicio{
 
   private Integer valoracion;
 
-  private char[] comentario = new char[255];
+  @Column(length = 255)
+  private String comentario;
 
   // Getters y setters
+  public Integer getValoracionID() {
+    return valoracionID;
+  }
+
+  public void setValoracionID(Integer valoracionID) {
+    this.valoracionID = valoracionID;
+  }
+
   public Integer getUserID() {
     return userID;
   }
@@ -36,6 +45,7 @@ public class ValoracionEjercicio{
   public void setEjercicioID(Integer ejercicioID) {
     this.ejercicioID = ejercicioID;
   }
+
   public Integer getValoracion() {
     return valoracion;
   }
@@ -44,11 +54,11 @@ public class ValoracionEjercicio{
     this.valoracion = valoracion;
   }
 
-  public char[] getComentario() {
+  public String getComentario() {
     return comentario;
   }
 
-  public void setComentario(char[] comentario) {
+  public void setComentario(String comentario) {
     this.comentario = comentario;
   }
 }

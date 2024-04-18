@@ -60,4 +60,13 @@ public class RutinaCompartidaController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<RutinaCompartida>> getRutinasCompartidasByUserId(@PathVariable Integer userId) {
+        List<RutinaCompartida> rutinasCompartidas = rutinaCompartidaRepository.findByUserId(userId);
+        if(rutinasCompartidas.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(rutinasCompartidas);
+    }
 }
