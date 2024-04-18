@@ -85,10 +85,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
-                android:background="@color/EasyFitnessColor"
+                android:background="@drawable/buton_background"
                 app:backgroundTint="@color/EasyFitnessColor"
                 android:text="+ Add routine"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
 
         </LinearLayout>

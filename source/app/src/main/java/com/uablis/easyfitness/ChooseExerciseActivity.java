@@ -20,7 +20,7 @@ import com.google.android.material.search.SearchBar;
 
 public class ChooseExerciseActivity extends AppCompatActivity {
     private SearchBar exerciseSearch;
-    private Button selectMuscle;
+    private Button selectMuscle, newExercise;
     private ImageView backArrow;
 
     @Override
@@ -32,8 +32,14 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         exerciseSearch = findViewById(R.id.exerciseSearch);
         selectMuscle = findViewById(R.id.selectMuscle);
         backArrow = findViewById(R.id.back_arrow);
+        newExercise = findViewById(R.id.btnNewExercise);
 
-
+        newExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToNewExercise();
+            }
+        });
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,6 +55,11 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         });
     }
 
+    public void goToNewExercise() {
+        Intent intent = new Intent(ChooseExerciseActivity.this, CreateNewExercise.class);
+        startActivity(intent);
+    }
+
     public void backScreen() {
         Intent intent = new Intent(ChooseExerciseActivity.this, EditRoutineActivity.class);
         startActivity(intent);
@@ -56,7 +67,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     public void selectMuscle() {
         // Obtenemos los nombres de los músculos desde los recursos de strings
-        final String[] muscleNames = getResources().getStringArray(R.array.muslce_options);
+        final String[] muscleNames = getResources().getStringArray(R.array.muscle_options);
 
         // Creamos un AlertDialog con la lista de músculos
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

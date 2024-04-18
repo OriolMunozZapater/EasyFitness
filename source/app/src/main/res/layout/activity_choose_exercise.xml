@@ -32,6 +32,17 @@
             android:textSize="20sp"
             android:layout_gravity="center" />
 
+        <Button
+            android:id="@+id/btnNewExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="New"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_gravity="end"/>
+
     </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
@@ -67,7 +78,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="400dp">
+                android:layout_height="370dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -82,7 +93,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -94,13 +106,6 @@
                             android:layout_marginBottom="20dp"/>
 
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/EasyFitnessColor"/>
-
-
                 </LinearLayout>
             </ScrollView>
 

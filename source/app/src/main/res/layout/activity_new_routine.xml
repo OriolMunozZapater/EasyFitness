@@ -109,14 +109,6 @@
                                 android:background="@null"/>
                         </FrameLayout>
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/EasyFitnessColor"
-                        android:layout_marginTop="20dp"/>
-
-
                 </LinearLayout>
             </ScrollView>
 
