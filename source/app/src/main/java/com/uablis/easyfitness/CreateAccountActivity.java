@@ -59,8 +59,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void backPressed() {
-        Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
-        startActivity(intent);
+        finish();
     }
     private void createAccount(String email, String password, String confirmPassword) {
 

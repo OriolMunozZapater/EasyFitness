@@ -12,15 +12,35 @@
         android:background="#A8711D"
         app:titleEnabled="false">
 
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Back Arrow" />
+
         <!-- TextView personalizado para el título -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PRESELECTED ROUTINES"
+            android:text="PRECREATED ROUTINES"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btnSaveRoutine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Save"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_gravity="end"/>
 
     </androidx.appcompat.widget.Toolbar>
     <RelativeLayout

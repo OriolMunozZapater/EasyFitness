@@ -73,7 +73,6 @@ public class PasswordRecoveryActivity extends AppCompatActivity {
     }
 
     public void back() {
-        Intent intent = new Intent(PasswordRecoveryActivity.this, LoginActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

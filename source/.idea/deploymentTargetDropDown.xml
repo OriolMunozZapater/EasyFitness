@@ -5,10 +5,16 @@
       <entry key="ChooseExerciseActivity">
         <State />
       </entry>
-      <entry key="EditRoutineActivity">
+      <entry key="HomeActivity">
         <State />
       </entry>
-      <entry key="NewRoutineActivity">
+      <entry key="LoginActivity">
+        <State />
+      </entry>
+      <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="TrainingRoutinesActivity">
         <State />
       </entry>
     </value>

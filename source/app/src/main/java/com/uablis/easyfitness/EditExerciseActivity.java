@@ -32,6 +32,7 @@ public class EditExerciseActivity extends AppCompatActivity {
     private Button btnAddExercise;
     private Toolbar toolbar;
     private ImageView backArrow;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,7 @@ public class EditExerciseActivity extends AppCompatActivity {
         exDesc = findViewById(R.id.exDesc);
         exTipo = findViewById(R.id.exTipo);
         exExerciseRatingBar = findViewById(R.id.exExerciseRating);
-        btnAddExercise = findViewById(R.id.btnAddExercise);
+        btnAddExercise = findViewById(R.id.btnSaveExeriseEdit);
 
         toolbar = findViewById(R.id.toolbar);
         backArrow = findViewById(R.id.backArrow);
@@ -65,12 +66,10 @@ public class EditExerciseActivity extends AppCompatActivity {
         String exerciseType = exTipo.getText().toString();
         float exerciseRating = exExerciseRatingBar.getRating();
 
-        Intent intent = new Intent(EditExerciseActivity.this, HomeActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void backPressed() {
-        Intent intent = new Intent(EditExerciseActivity.this, EditRoutineActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,7 +23,9 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     private SearchBar exerciseSearch;
     private Button selectMuscle, newExercise;
     private ImageView backArrow;
+    private LinearLayout exercise;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,15 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         selectMuscle = findViewById(R.id.selectMuscle);
         backArrow = findViewById(R.id.back_arrow);
         newExercise = findViewById(R.id.btnNewExercise);
+        exercise = findViewById(R.id.exercise);
 
+        exercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //afegir ex a la rutina
+                finish();
+            }
+        });
         newExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,9 +72,9 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     }
 
     public void backScreen() {
-        Intent intent = new Intent(ChooseExerciseActivity.this, EditRoutineActivity.class);
-        startActivity(intent);
+        finish();
     }
+
 
     public void selectMuscle() {
         // Obtenemos los nombres de los músculos desde los recursos de strings
