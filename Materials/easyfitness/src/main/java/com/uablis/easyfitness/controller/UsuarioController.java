@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,7 @@ public class UsuarioController {
           existingUsuario.setDescripcion(usuarioDetails.getDescripcion());
           existingUsuario.setRedes_sociales(usuarioDetails.getRedes_sociales());
           existingUsuario.setTiempo_entrenamiento(usuarioDetails.getTiempo_entrenamiento());
+          existingUsuario.setFirstLogin(usuarioDetails.getFirstLogin());
 
           return ResponseEntity.ok(usuarioRepository.save(existingUsuario));
         }).orElseGet(() -> ResponseEntity.notFound().build());
@@ -67,6 +69,13 @@ public class UsuarioController {
           usuarioRepository.delete(usuario);
           return ResponseEntity.ok().<Void>build();
         }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/firstlogin")
+  public ResponseEntity<?> getIsFirstLoginByEmail(@RequestParam String email) {
+    return usuarioRepository.findByCorreo(email)
+        .map(usuario -> ResponseEntity.ok(Collections.singletonMap("isFirstLogin", usuario.getFirstLogin())))
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   // Añadir métodos para manejar otras peticiones como

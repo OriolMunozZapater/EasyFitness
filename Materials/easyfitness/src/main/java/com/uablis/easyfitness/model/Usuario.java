@@ -14,10 +14,11 @@ public class Usuario {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer userID;
 
-  @Column(nullable = false)
+  @Column(name = "is_first_login")
+  private boolean isFirstLogin = true;
+
   private String nombre;
 
-  @Column(nullable = false)
   private String apellido;
 
   @Column(nullable = false, unique = true)
@@ -26,13 +27,10 @@ public class Usuario {
   @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
   private String sexo;
 
-  @Column(nullable = false)
   private Double peso_actual;
 
-  @Column(nullable = false)
   private Integer altura;
 
   @Lob
@@ -66,7 +64,13 @@ public class Usuario {
   private Objetivo objetivo;
 
   // Getters y setters
+  public void setFirstLogin(boolean firstLogin) {
+    isFirstLogin = firstLogin;
+  }
 
+  public boolean getFirstLogin() {
+    return isFirstLogin;
+  }
   public Set<Usuario> getSeguidos() {
     return seguidos;
   }
