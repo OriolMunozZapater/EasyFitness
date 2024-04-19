@@ -60,6 +60,9 @@
         <activity
             android:name=".CreateNewExercise"
             android:exported="true" />
+        <activity
+            android:name=".StartRoutineActivity"
+            android:exported="true" />
 
     </application>
 
