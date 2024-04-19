@@ -19,10 +19,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -84,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Login", "signInWithEmail:success");
-                            openHomeScreen();
+                            checkFirstLogin(email);
                         } else {
                             Log.w("Login", "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -94,8 +100,38 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void openHomeScreen() {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+    private void checkFirstLogin(String email) {
+        String url = "http://192.168.1.97:8080/api/usuarios/firstlogin?email=" + email;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        boolean isFirstLogin = response.getBoolean("isFirstLogin");
+                        if (isFirstLogin) {
+                            openFirstLoginActivity();
+                        } else {
+                            openViewTrainingRoutineActivity();
+                        }
+                    } catch (JSONException e) {
+                        Log.e("LoginActivity", "JSON parsing error: " + e.getMessage());
+                    }
+                },
+                error -> {
+                    Log.e("API Error", "Error checking first login: " + error.toString());
+                });
+
+        queue.add(jsonObjectRequest);
+    }
+
+    private void openFirstLoginActivity() {
+        Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openViewTrainingRoutineActivity() {
+        Intent intent = new Intent(LoginActivity.this, TrainingRoutinesActivity.class);
         startActivity(intent);
         finish();
     }
@@ -104,11 +140,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
         startActivity(intent);
     }
+
     private void openPasswordRecoveryScreen() {
         Intent intent = new Intent(LoginActivity.this, PasswordRecoveryActivity.class);
         startActivity(intent);
     }
-
     private void backPressed() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
