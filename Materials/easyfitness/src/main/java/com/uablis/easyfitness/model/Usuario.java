@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -21,10 +22,9 @@ public class Usuario {
 
   private String apellido;
 
-  @Column(nullable = false, unique = true)
+  @Column(unique = true)
   private String correo;
 
-  @Column(nullable = false)
   private String password;
 
   private String sexo;
@@ -63,9 +63,21 @@ public class Usuario {
   @JoinColumn(name = "objetivoID")
   private Objetivo objetivo;
 
+  @Column(name = "fecha_nacimiento")
+  @Temporal(TemporalType.DATE)
+  private Date fechaNacimiento;
+
   // Getters y setters
   public void setFirstLogin(boolean firstLogin) {
     isFirstLogin = firstLogin;
+  }
+
+  public Date getFechaNacimiento() {
+    return fechaNacimiento;
+  }
+
+  public void setFechaNacimiento(Date fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 
   public boolean getFirstLogin() {
