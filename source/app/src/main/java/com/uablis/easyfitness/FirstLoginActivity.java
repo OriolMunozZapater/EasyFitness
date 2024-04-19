@@ -7,11 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,87 +19,134 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FirstLoginActivity extends AppCompatActivity {
     private EditText etWeight, etName, etSecondName, etHeight;
+    private TextView etDateOfBirth;
     private Button btnSexSelect;
-    private ImageView forwardArrow;
-    private TextView etDateOfBirth, textViewSex;
-    private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Croissant"};
-    private Spinner genderSpinner;
+    private ImageButton forwardArrow;
+    private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo"};
     private Toolbar toolbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_login);
 
+        bindViews();
+        setupListeners();
+    }
+
+    private void bindViews() {
         etWeight = findViewById(R.id.etWeight);
-        etDateOfBirth = findViewById(R.id.etDateOfBirth);
-        btnSexSelect = findViewById(R.id.btnSexSelect);
-        textViewSex = findViewById(R.id.textViewSex);
-        forwardArrow = findViewById(R.id.forwardArrow);
-        etHeight = findViewById(R.id.etHeight);
         etName = findViewById(R.id.etName);
         etSecondName = findViewById(R.id.etSecondName);
-
+        etHeight = findViewById(R.id.etHeight);
+        etDateOfBirth = findViewById(R.id.etDateOfBirth);
+        btnSexSelect = findViewById(R.id.btnSexSelect);
+        forwardArrow = findViewById(R.id.forwardArrow);
         toolbar = findViewById(R.id.toolbar);
+    }
 
-        forwardArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextScreen();
-            }
-        });
+    private void setupListeners() {
+        forwardArrow.setOnClickListener(v -> nextScreen());
+        etDateOfBirth.setOnClickListener(v -> showDatePickerDialog());
+        btnSexSelect.setOnClickListener(this::showSexoOptions);
+    }
 
-        etDateOfBirth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Obtener la fecha actual
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-
-                // Crear y mostrar el DatePickerDialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        FirstLoginActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                // Actualizar el texto del EditText con la fecha seleccionada
-                                etDateOfBirth.setText((month + 1) + "/" + dayOfMonth + "/" + year);
-                            }
-                        },
-                        year, month, dayOfMonth);
-                datePickerDialog.show();
-            }
-        });
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                FirstLoginActivity.this,
+                (view, year, month, dayOfMonth) -> etDateOfBirth.setText(String.format("%d-%02d-%02d", year, month + 1, dayOfMonth)),
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
     }
 
     public void showSexoOptions(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona tu sexo");
-        builder.setItems(genderOptions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String selectedSexo = genderOptions[which].toString();
-                btnSexSelect.setText(selectedSexo);
-            }
-        });
+        builder.setItems(genderOptions, (dialog, which) -> btnSexSelect.setText(genderOptions[which]));
         builder.show();
     }
 
     public void nextScreen() {
-        String aux_weight = etWeight.getText().toString().trim();
-        double weight = Double.parseDouble(aux_weight);
+        if (validateFields()) {
+            updateUserInfo();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Error");
+            builder.setMessage("Por favor, rellena todos los campos antes de continuar.");
+            builder.setPositiveButton("OK", null);
+            builder.show();
+        }
+    }
 
-        String birthDate = etDateOfBirth.getText().toString().trim();
-        String sex = btnSexSelect.getText().toString().trim();
+    private boolean validateFields() {
+        return !etName.getText().toString().trim().isEmpty() &&
+                !etSecondName.getText().toString().trim().isEmpty() &&
+                !etWeight.getText().toString().trim().isEmpty() &&
+                !etHeight.getText().toString().trim().isEmpty() &&
+                !etDateOfBirth.getText().toString().isEmpty() &&
+                !btnSexSelect.getText().toString().equals("Select");
+    }
 
-        Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
-        startActivity(intent);
+    private void updateUserInfo() {
+        String userId = UsuarioActual.getInstance().getUserId();
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("nombre", etName.getText().toString().trim());
+            jsonBody.put("apellido", etSecondName.getText().toString().trim());
+            jsonBody.put("peso_actual", etWeight.getText().toString().trim());
+            jsonBody.put("altura", etHeight.getText().toString().trim());
+            jsonBody.put("fecha_nacimiento", etDateOfBirth.getText().toString());
+            jsonBody.put("sexo", btnSexSelect.getText().toString());
+            jsonBody.put("firstLogin", false);
+
+            sendUpdateRequest(jsonBody);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendUpdateRequest(JSONObject jsonBody) {
+        String userId = UsuarioActual.getInstance().getUserId();
+        String url = "http://192.168.1.97:8080/api/usuarios/" + userId;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, response -> {
+            Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
+            startActivity(intent);
+            finish();
+        }, error -> error.printStackTrace()) {
+            @Override
+            public byte[] getBody() {
+                return jsonBody.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        queue.add(stringRequest);
     }
 }

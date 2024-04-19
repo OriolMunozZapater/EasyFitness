@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("Login", "signInWithEmail:success");
+                            getUserIdFromDatabase(email);
                             checkFirstLogin(email);
                         } else {
                             Log.w("Login", "signInWithEmail:failure", task.getException());
@@ -99,6 +100,32 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void getUserIdFromDatabase(String email) {
+        String url = "http://192.168.1.97:8080/api/usuarios/findUserIdByEmail?email=" + email;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if(response.has("userID")) {
+                            String userId = response.getString("userID");
+                            // Guarda el userId en UsuarioActual
+                            UsuarioActual.getInstance().setUserId(userId);
+                            UsuarioActual.getInstance().setEmail(email);
+                        } else {
+                            Log.e("LoginActivity", "Campo 'userID' no encontrado en la respuesta.");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("LoginActivity", "Error en el parsing del JSON: " + e.getMessage());
+                    }
+                },
+                error -> Log.e("API Error", "Error fetching userId from database: " + error.toString()));
+
+        queue.add(jsonObjectRequest);
+    }
+
 
     private void checkFirstLogin(String email) {
         String url = "http://192.168.1.97:8080/api/usuarios/firstlogin?email=" + email;
