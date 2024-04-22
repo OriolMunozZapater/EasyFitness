@@ -34,7 +34,7 @@ public class EditRoutineActivity extends AppCompatActivity {
     private LinearLayout routine;
     private EditText etEditRoutineName;
     private ImageView backArrow;
-    private Button btnAddExercise;
+    private Button btnAddExercise, btnSave;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,6 +51,15 @@ public class EditRoutineActivity extends AppCompatActivity {
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
         etEditRoutineName = findViewById(R.id.etEditRoutineName);
+        btnSave = findViewById(R.id.btnSave);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+
         training_routines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +95,25 @@ public class EditRoutineActivity extends AppCompatActivity {
         });
     }
 
+    public void save() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to modificate this routine?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //afegir rutina a la bd
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el diálogo
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
     public void goToRoutines() {
         Intent intent = new Intent(EditRoutineActivity.this, TrainingRoutinesActivity.class);
         startActivity(intent);
@@ -96,8 +124,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void backToScreen() {
-        Intent intent = new Intent(EditRoutineActivity.this, TrainingRoutinesActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void deleteExercise() {

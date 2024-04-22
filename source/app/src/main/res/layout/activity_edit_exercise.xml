@@ -120,11 +120,12 @@
                 </RelativeLayout>
 
                 <Button
-                    android:id="@+id/btnAddExercise"
-                    android:layout_width="200dp"
-                    android:layout_height="60dp"
+                    android:id="@+id/btnSaveExeriseEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:backgroundTint="@color/EasyFitnessColor"
+                    app:backgroundTint="@color/EasyFitnessColor"
+                    android:background="@drawable/buton_background"
                     android:text="Save"
                     android:textColor="@color/black"
                     android:textSize="28sp" />
