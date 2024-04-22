@@ -34,7 +34,7 @@ public class NewRoutineActivity extends AppCompatActivity {
     private LinearLayout routine;
     private EditText etEditRoutineName;
     private ImageView backArrow;
-    private Button btnAddExercise;
+    private Button btnAddExercise, btnSaveRoutine;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -51,11 +51,19 @@ public class NewRoutineActivity extends AppCompatActivity {
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
         etEditRoutineName = findViewById(R.id.etRoutineName);
+        btnSaveRoutine = findViewById(R.id.btnSaveNewRoutine);
 
         training_routines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToRoutines();
+            }
+        });
+
+        btnSaveRoutine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveRoutine();
             }
         });
 
@@ -87,6 +95,26 @@ public class NewRoutineActivity extends AppCompatActivity {
         });
     }
 
+    public void saveRoutine() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to create a new routine?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //afegir rutina a la bd
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el diálogo
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
     public void goToRoutines() {
         Intent intent = new Intent(NewRoutineActivity.this, TrainingRoutinesActivity.class);
         startActivity(intent);
@@ -97,8 +125,7 @@ public class NewRoutineActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void backToScreen() {
-        Intent intent = new Intent(NewRoutineActivity.this, TrainingRoutinesActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void deleteExercise() {
