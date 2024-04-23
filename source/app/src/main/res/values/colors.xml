@@ -7,5 +7,7 @@
     <color name="transparent">#00000000</color>
     <color name="colorSpinnerBackground">#202020</color>
     <color name="EasyFitnessColor">#A8711D</color>
+    <color name="layout_type1">#4A4A4A</color>
+    <color name="layout_type2">#BD8D46</color>
 
 </resources>

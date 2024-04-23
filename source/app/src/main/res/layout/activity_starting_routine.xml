@@ -33,7 +33,7 @@
             android:layout_gravity="center" />
 
         <Button
-            android:id="@+id/btnNewExercise"
+            android:id="@+id/btnEndTraining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -158,16 +158,19 @@
 
                     </LinearLayout>
 
-                    <TextView
+                    <EditText
                         android:id="@+id/tvExerciseDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/exerciseShow"
+                        android:background="@color/transparent"
                         android:textColor="@color/EasyFitnessColor"
-                        android:text="Aqui anirà la descr de l'exercici"
+                        android:textColorHint="@color/EasyFitnessColor"
+                        android:hint="Aqui anirà la descr de l'exercici"
                         android:textSize="18sp"/>
 
                     <RelativeLayout
+                        android:id="@+id/rlExerciseThings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvExerciseDescription"
@@ -179,6 +182,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/EasyFitnessColor"
                             android:textSize="20sp"
+                            android:layout_marginStart="35dp"
                             android:text="SERIE"/>
 
                         <TextView
@@ -197,11 +201,83 @@
                             android:textColor="@color/EasyFitnessColor"
                             android:textSize="20sp"
                             android:text="REPS"
+                            android:layout_marginEnd="40dp"
                             android:layout_alignParentRight="true"/>
 
-
-
                     </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/seriesContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_below="@id/rlExerciseThings">
+
+                        <!-- Vista de fila para ingresar datos de serie -->
+                        <LinearLayout
+                            android:id="@+id/serieRow"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/layout_type1"
+                            android:padding="5dp">
+
+                            <!-- Campos de entrada de texto -->
+                            <EditText
+                                android:id="@+id/etNumSerie"
+                                android:layout_width="0dp"
+                                android:textAlignment="center"
+                                android:inputType="number"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"
+                                android:textStyle="bold"
+                                android:textColorHint="@color/black"
+                                android:textColor="@color/black"
+                                android:text="1"/>
+
+                            <EditText
+                                android:id="@+id/etPesSerie"
+                                android:layout_width="0dp"
+                                android:textAlignment="center"
+                                android:inputType="number"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:textColorHint="@color/black"
+                                android:background="@color/transparent"
+                                android:textColor="@color/black"
+                                android:hint="--"/>
+
+                            <EditText
+                                android:id="@+id/etRepsSerie"
+                                android:textAlignment="center"
+                                android:layout_width="0dp"
+                                android:inputType="number"
+                                android:layout_height="wrap_content"
+                                android:textColorHint="@color/black"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:hint="--"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Botón para añadir serie -->
+                    <Button
+                        android:id="@+id/btnAddSerie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Añadir serie"
+                        android:layout_below="@id/seriesContainer"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/buton_background"
+                        app:backgroundTint="@color/EasyFitnessColor"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="15dp"/>
 
                 </RelativeLayout>
 
