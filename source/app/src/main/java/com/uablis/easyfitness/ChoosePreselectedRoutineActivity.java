@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -19,11 +20,11 @@ import org.w3c.dom.Text;
 
 public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private TextView hola;
-    private ImageView home, training_routines, training, profile;
+    private ImageView home, training_routines, training, profile, backArrow;
     private Toolbar toolbar, appbar;
     private ImageButton menu;
+    private RelativeLayout routine;
 
-    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_preselected_routine);
@@ -33,6 +34,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
         menu = findViewById(R.id.menu_button);
+        backArrow = findViewById(R.id.back_arrow);
+        routine = findViewById(R.id.preSelectedRoutine);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +43,29 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                 menuPopUpRoutine(v);
             }
         });
+
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backScreen();
+            }
+        });
+
+        routine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addRoutine();
+            }
+        });
+    }
+
+    public void addRoutine() {
+        //logica per afegir rutina com a seleccionada i mostrarla a view_trainnig_routine
+        finish();
+    }
+
+    public void backScreen() {
+        finish();
     }
 
     public void menuPopUpRoutine(View view) {
