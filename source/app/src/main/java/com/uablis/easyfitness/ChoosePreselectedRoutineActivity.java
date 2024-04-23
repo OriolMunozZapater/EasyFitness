@@ -1,6 +1,8 @@
 package com.uablis.easyfitness;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
@@ -71,8 +73,46 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     public void menuPopUpRoutine(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         MenuInflater inflater = popupMenu.getMenuInflater();
-        inflater.inflate(R.menu.menu_type1, popupMenu.getMenu());
+        inflater.inflate(R.menu.menu_type3, popupMenu.getMenu());
         popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.edit) {
+                    goToEditRoutine();
+                    return true;
+                } else if (item.getItemId() == R.id.delete_option) {
+                    showAlert();
+                } else {
+                    finish();
+                }
+                return false;
+            }
+        });
+    }
+
+    public void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this exercise?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //borrar ex de la bd
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el diálogo
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void goToEditRoutine() {
+        Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, EditRoutineActivity.class);
+        startActivity(intent);
     }
 
     public void ScreenMain() {
