@@ -86,10 +86,17 @@ public class EditRoutineActivity extends AppCompatActivity {
 
         for (String name : routineNames) {
             View routineView = getLayoutInflater().inflate(R.layout.exercise_row, routinesLayout, false);
-            @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView textView = routineView.findViewById(R.id.tvExerciseName);
-            @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageButton eliminateCross = routineView.findViewById(R.id.eliminate_cross);
+            TextView textView = routineView.findViewById(R.id.tvExerciseName);
+            ImageButton eliminateCross = routineView.findViewById(R.id.eliminate_cross);
 
             textView.setText(name);
+
+            routineView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToEditExercise();
+                }
+            });
 
             eliminateCross.setOnClickListener(new View.OnClickListener() {
                 @Override
