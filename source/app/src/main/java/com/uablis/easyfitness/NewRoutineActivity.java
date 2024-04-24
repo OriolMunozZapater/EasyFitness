@@ -31,7 +31,7 @@ public class NewRoutineActivity extends AppCompatActivity {
 
     private ImageButton eliminateCross;
     private ImageView home, training_routines, training, profile;
-    private LinearLayout routine;
+    LinearLayout exerciseContainer;
     private EditText etEditRoutineName;
     private ImageView backArrow;
     private Button btnAddExercise, btnSaveRoutine;
@@ -42,16 +42,16 @@ public class NewRoutineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_routine);
 
-        eliminateCross = findViewById(R.id.eliminate_cross);
         backArrow = findViewById(R.id.back_arrow);
         btnAddExercise = findViewById(R.id.btnAddExercise1);
-        routine = findViewById(R.id.routine);
         profile = findViewById(R.id.profile);
         home = findViewById(R.id.home);
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
-        etEditRoutineName = findViewById(R.id.etRoutineName);
         btnSaveRoutine = findViewById(R.id.btnSaveNewRoutine);
+
+        String[] routineNames = {"bench press", "hack squad"};
+        updateUIWithRoutines(routineNames);
 
         training_routines.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,23 +67,10 @@ public class NewRoutineActivity extends AppCompatActivity {
             }
         });
 
-        routine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToEditExercise();
-            }
-        });
-
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 backToScreen();
-            }
-        });
-        eliminateCross.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteExercise();
             }
         });
 
@@ -93,6 +80,33 @@ public class NewRoutineActivity extends AppCompatActivity {
                 goToAddExerciseScreen();
             }
         });
+    }
+
+    private void updateUIWithRoutines(String[] routineNames) {
+        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+
+        for (String name : routineNames) {
+            View routineView = getLayoutInflater().inflate(R.layout.exercise_row, routinesLayout, false);
+            TextView textView = routineView.findViewById(R.id.tvExerciseName);
+            ImageButton eliminateCross = routineView.findViewById(R.id.eliminate_cross);
+
+            textView.setText(name);
+
+            routineView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToEditExercise();
+                }
+            });
+
+            eliminateCross.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteExercise();
+                }
+            });
+            routinesLayout.addView(routineView);
+        }
     }
 
     public void saveRoutine() {

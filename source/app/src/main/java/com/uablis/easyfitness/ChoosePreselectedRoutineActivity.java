@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -35,16 +36,10 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         home = findViewById(R.id.home);
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
-        menu = findViewById(R.id.menu_button);
         backArrow = findViewById(R.id.back_arrow);
-        routine = findViewById(R.id.preSelectedRoutine);
 
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuPopUpRoutine(v);
-            }
-        });
+        String[] routineNames = {"superaniol", "aniolpeirna"};
+        updateUIWithRoutines(routineNames);
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,13 +47,32 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                 backScreen();
             }
         });
+    }
 
-        routine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addRoutine();
-            }
-        });
+    private void updateUIWithRoutines(String[] routineNames) {
+        LinearLayout routinesLayout = findViewById(R.id.preRoutineContainer);
+
+        for (String name : routineNames) {
+            View routineView = getLayoutInflater().inflate(R.layout.routine_item, routinesLayout, false);
+            TextView textView = routineView.findViewById(R.id.textViewRoutineName);
+            ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
+
+            textView.setText(name);
+
+            routineView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    menuPopUpRoutine(v);
+                }
+            });
+            routinesLayout.addView(routineView);
+        }
     }
 
     public void addRoutine() {

@@ -42,7 +42,9 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_training_routine);
-        loadUserRoutines();
+        // loadUserRoutines();
+        String[] routineNames = {"superaniol", "aniolpeirna"};
+        updateUIWithRoutines(routineNames);
     }
 
     private void loadUserRoutines() {
@@ -96,7 +98,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
             });
             routinesLayout.addView(routineView);
         }
-
     }
 
     public void menuPopUpRoutine(View view) {
