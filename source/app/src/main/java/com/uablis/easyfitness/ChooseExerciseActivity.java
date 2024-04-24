@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ import com.google.android.material.search.SearchBar;
 
 public class ChooseExerciseActivity extends AppCompatActivity {
     private SearchBar exerciseSearch;
+    LinearLayout exerciseContainer;
     private Button selectMuscle, newExercise;
     private ImageView backArrow;
 
@@ -33,6 +37,9 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         selectMuscle = findViewById(R.id.selectMuscle);
         backArrow = findViewById(R.id.back_arrow);
         newExercise = findViewById(R.id.btnNewExercise);
+
+        String[] routineNames = {"bench press", "hack squad"};
+        updateUIWithRoutines(routineNames);
 
         newExercise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +60,25 @@ public class ChooseExerciseActivity extends AppCompatActivity {
                 selectMuscle();
             }
         });
+    }
+
+    private void updateUIWithRoutines(String[] routineNames) {
+        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+
+        for (String name : routineNames) {
+            View routineView = getLayoutInflater().inflate(R.layout.exercise_row2, routinesLayout, false);
+            TextView textView = routineView.findViewById(R.id.tvExerciseName);
+
+
+            textView.setText(name);
+            routineView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            routinesLayout.addView(routineView);
+        }
     }
 
     public void goToNewExercise() {
