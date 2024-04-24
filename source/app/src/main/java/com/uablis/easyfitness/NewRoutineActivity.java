@@ -116,8 +116,7 @@ public class NewRoutineActivity extends AppCompatActivity {
     }
 
     public void goToRoutines() {
-        Intent intent = new Intent(NewRoutineActivity.this, TrainingRoutinesActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void goToEditExercise(){

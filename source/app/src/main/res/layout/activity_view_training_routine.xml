@@ -36,47 +36,20 @@
             android:orientation="vertical"
             android:padding="32dp">
 
+            <!-- Dentro de activity_view_training_routine.xml -->
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="450dp">
+                android:layout_height="450dp"
+                android:layout_below="@id/toolbar"
+                android:padding="16dp">
 
-                <!-- Aixo és cada rutina-->
+                <!-- Este LinearLayout contendrá dinámicamente cada rutina -->
                 <LinearLayout
+                    android:id="@+id/routinesContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="20dp">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@color/EasyFitnessColor" />
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bench Press"
-                            android:textColor="@color/EasyFitnessColor"
-                            android:textSize="18sp"
-                            android:layout_marginTop="30dp"
-                            android:layout_marginBottom="20dp"/>
-
-                        <ImageButton
-                            android:id="@+id/menu_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_arrow"
-                            android:background="@color/transparent"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"/>
-
-                    </RelativeLayout>
-
+                    <!-- Los elementos de la rutina se añadirán aquí dinámicamente -->
                 </LinearLayout>
             </ScrollView>
 
@@ -89,7 +62,8 @@
                 app:backgroundTint="@color/EasyFitnessColor"
                 android:text="+ Add routine"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:onClick="menuPopUpAddRoutine"/>
 
         </LinearLayout>
 

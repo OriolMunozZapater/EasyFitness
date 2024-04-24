@@ -57,8 +57,7 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
-                startActivity(intent);
+                finish();
                 //afegir exercici a la bd
             }
         });
@@ -78,8 +77,7 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

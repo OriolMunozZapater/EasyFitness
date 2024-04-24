@@ -61,8 +61,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     }
 
     public void backScreen() {
-        Intent intent = new Intent(ChooseExerciseActivity.this, EditRoutineActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     public void selectMuscle() {
