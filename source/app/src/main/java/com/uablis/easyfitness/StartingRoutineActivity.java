@@ -39,7 +39,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         saveSerie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveSerieToAppi();
+                saveSerie1();
             }
         });
 
@@ -71,7 +71,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         trainingDuration.start();
     }
 
-    public void saveSerieToAppi() {
+    public void saveSerie1() {
         // Cambiar el color de fondo del LinearLayout newRow
         int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
         LinearLayout serierow = findViewById(R.id.serieRow);
