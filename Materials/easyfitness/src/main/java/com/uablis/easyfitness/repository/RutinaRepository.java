@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface RutinaRepository extends JpaRepository<Rutina, Integer> {
   List<Rutina> findAllByUserID(Integer userID);
+  List<Rutina> findByUserIDAndNombre(Integer userID, String nombre);
 }
 

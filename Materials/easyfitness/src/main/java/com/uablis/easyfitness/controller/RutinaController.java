@@ -29,6 +29,15 @@ public class RutinaController {
         return rutina.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Rutina>> getRutinaByUserIdAndNombre(@RequestParam Integer userID, @RequestParam String nombre) {
+        List<Rutina> rutinas = rutinaRepository.findByUserIDAndNombre(userID, nombre);
+        if (rutinas.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(rutinas);
+    }
+
     // Crear una nueva rutina
     @PostMapping
     public Rutina createRutina(@RequestBody Rutina rutina) {
