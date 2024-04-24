@@ -2,23 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="EditRoutineActivity">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Aniol\.android\avd\Pixel_8_Pro_API_30_2.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-24T13:06:49.707931300Z" />
-        </State>
-      </entry>
-      <entry key="TrainingRoutinesActivity">
+      <entry key="app">
         <State />
       </entry>
     </value>
