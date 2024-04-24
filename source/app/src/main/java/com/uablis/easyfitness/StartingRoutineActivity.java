@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat;
 public class StartingRoutineActivity extends AppCompatActivity {
     private Chronometer trainingDuration;
     LinearLayout seriesContainer;
+    ImageButton saveSerie;
     private Button btnAddSerie, endTraining;
     private int serieCount = 2;
 
@@ -32,6 +34,14 @@ public class StartingRoutineActivity extends AppCompatActivity {
         seriesContainer = findViewById(R.id.seriesContainer);
         btnAddSerie = findViewById(R.id.btnAddSerie);
         endTraining = findViewById(R.id.btnEndTraining);
+        saveSerie = findViewById(R.id.saveSerie);
+
+        saveSerie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveSerieToAppi();
+            }
+        });
 
         endTraining.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +69,13 @@ public class StartingRoutineActivity extends AppCompatActivity {
         // Iniciar el cronómetro
         trainingDuration.setBase(SystemClock.elapsedRealtime());
         trainingDuration.start();
+    }
+
+    public void saveSerieToAppi() {
+        // Cambiar el color de fondo del LinearLayout newRow
+        int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
+        LinearLayout serierow = findViewById(R.id.serieRow);
+        serierow.setBackgroundColor(newColor);
     }
 
     public void endRoutine() {
@@ -106,6 +123,16 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         // Incrementar el contador de serie
         serieCount++;
+
+        ImageButton saveSerie = newRow.findViewById(R.id.saveSerie);
+        saveSerie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cambiar el color de fondo del LinearLayout newRow
+                int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
+                newRow.setBackgroundColor(newColor);
+            }
+        });
 
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
