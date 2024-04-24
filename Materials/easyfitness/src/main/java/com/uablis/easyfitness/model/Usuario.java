@@ -1,8 +1,11 @@
 package com.uablis.easyfitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
@@ -12,25 +15,22 @@ public class Usuario {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer userID;
 
-  @Column(nullable = false)
+  @Column(name = "is_first_login")
+  private boolean isFirstLogin = true;
+
   private String nombre;
 
-  @Column(nullable = false)
   private String apellido;
 
-  @Column(nullable = false, unique = true)
+  @Column(unique = true)
   private String correo;
 
-  @Column(nullable = false)
   private String password;
 
-  @Column(nullable = false)
   private String sexo;
 
-  @Column(nullable = false)
   private Double peso_actual;
 
-  @Column(nullable = false)
   private Integer altura;
 
   @Lob
@@ -44,13 +44,61 @@ public class Usuario {
   private String redes_sociales;
 
   @Column
-  private String tiempo_entrenamiento; // Consider using java.time.Duration or a Long for seconds/milliseconds
+  private String tiempo_entrenamiento;
+
+  @JsonIgnore
+  @ManyToMany(mappedBy = "seguidos")
+  private Set<Usuario> seguidores;
+
+  @JsonIgnore
+  @ManyToMany
+  @JoinTable(
+      name = "usuarios_seguidos",
+      joinColumns = @JoinColumn(name = "seguidoID"),
+      inverseJoinColumns = @JoinColumn(name = "usuarioID")
+  )
+  private Set<Usuario> seguidos;
 
   @OneToOne
   @JoinColumn(name = "objetivoID")
   private Objetivo objetivo;
 
+  @Column(name = "fecha_nacimiento")
+  @Temporal(TemporalType.DATE)
+  private Date fechaNacimiento;
+
   // Getters y setters
+  public void setFirstLogin(boolean firstLogin) {
+    isFirstLogin = firstLogin;
+  }
+
+  public Date getFechaNacimiento() {
+    return fechaNacimiento;
+  }
+
+  public void setFechaNacimiento(Date fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
+  }
+
+  public boolean getFirstLogin() {
+    return isFirstLogin;
+  }
+  public Set<Usuario> getSeguidos() {
+    return seguidos;
+  }
+
+  public void setSeguidos(Set<Usuario> seguidos) {
+    this.seguidos = seguidos;
+  }
+
+  public Set<Usuario> getSeguidores() {
+    return seguidores;
+  }
+
+  public void setSeguidores(Set<Usuario> seguidores) {
+    this.seguidores = seguidores;
+  }
+
   public Integer getUserID() {
     return userID;
   }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -61,7 +62,7 @@
             android:name=".CreateNewExercise"
             android:exported="true" />
         <activity
-            android:name=".StartRoutineActivity"
+            android:name=".StartingRoutineActivity"
             android:exported="true" />
 
     </application>

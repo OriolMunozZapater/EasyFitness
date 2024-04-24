@@ -78,7 +78,8 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -115,7 +116,7 @@ public class CreateNewExercise extends AppCompatActivity {
 
     public void showMuscleOptions(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select muscle");
+        builder.setTitle("Selecciona tu sexo");
         builder.setItems(muscle_options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

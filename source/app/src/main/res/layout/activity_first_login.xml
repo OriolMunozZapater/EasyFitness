@@ -172,12 +172,15 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
-            <ImageView
+
+            <ImageButton
                 android:id="@+id/forwardArrow"
                 android:layout_width="82dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:src="@drawable/ic_forward_arrow" />
+                android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_forward_arrow"/>
+
         </LinearLayout>
     </RelativeLayout>
 

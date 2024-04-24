@@ -20,18 +20,19 @@ CREATE TABLE objetivo (
 
 CREATE TABLE usuario (
   userID INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  apellido VARCHAR(255) NOT NULL,
+  nombre VARCHAR(255),
+  apellido VARCHAR(255),
   correo VARCHAR(255) UNIQUE NOT NULL,
-  contraseña VARCHAR(255) NOT NULL,
-  sexo VARCHAR(10) NOT NULL,
-  peso_actual DECIMAL(5,2) NOT NULL,
-  altura INT NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  sexo VARCHAR(10),
+  peso_actual DECIMAL(5,2),
+  altura INT,
   foto BLOB,
   descripcion VARCHAR(255),
   redes_sociales VARCHAR(255),
   tiempo_entrenamiento TIME,
   objetivoID INT,
+  is_first_login BOOLEAN DEFAULT TRUE,
   FOREIGN KEY (objetivoID) REFERENCES objetivo(objetivoID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -47,32 +48,33 @@ CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
-  descripción VARCHAR(255),
+  descripcion VARCHAR(255),
   tipo VARCHAR(50),
-  valoración DOUBLE,
+  valoracion DOUBLE,
   grupo_muscular VARCHAR(50),
   video BLOB
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
   serieID INT AUTO_INCREMENT PRIMARY KEY,
-  ejercicio_ID INT NOT NULL,
+  ejercicioID INT NOT NULL,
   n_repeticiones INT,
   peso INT,
   comentario_serie VARCHAR(255),
   tipo VARCHAR(50),
-  FOREIGN KEY (ejercicio_ID) REFERENCES ejercicio(ejercicioID)
+  FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE valoracion_ejercicio (
+  valoracionID INT AUTO_INCREMENT PRIMARY KEY,
   userID INT NOT NULL,
   ejercicioID INT NOT NULL,
   valoracion INT,
   comentario VARCHAR(255),
-  PRIMARY KEY (userID, ejercicioID),
   FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE rutina (
   rutinaID INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,17 +86,17 @@ CREATE TABLE rutina (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE rutina_ejercicio (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT NOT NULL,
   ejercicioID INT NOT NULL,
   orden INT NOT NULL,
-  PRIMARY KEY (rutinaID, ejercicioID),
-  FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID),
+  FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID) ON DELETE CASCADE,
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE rutina_ejercicio (
+CREATE TABLE rutina_compartida (
   rutinaID INT NOT NULL,
-  usuarioID INT NOT NULL,
+  userID INT NOT NULL,
   FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID),
-  FOREIGN KEY (usuarioID) REFERENCES usuario(usuarioID)
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

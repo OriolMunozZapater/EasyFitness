@@ -1,6 +1,7 @@
 package com.uablis.easyfitness;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -24,9 +25,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private ImageView home, training_routines, training, profile, backArrow;
     private Toolbar toolbar, appbar;
     private ImageButton menu;
-    private Button savePreRoutine;
+    private RelativeLayout routine;
 
-    @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_preselected_routine);
@@ -36,15 +36,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
         menu = findViewById(R.id.menu_button);
-        savePreRoutine = findViewById(R.id.btnSaveRoutine);
         backArrow = findViewById(R.id.back_arrow);
-
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        routine = findViewById(R.id.preSelectedRoutine);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,41 +46,28 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
             }
         });
 
-        training_routines.setOnClickListener(new View.OnClickListener() {
+        backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, TrainingRoutinesActivity.class);
-                startActivity(intent);
-                finish();
+                backScreen();
             }
         });
 
-        savePreRoutine.setOnClickListener(new View.OnClickListener() {
+        routine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveRoutine();
+                addRoutine();
             }
         });
     }
 
-    public void saveRoutine() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to create a new routine?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //afegir rutina a la bd
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacer nada, simplemente cerrar el diálogo
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+    public void addRoutine() {
+        //logica per afegir rutina com a seleccionada i mostrarla a view_trainnig_routine
+        finish();
+    }
+
+    public void backScreen() {
+        finish();
     }
 
     public void menuPopUpRoutine(View view) {
@@ -103,7 +83,7 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                     return true;
                 } else if (item.getItemId() == R.id.delete_option) {
                     showAlert();
-                } else if (item.getItemId() == R.id.add_option){
+                } else {
                     finish();
                 }
                 return false;

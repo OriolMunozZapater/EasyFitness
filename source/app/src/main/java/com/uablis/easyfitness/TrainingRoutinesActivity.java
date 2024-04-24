@@ -66,11 +66,16 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.delete_option) {
                     showAlert();
                 } else if (item.getItemId() == R.id.start_option){
-                    return false;
+                    goToStartRoutine();
                 }
                 return false;
             }
         });
+    }
+
+    public void goToStartRoutine() {
+        Intent intent = new Intent(TrainingRoutinesActivity.this, StartingRoutineActivity.class);
+        startActivity(intent);
     }
 
     public void menuPopUpAddRoutine(View view) {

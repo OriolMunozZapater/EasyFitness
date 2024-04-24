@@ -5,7 +5,4 @@
     <item
         android:id="@+id/delete_option"
         android:title="Eliminar"/>
-    <item
-        android:id="@+id/add_option"
-        android:title="Add"/>
 </menu>
