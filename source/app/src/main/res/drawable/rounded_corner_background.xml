@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#4BCCCCCC" /> <!-- Ajusta el valor de alfa (80) según tu preferencia -->
+    <corners android:radius="20dp" /> <!-- Ajusta el radio para controlar la redondez de las esquinas -->
+</shape>
