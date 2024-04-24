@@ -27,6 +27,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 public class EditRoutineActivity extends AppCompatActivity {
 
     private ImageButton eliminateCross;
@@ -127,13 +135,43 @@ public class EditRoutineActivity extends AppCompatActivity {
         finish();
     }
 
+    private boolean deleteExerciseFromDatabase() {
+        int idExercise=0;
+        String url="http://192.168.1.97:8080/api/rutina_ejercicios"+idExercise;
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // Crear la solicitud DELETE
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejar cualquier error de la solicitud DELETE
+                        error.printStackTrace();
+                    }
+                });
+
+        // Agregar la solicitud a la cola de solicitudes
+        queue.add(stringRequest);
+        return true;
+    }
+
     public void deleteExercise() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("¿Estás seguro de eliminar?")
                 .setCancelable(false)
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        if(deleteExerciseFromDatabase()) {
+                            Toast.makeText(EditRoutineActivity.this, "Ejercicio eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(EditRoutineActivity.this, "Error al eliminar el ejercicio", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -145,6 +183,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
 
     public void goToAddExerciseScreen() {
         Intent intent = new Intent(EditRoutineActivity.this, ChooseExerciseActivity.class);
