@@ -10,13 +10,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class TrainingRoutinesActivity extends AppCompatActivity {
@@ -26,30 +38,65 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     private ImageButton menu;
     private Button btnAddRoutine;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_training_routine);
+        loadUserRoutines();
+    }
 
-        profile = findViewById(R.id.profile);
-        home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
-        btnAddRoutine = findViewById(R.id.btnAddRoutine);
-        menu = findViewById(R.id.menu_button);
+    private void loadUserRoutines() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String userId = UsuarioActual.getInstance().getUserId();
+        String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + userId;
 
-        menu.setOnClickListener(new View.OnClickListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            String[] routineNames = new String[jsonArray.length()];
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                routineNames[i] = jsonObject.getString("nombre");
+
+                            }
+                            updateUIWithRoutines(routineNames);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(TrainingRoutinesActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onClick(View v) {
-                menuPopUpRoutine(v);
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(TrainingRoutinesActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        btnAddRoutine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuPopUpAddRoutine(v);
-            }
-        });
+        queue.add(stringRequest);
+    }
+
+    private void updateUIWithRoutines(String[] routineNames) {
+        LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
+
+        for (String name : routineNames) {
+            View routineView = getLayoutInflater().inflate(R.layout.routine_item, routinesLayout, false);
+            TextView textView = routineView.findViewById(R.id.textViewRoutineName);
+            ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
+
+            textView.setText(name);
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    menuPopUpRoutine(v);
+                }
+            });
+            routinesLayout.addView(routineView);
+        }
+
     }
 
     public void menuPopUpRoutine(View view) {
