@@ -7,6 +7,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -60,11 +61,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
         trainingDuration.start();
     }
 
-    @SuppressLint("SetTextI18n")
+
     private void updateUIWithRoutines(String[] routineNames) {
         LinearLayout routinesLayout = findViewById(R.id.exerciseTrainContainer);
-        final int[] serieCount = {2};
-
         for (String name : routineNames) {
             View routineView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
             TextView textView = routineView.findViewById(R.id.tvExerciseName);
@@ -72,10 +71,31 @@ public class StartingRoutineActivity extends AppCompatActivity {
             LinearLayout seriesContainer = routineView.findViewById(R.id.seriesContainer);
 
             textView.setText(name);
+
             addSerie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addNewSerie(seriesContainer, serieCount[0]);
+                    addNewSerie(seriesContainer);
+                }
+            });
+
+            // Agregar un OnClickListener al ImageButton de la primera fila de serie por defecto
+            ImageButton saveSerieFirstRow = routineView.findViewById(R.id.saveSerie);
+            saveSerieFirstRow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
+                    int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
+                    firstRow.setBackgroundColor(newColor);
+                }
+            });
+
+            // Agregar un OnClickListener al ImageButton para eliminar el ejercicio
+            ImageButton eliminateExercise = routineView.findViewById(R.id.eliminate_cross);
+            eliminateExercise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteExercise(routineView);
                 }
             });
 
@@ -83,13 +103,39 @@ public class StartingRoutineActivity extends AppCompatActivity {
         }
     }
 
-    private void addNewSerie(LinearLayout seriesContainer, int serieCount) {
+    public void deleteExercise(View routineView) {
+        // Mostrar un diálogo de confirmación antes de eliminar el ejercicio
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartingRoutineActivity.this);
+        builder.setTitle("Eliminar ejercicio");
+        builder.setMessage("¿Estás seguro de que quieres eliminar este ejercicio?");
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Obtener el padre del LinearLayout que contiene todo el diseño del ejercicio y eliminarlo
+                ViewGroup parent = (ViewGroup) routineView.getParent();
+                parent.removeView(routineView);
+                dialog.dismiss(); // Cerrar el diálogo
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Cerrar el diálogo
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void addNewSerie(LinearLayout seriesContainer) {
+        // Obtener el número de serie de la última fila agregada al contenedor
+        int lastSerieNumber = seriesContainer.getChildCount();
 
         // Inflar la vista de fila de serie desde XML
         LinearLayout newRow = (LinearLayout) getLayoutInflater().inflate(R.layout.row_serie, null);
 
         // Alternar el color de fondo
-        int bgColor = ContextCompat.getColor(this, serieCount % 2 == 0 ? R.color.layout_type2 : R.color.layout_type1);
+        int bgColor = ContextCompat.getColor(this, lastSerieNumber % 2 == 0 ? R.color.layout_type1 : R.color.layout_type2);
         newRow.setBackgroundColor(bgColor);
 
         // Establecer ID único para la nueva fila
@@ -105,10 +151,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         // Obtener el EditText para el número de serie y asignarle el valor del contador de serie
         EditText etNumSerie = newRow.findViewById(R.id.etNumSerie);
-        etNumSerie.setText(String.valueOf(serieCount));
-
-        // Incrementar el contador de serie
-        serieCount++;
+        etNumSerie.setText(String.valueOf(lastSerieNumber + 1)); // Aumentar el número de serie en uno
 
         ImageButton saveSerie = newRow.findViewById(R.id.saveSerie);
         saveSerie.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +166,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
     }
+
 
     public void endRoutine() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
