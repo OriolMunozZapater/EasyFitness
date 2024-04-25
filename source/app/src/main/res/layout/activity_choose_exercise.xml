@@ -81,31 +81,12 @@
                 android:layout_height="370dp">
 
                 <LinearLayout
+                    android:id="@+id/exerciseContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/EasyFitnessColor"/>
-                    <!-- Cada un d'aquests és un exercici-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="20dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bench Press"
-                            android:textColor="@color/EasyFitnessColor"
-                            android:textSize="18sp"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="20dp"/>
-
-                    </LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
