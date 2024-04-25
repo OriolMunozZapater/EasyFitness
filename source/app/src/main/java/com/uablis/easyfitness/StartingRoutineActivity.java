@@ -3,6 +3,7 @@ package com.uablis.easyfitness;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -19,10 +21,8 @@ import androidx.core.content.ContextCompat;
 
 public class StartingRoutineActivity extends AppCompatActivity {
     private Chronometer trainingDuration;
-    LinearLayout seriesContainer;
-    ImageButton saveSerie;
-    private Button btnAddSerie, endTraining;
-    private int serieCount = 2;
+    private Button endTraining;
+    private LinearLayout routinesLayout;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -31,28 +31,17 @@ public class StartingRoutineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_starting_routine);
 
         trainingDuration = findViewById(R.id.chronometer);
-        seriesContainer = findViewById(R.id.seriesContainer);
-        btnAddSerie = findViewById(R.id.btnAddSerie);
-        endTraining = findViewById(R.id.btnEndTraining);
-        saveSerie = findViewById(R.id.saveSerie);
 
-        saveSerie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveSerie1();
-            }
-        });
+        endTraining = findViewById(R.id.btnEndTraining);
+        routinesLayout = findViewById(R.id.exerciseTrainContainer);
+
+        String[] routineNames = {"bench press", "hack squad"};
+        updateUIWithRoutines(routineNames);
 
         endTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 endRoutine();
-            }
-        });
-        btnAddSerie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewSerie();
             }
         });
 
@@ -71,34 +60,31 @@ public class StartingRoutineActivity extends AppCompatActivity {
         trainingDuration.start();
     }
 
-    public void saveSerie1() {
-        // Cambiar el color de fondo del LinearLayout newRow
-        int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
-        LinearLayout serierow = findViewById(R.id.serieRow);
-        serierow.setBackgroundColor(newColor);
+    @SuppressLint("SetTextI18n")
+    private void updateUIWithRoutines(String[] routineNames) {
+        LinearLayout routinesLayout = findViewById(R.id.exerciseTrainContainer);
+        final int[] serieCount = {2};
+
+        for (String name : routineNames) {
+            View routineView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
+            TextView textView = routineView.findViewById(R.id.tvExerciseName);
+            Button addSerie = routineView.findViewById(R.id.btnAddSerie);
+            LinearLayout seriesContainer = routineView.findViewById(R.id.seriesContainer);
+
+            textView.setText(name);
+            addSerie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addNewSerie(seriesContainer, serieCount[0]);
+                }
+            });
+
+            routinesLayout.addView(routineView);
+        }
     }
 
-    public void endRoutine() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to end this training session?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //guardar les vaines a la bd
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacer nada, simplemente cerrar el diálogo
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-    }
+    private void addNewSerie(LinearLayout seriesContainer, int serieCount) {
 
-    private void addNewSerie() {
         // Inflar la vista de fila de serie desde XML
         LinearLayout newRow = (LinearLayout) getLayoutInflater().inflate(R.layout.row_serie, null);
 
@@ -136,5 +122,25 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
+    }
+
+    public void endRoutine() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to end this training session?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //guardar les vaines a la bd
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el diálogo
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 }
