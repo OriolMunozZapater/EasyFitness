@@ -64,12 +64,13 @@ public class RutinaController {
 
     // Métodos personalizados:
 
-  @GetMapping("/usuario/{userId}")
-  public ResponseEntity<List<Rutina>> getRutinasByUserId(@PathVariable Integer userId) {
-    List<Rutina> rutinas = rutinaRepository.findAllByUserID(userId);
-    if(rutinas.isEmpty()) {
-      return ResponseEntity.notFound().build();
+    @GetMapping("/usuario/{userId}")
+    public ResponseEntity<List<Rutina>> getRutinasByUserId(@PathVariable Integer userId) {
+      List<Rutina> rutinas = rutinaRepository.findAllByUserID(userId);
+      if (rutinas.isEmpty()) {
+        return ResponseEntity.notFound().build();
+      }
+      return ResponseEntity.ok(rutinas);
     }
-    return ResponseEntity.ok(rutinas);
-  }
+
 }
