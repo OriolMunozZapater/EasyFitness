@@ -61,7 +61,6 @@ CREATE TABLE serie (
   n_repeticiones INT,
   peso INT,
   comentario_serie VARCHAR(255),
-  tipo VARCHAR(50),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
