@@ -45,6 +45,15 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         // loadUserRoutines();
         String[] routineNames = {"superaniol", "aniolpeirna"};
         updateUIWithRoutines(routineNames);
+
+        profile = findViewById(R.id.profile);
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainingRoutinesActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadUserRoutines() {

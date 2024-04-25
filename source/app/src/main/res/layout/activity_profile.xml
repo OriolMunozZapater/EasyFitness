@@ -239,7 +239,7 @@
                         android:id="@+id/btnEditPersonalData"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/editbutton"
+                        android:src="@drawable/edit_button"
                         android:gravity="center_horizontal"
                         android:background="?android:selectableItemBackground"
                         android:contentDescription="@string/login_button"
