@@ -47,7 +47,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         updateUIWithRoutines(routineNames);
 
         profile = findViewById(R.id.profile);
-
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

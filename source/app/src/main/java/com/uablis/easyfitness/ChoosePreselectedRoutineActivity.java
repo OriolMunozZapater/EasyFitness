@@ -36,14 +36,31 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 
 public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
-    private TextView hola;
     private ImageView home, training_routines, training, profile, backArrow;
-    private Toolbar toolbar, appbar;
-    private ImageButton menu;
-    private RelativeLayout routine;
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_preselected_routine);
+
+        profile = findViewById(R.id.profile);
+        home = findViewById(R.id.home);
+        training_routines = findViewById(R.id.training_routines);
+        training = findViewById(R.id.training_session);
+        backArrow = findViewById(R.id.back_arrow);
+        String[] routineNames = {"superaniol", "aniolpeirna"}; String[] routineID = {"1", "2"};
 
 
-    private void copyPredifinedRoutine() {
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backScreen();
+            }
+        });
+
+        updateUIWithRoutines(routineNames, routineID, "1234");
+    }
+
+    private void loadPredifinedRoutine() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
         String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + 0;
@@ -77,30 +94,37 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
 
         queue.add(stringRequest);
     }
-
     private void updateUIWithRoutines(String[] routineNames, String[] routineIDs, String userID) {
-        LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
+        LinearLayout routinesLayout = findViewById(R.id.preRoutineContainer);
 
-        for (int i =0; i < routineNames.length; i++) {
+        for (String name : routineNames) {
             View routineView = getLayoutInflater().inflate(R.layout.routine_item, routinesLayout, false);
             TextView textView = routineView.findViewById(R.id.textViewRoutineName);
             ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
 
-            textView.setText(routineNames[i]);
-            int finalI = i;
+            textView.setText(name);
+            //eto ns
+            int finalI = 0;
+            int finalI1 = finalI;
+            routineView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    copyRoutine(routineIDs[finalI1], userID);
+                }
+            });
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    copyRoutine(routineIDs[finalI], userID);
+                    menuPopUpRoutine(v);
                 }
             });
             routinesLayout.addView(routineView);
-        }
 
+            finalI++;
+        }
     }
 
     protected void copyRoutine(String copiedRoutineID, String userID) {
-
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://192.168.1.97:8080/api/rutinas/" + copiedRoutineID;
 
@@ -193,8 +217,6 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-
-
     private void showAlert(String title, String message) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(ChoosePreselectedRoutineActivity.this, R.style.AlertDialogTheme);
         builder.setTitle(title)
@@ -211,48 +233,9 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     }
 
     private void navigateToLogin() {
-        Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+        Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Limpia el back stack
         startActivity(intent);
-    }
-
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_preselected_routine);
-
-        profile = findViewById(R.id.profile);
-        home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
-        menu = findViewById(R.id.menu_button);
-        backArrow = findViewById(R.id.back_arrow);
-        routine = findViewById(R.id.preSelectedRoutine);
-
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                menuPopUpRoutine(v);
-            }
-        });
-
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backScreen();
-            }
-        });
-
-        routine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addRoutine();
-            }
-        });
-    }
-
-    public void addRoutine() {
-        //logica per afegir rutina com a seleccionada i mostrarla a view_trainnig_routine
-        finish();
     }
 
     public void backScreen() {
@@ -304,8 +287,4 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void ScreenMain() {
-        Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, LoginActivity.class);
-        startActivity(intent);
-    }
 }

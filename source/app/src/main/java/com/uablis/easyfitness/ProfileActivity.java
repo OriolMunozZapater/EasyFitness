@@ -25,24 +25,32 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        recuperarDatosPerfil();
+        //recuperarDatosPerfil();
 
         profile = findViewById(R.id.profile);
         home = findViewById(R.id.home);
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
-        toolbar = findViewById(R.id.toolbar);
+
         edit_profile = findViewById(R.id.btnEditPersonalData);
 
         edit_profile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToEditData();
-                }
+            @Override
+            public void onClick(View v) {
+                goToEditData();
             }
-        );
+        });
 
+        training_routines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
+
     public void recuperarDatosPerfil() {
         // Obtener referencias a los elementos de la interfaz
         TextView pesoObjetivoTextView = findViewById(R.id.pesObjectiu);
@@ -73,10 +81,10 @@ public class ProfileActivity extends AppCompatActivity {
         String sexo = preferencias.getString("sexo", "");
         sexoTextView.setText(sexo);*/
     }
-
     public void goToEditData() {
         Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_DETALLS_PERFIL*/EditRoutineActivity.class);
         startActivity(intent);
     }
+
 }
 
