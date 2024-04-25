@@ -173,11 +173,35 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                                         // La inserción fue exitosa
                                         showAlert("Éxito", "Rutina creada exitosamente y datos guardados en la API.");
                                         String idNewRoutine = getNewRoutineID(routineName, userID);
-                                        String postUrl = "http://192.168.1.97:8080/api/rutinas/";
+
                                     }
 
                                     private String getNewRoutineID(String routineName, String userID) {
 
+                                        RequestQueue queue = Volley.newRequestQueue(this);
+                                        String url = "http://localhost:8080/api/rutinas/buscar?userID=" + userID + "&nombre=" + routineName;
+
+                                        // Primera solicitud GET para obtener los detalles de la rutina
+                                        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                                                new Response.Listener<String>() {
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        try {
+                                                            JSONArray jsonArray = new JSONArray(response);
+
+
+                                                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                                                String routineName = jsonObject.getString("rutinaID");
+                                                                String routineDescription = jsonObject.getString("descripcion");
+                                                                String publicRoutine = jsonObject.getString("publico");
+                                                                insertNewRoutine(routineName, routineDescription, publicRoutine, userID);
+
+
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                            Toast.makeText(ChoosePreselectedRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
                                         return "";
                                     }
                                 },
