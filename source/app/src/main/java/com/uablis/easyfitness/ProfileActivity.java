@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Recuperar datos de BD
 
         // Peso objetivo
-        int pesoObjetivo = preferencias.getInt("peso_objetivo", 0);
+        /*int pesoObjetivo = preferencias.getInt("peso_objetivo", 0);
         pesoObjetivoTextView.setText(String.valueOf(pesoObjetivo) + " Kg");
 
         // Peso actual
@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Sexo
         String sexo = preferencias.getString("sexo", "");
-        sexoTextView.setText(sexo);
+        sexoTextView.setText(sexo);*/
     }
 
     public void goToEditData() {
