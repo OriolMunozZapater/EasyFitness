@@ -67,6 +67,9 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="true" />
+        <activity
+            android:name=".CheckTrainingsActivity"
+            android:exported="true" />
 
     </application>
 
