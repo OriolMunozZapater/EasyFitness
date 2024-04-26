@@ -14,16 +14,37 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StartingRoutineActivity extends AppCompatActivity {
     private Chronometer trainingDuration;
     private Button endTraining;
     private LinearLayout routinesLayout;
+    private long startTime;
+    private int rutinaId;
+    private String routineName;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -36,8 +57,12 @@ public class StartingRoutineActivity extends AppCompatActivity {
         endTraining = findViewById(R.id.btnEndTraining);
         routinesLayout = findViewById(R.id.exerciseTrainContainer);
 
-        String[] routineNames = {"bench press", "hack squad"};
-        updateUIWithRoutines(routineNames);
+        // rutinaId = 1;
+        rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
+        // String routineName = "bench press";
+        obtenerRutinaName(rutinaId);
+
+        updateUIWithRoutines(routineName);
 
         endTraining.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,45 +87,44 @@ public class StartingRoutineActivity extends AppCompatActivity {
     }
 
 
-    private void updateUIWithRoutines(String[] routineNames) {
+    private void updateUIWithRoutines(String routineName) {
         LinearLayout routinesLayout = findViewById(R.id.exerciseTrainContainer);
-        for (String name : routineNames) {
-            View routineView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
-            TextView textView = routineView.findViewById(R.id.tvExerciseName);
-            Button addSerie = routineView.findViewById(R.id.btnAddSerie);
-            LinearLayout seriesContainer = routineView.findViewById(R.id.seriesContainer);
 
-            textView.setText(name);
+        View routineView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
+        TextView textView = routineView.findViewById(R.id.tvExerciseName);
+        Button addSerie = routineView.findViewById(R.id.btnAddSerie);
+        LinearLayout seriesContainer = routineView.findViewById(R.id.seriesContainer);
 
-            addSerie.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addNewSerie(seriesContainer);
-                }
-            });
+        textView.setText(routineName);
 
-            // Agregar un OnClickListener al ImageButton de la primera fila de serie por defecto
-            ImageButton saveSerieFirstRow = routineView.findViewById(R.id.saveSerie);
-            saveSerieFirstRow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
-                    int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
-                    firstRow.setBackgroundColor(newColor);
-                }
-            });
+        addSerie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewSerie(seriesContainer);
+            }
+        });
 
-            // Agregar un OnClickListener al ImageButton para eliminar el ejercicio
-            ImageButton eliminateExercise = routineView.findViewById(R.id.eliminate_cross);
-            eliminateExercise.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    deleteExercise(routineView);
-                }
-            });
+        // Agregar un OnClickListener al ImageButton de la primera fila de serie por defecto
+        ImageButton saveSerieFirstRow = routineView.findViewById(R.id.saveSerie);
+        saveSerieFirstRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
+                int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
+                firstRow.setBackgroundColor(newColor);
+            }
+        });
 
-            routinesLayout.addView(routineView);
-        }
+        // Agregar un OnClickListener al ImageButton para eliminar el ejercicio
+        ImageButton eliminateExercise = routineView.findViewById(R.id.eliminate_cross);
+        eliminateExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteExercise(routineView);
+            }
+        });
+
+        routinesLayout.addView(routineView);
     }
 
     public void deleteExercise(View routineView) {
@@ -175,6 +199,10 @@ public class StartingRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //guardar les vaines a la bd
+                long elapsedMillis = SystemClock.elapsedRealtime() - trainingDuration.getBase();
+                String tiempoTardado = formatElapsedTime(elapsedMillis);
+                insertRegistro(routineName, tiempoTardado);
+                trainingDuration.stop();
                 finish();
             }
         });
@@ -186,5 +214,77 @@ public class StartingRoutineActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    private String formatElapsedTime(long elapsedMillis) {
+        int hours = (int) (elapsedMillis / 3600000);
+        int minutes = (int) ((elapsedMillis % 3600000) / 60000);
+        int seconds = (int) ((elapsedMillis % 60000) / 1000);
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+
+
+    private void insertRegistro(final String nombreRutina, final String tiempoTardado) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://192.168.1.97:8080/api/registros";
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // La inserción fue exitosa
+                        Toast.makeText(StartingRoutineActivity.this, "Rutina registrada exitosamente.", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Solo notifica al usuario que hubo un error
+                        Toast.makeText(StartingRoutineActivity.this, "Error al registrar la rutina.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                String reqBody = "{\"nombreRutina\":\"" + nombreRutina + "\", \"tiempoTardado\":\"" + tiempoTardado + "\", \"userID\":" + userID + "}";
+                return reqBody.getBytes(StandardCharsets.UTF_8);
+            }
+
+        };
+        queue.add(postRequest);
+    }
+
+    private void obtenerRutinaName(int rutinaId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://192.168.1.97:8080/api/rutinas/" + rutinaId;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        routineName = response.getString("nombre");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Solo notifica al usuario que hubo un error
+                    Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        queue.add(jsonObjectRequest);
     }
 }

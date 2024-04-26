@@ -33,6 +33,7 @@ public class EditRoutineActivity extends AppCompatActivity {
     private EditText etEditRoutineName;
     private ImageView backArrow;
     private Button btnAddExercise, btnSave;
+    private int rutinaId;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -49,6 +50,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         etEditRoutineName = findViewById(R.id.etEditRoutineName);
         btnSave = findViewById(R.id.btnSave);
 
+        rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
         String[] routineNames = {"bench press", "hack squad"};
         updateUIWithRoutines(routineNames);
 
