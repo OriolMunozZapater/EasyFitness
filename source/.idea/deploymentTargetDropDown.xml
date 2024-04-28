@@ -2,16 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="HomeActivity">
+      <entry key="CheckTrainingsActivity">
         <State />
       </entry>
-      <entry key="MainActivity">
+      <entry key="ChoosePreselectedRoutineActivity">
+        <State />
+      </entry>
+      <entry key="ProfileActivity">
         <State />
       </entry>
       <entry key="StartingRoutineActivity">
         <State />
       </entry>
       <entry key="TrainingRoutinesActivity">
+        <State />
+      </entry>
+      <entry key="app">
         <State />
       </entry>
     </value>
