@@ -47,7 +47,6 @@ CREATE TABLE usuarios_seguidos (
 
 CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
-  rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
   tipo VARCHAR(50),
