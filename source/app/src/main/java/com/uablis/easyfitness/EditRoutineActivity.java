@@ -35,6 +35,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class EditRoutineActivity extends AppCompatActivity {
 
     private ImageButton eliminateCross;
@@ -134,6 +138,42 @@ public class EditRoutineActivity extends AppCompatActivity {
     public void backToScreen() {
         finish();
     }
+
+    private void loadUserExercises() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String userId = UsuarioActual.getInstance().getUserId();
+        int rutinaid = 1; //ESTABLECER ID BUENO
+        String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + userId;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            String[] exerciseNames = new String[jsonArray.length()];
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                exerciseNames[i] = jsonObject.getString("nombre");
+
+                            }
+                            updateUIWithRoutines(routineNames); //FALTA CAMBIAR
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EditRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+
 
     private boolean deleteExerciseFromDatabase() {
         int idExercise=0;
