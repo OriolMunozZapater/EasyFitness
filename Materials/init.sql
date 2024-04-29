@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS rutina;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS objetivo;
 DROP TABLE IF EXISTS rutina_compartida;
+DROP TABLE IF EXISTS registro;
 
 SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 
@@ -47,6 +48,7 @@ CREATE TABLE usuarios_seguidos (
 
 CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
+  rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
   tipo VARCHAR(50),
@@ -101,7 +103,6 @@ CREATE TABLE rutina_compartida (
   FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE registro;
 CREATE TABLE registro (
   registroID INT AUTO_INCREMENT PRIMARY KEY,
   nombre_rutina VARCHAR(255),
