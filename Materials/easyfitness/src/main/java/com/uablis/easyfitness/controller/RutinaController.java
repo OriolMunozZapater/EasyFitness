@@ -1,12 +1,24 @@
 package com.uablis.easyfitness.controller;
 
+import com.uablis.easyfitness.model.Ejercicio;
 import com.uablis.easyfitness.model.Rutina;
+import com.uablis.easyfitness.model.RutinaEjercicio;
+import com.uablis.easyfitness.model.Serie;
+import com.uablis.easyfitness.repository.EjercicioRepository;
+import com.uablis.easyfitness.repository.RutinaEjercicioRepository;
 import com.uablis.easyfitness.repository.RutinaRepository;
+import com.uablis.easyfitness.repository.SerieRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -15,8 +27,80 @@ public class RutinaController {
 
     @Autowired
     private RutinaRepository rutinaRepository;
+    @Autowired
+    private RutinaEjercicioRepository rutinaEjercicioRepository;
+    @Autowired
+    private EjercicioRepository ejercicioRepository;
+    @Autowired
+    private SerieRepository serieRepository;
+    private static final Logger log = LoggerFactory.getLogger(RutinaController.class);
 
-    // Obtener todas las rutinas
+  @PostMapping("/copiar/{rutinaId}")
+  @Transactional
+  public ResponseEntity<Rutina> copiarRutina(@PathVariable Integer rutinaId, @RequestBody Map<String, Object> body) {
+    try {
+      Integer userId = (Integer) body.get("userID");
+      if (userId == null) {
+        log.error("UserID no proporcionado");
+        return ResponseEntity.badRequest().build();
+      }
+      Rutina original = rutinaRepository.findById(rutinaId)
+          .orElseThrow(() -> new RuntimeException("Rutina no encontrada con ID: " + rutinaId));
+
+      Rutina nuevaRutina = new Rutina();
+      nuevaRutina.setNombre(original.getNombre());
+      nuevaRutina.setDescripcion(original.getDescripcion());
+      nuevaRutina.setUserID(userId);
+      nuevaRutina.setPublico(false);
+      Rutina savedRutina = rutinaRepository.save(nuevaRutina);
+
+      copiarEjerciciosYRelaciones(original.getRutinaID(), savedRutina.getRutinaID());
+      return ResponseEntity.ok(savedRutina);
+    } catch (DataAccessException e) {
+      log.error("Error de acceso a datos: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    } catch (Exception e) {
+      log.error("Error general: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  private void copiarEjerciciosYRelaciones(Integer originalRutinaId, Integer nuevaRutinaId) {
+    List<RutinaEjercicio> rutinaEjercicios = rutinaEjercicioRepository.findByRutinaId(originalRutinaId);
+    for (RutinaEjercicio re : rutinaEjercicios) {
+      Ejercicio originalEjercicio = ejercicioRepository.findById(re.getEjercicioId())
+          .orElseThrow(() -> new RuntimeException("Ejercicio no encontrado con ID: " + re.getEjercicioId()));
+
+      Ejercicio nuevoEjercicio = new Ejercicio();
+      nuevoEjercicio.setNombre(originalEjercicio.getNombre());
+      nuevoEjercicio.setDescripcion(originalEjercicio.getDescripcion());
+      nuevoEjercicio.setTipo(originalEjercicio.getTipo());
+      nuevoEjercicio.setValoracion(originalEjercicio.getValoracion());
+      nuevoEjercicio.setGrupoMuscular(originalEjercicio.getGrupoMuscular());
+      nuevoEjercicio.setVideo(originalEjercicio.getVideo());
+      nuevoEjercicio.setRutinaID(nuevaRutinaId);
+      Ejercicio savedEjercicio = ejercicioRepository.save(nuevoEjercicio);
+
+      RutinaEjercicio nuevoRE = new RutinaEjercicio();
+      nuevoRE.setRutinaId(nuevaRutinaId);
+      nuevoRE.setEjercicioId(savedEjercicio.getEjercicioID());
+      nuevoRE.setOrden(re.getOrden());
+      rutinaEjercicioRepository.save(nuevoRE);
+
+      List<Serie> series = serieRepository.findByEjercicioID(originalEjercicio.getEjercicioID());
+      for (Serie serie : series) {
+        Serie nuevaSerie = new Serie();
+        nuevaSerie.setEjercicioID(savedEjercicio.getEjercicioID());
+        nuevaSerie.setNRepeticiones(serie.getNRepeticiones());
+        nuevaSerie.setPeso(serie.getPeso());
+        nuevaSerie.setComentarioSerie(serie.getComentarioSerie());
+        nuevaSerie.setTipo(serie.getTipo());
+        serieRepository.save(nuevaSerie);
+      }
+    }
+  }
+
+  // Obtener todas las rutinas
     @GetMapping
     public List<Rutina> getAllRutinas() {
         return rutinaRepository.findAll();
