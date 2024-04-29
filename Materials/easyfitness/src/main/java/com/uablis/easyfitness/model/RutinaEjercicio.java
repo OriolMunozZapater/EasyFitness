@@ -1,7 +1,10 @@
 package com.uablis.easyfitness.model;
 
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
+
 import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 @Table(name = "rutina_ejercicio")
@@ -12,10 +15,10 @@ public class RutinaEjercicio {
     private Integer id;
 
     @Column(name = "rutinaID", nullable = false)
-    private Integer rutinaId;
+    private Integer rutinaID;
 
     @Column(name = "ejercicioID", nullable = false)
-    private Integer ejercicioId;
+    private Integer ejercicioID;
 
     @Column(nullable = false)
     private Integer orden;
@@ -30,19 +33,19 @@ public class RutinaEjercicio {
     }
 
     public Integer getRutinaId() {
-        return rutinaId;
+        return rutinaID;
     }
 
     public void setRutinaId(Integer rutinaId) {
-        this.rutinaId = rutinaId;
+        this.rutinaID = rutinaId;
     }
 
     public Integer getEjercicioId() {
-        return ejercicioId;
+        return ejercicioID;
     }
 
     public void setEjercicioId(Integer ejercicioId) {
-        this.ejercicioId = ejercicioId;
+        this.ejercicioID = ejercicioId;
     }
 
     public Integer getOrden() {
@@ -59,23 +62,24 @@ public class RutinaEjercicio {
         if (!(o instanceof RutinaEjercicio)) return false;
         RutinaEjercicio that = (RutinaEjercicio) o;
         return Objects.equals(id, that.id) &&
-            Objects.equals(rutinaId, that.rutinaId) &&
-            Objects.equals(ejercicioId, that.ejercicioId) &&
+            Objects.equals(rutinaID, that.rutinaID) &&
+            Objects.equals(ejercicioID, that.ejercicioID) &&
             Objects.equals(orden, that.orden);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, rutinaId, ejercicioId, orden);
+        return Objects.hash(id, rutinaID, ejercicioID, orden);
     }
 
     @Override
     public String toString() {
         return "RutinaEjercicio{" +
-            "id=" + id +
-            ", rutinaId=" + rutinaId +
-            ", ejercicioId=" + ejercicioId +
+            "Id=" + id +
+            ", rutinaId=" + rutinaID +
+            ", ejercicioId=" + ejercicioID +
             ", orden=" + orden +
             '}';
     }
+
 }
