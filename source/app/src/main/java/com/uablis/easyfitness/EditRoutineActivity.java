@@ -1,33 +1,22 @@
 package com.uablis.easyfitness;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.appcompat.widget.Toolbar;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 import android.widget.ImageButton;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,6 +27,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class EditRoutineActivity extends AppCompatActivity {
     private ImageView home, training_routines, training, profile;
@@ -61,8 +52,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         etEditRoutineName = findViewById(R.id.etEditRoutineName);
         btnSave = findViewById(R.id.btnSave);
 
-        String[] routineNames = {"bench press", "hack squad"};
-        updateUIWithRoutines(routineNames);
+        loadUserExercisesID();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,30 +83,34 @@ public class EditRoutineActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUIWithRoutines(String[] routineNames) {
+    private void updateUIWithExercises(String[] exerciseNames, Integer[] exerciseID, Integer rutinaID) {
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+        int pos=0;
 
-        for (String name : routineNames) {
-            View routineView = getLayoutInflater().inflate(R.layout.exercise_row, routinesLayout, false);
-            TextView textView = routineView.findViewById(R.id.tvExerciseName);
-            ImageButton eliminateCross = routineView.findViewById(R.id.eliminate_cross);
+        for (String name : exerciseNames) {
+
+            View exerciseView = getLayoutInflater().inflate(R.layout.exercise_row, routinesLayout, false);
+            TextView textView = exerciseView.findViewById(R.id.tvExerciseName);
+            ImageButton eliminateCross = exerciseView.findViewById(R.id.eliminate_cross);
 
             textView.setText(name);
 
-            routineView.setOnClickListener(new View.OnClickListener() {
+            exerciseView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     goToEditExercise();
                 }
             });
 
+            int finalPos = pos;
             eliminateCross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteExercise();
+                    deleteExercise(exerciseID[finalPos],rutinaID);
                 }
             });
-            routinesLayout.addView(routineView);
+            routinesLayout.addView(exerciseView);
+            pos++;
         }
     }
 
@@ -152,11 +146,10 @@ public class EditRoutineActivity extends AppCompatActivity {
         finish();
     }
 
-    private void loadUserExercises() {
+    private void loadUserExercisesID() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String userId = UsuarioActual.getInstance().getUserId();
         int rutinaid = 1; //ESTABLECER ID BUENO
-        String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + userId;
+        String url = "http://192.168.0.19:8080/api/rutina_ejercicios/rutina/" + rutinaid;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -164,13 +157,15 @@ public class EditRoutineActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            String[] exerciseNames = new String[jsonArray.length()];
+                            Integer[] exerciseID = new Integer[jsonArray.length()];
+
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                exerciseNames[i] = jsonObject.getString("nombre");
-
+                                exerciseID[i] = jsonObject.getInt("ejercicioId");
                             }
-                            updateUIWithRoutines(routineNames); //FALTA CAMBIAR
+
+                            loadUserExercisesName(exerciseID, rutinaid);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(EditRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
@@ -183,14 +178,47 @@ public class EditRoutineActivity extends AppCompatActivity {
                 Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
+        queue.add(stringRequest);
+    }
 
+    private void loadUserExercisesName(Integer[] exerciseID, Integer rutinaID) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String ids = TextUtils.join(",", exerciseID); // Convertir el array a una cadena separada por comas
+        String url = "http://192.168.0.19:8080/api/ejercicios/name/" + ids;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            String[] exerciseNames = new String[jsonArray.length()];
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                exerciseNames[i] = jsonObject.getString("nombre");
+                            }
+
+                            updateUIWithExercises(exerciseNames, exerciseID, rutinaID); //FALTA CAMBIAR
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EditRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
         queue.add(stringRequest);
     }
 
 
-    private boolean deleteExerciseFromDatabase() {
-        int idExercise=0;
-        String url="http://192.168.1.97:8080/api/rutina_ejercicios"+idExercise;
+    private boolean deleteExerciseFromDatabase(Integer exerciseID, Integer rutinaID) {
+        String url="http://192.168.0.19:8080/api/rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -214,18 +242,29 @@ public class EditRoutineActivity extends AppCompatActivity {
         return true;
     }
 
-    public void deleteExercise() {
+    public void deleteExercise(Integer exerciseID, Integer rutinaID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("¿Estás seguro de eliminar?")
                 .setCancelable(false)
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(deleteExerciseFromDatabase()) {
+                        if(deleteExerciseFromDatabase(exerciseID, rutinaID)) {
                             Toast.makeText(EditRoutineActivity.this, "Ejercicio eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                            //RELOAD pantalla
+                            LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+                            routinesLayout.removeAllViews();
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            loadUserExercisesID();
                         }else{
                             Toast.makeText(EditRoutineActivity.this, "Error al eliminar el ejercicio", Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
