@@ -3,7 +3,6 @@ package com.uablis.easyfitness;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -16,10 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
@@ -27,13 +25,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
     private LinearLayout routinesLayout;
     private long startTime;
     private int rutinaId;
+    private String rutinaID;
     private String routineName;
 
     @SuppressLint("MissingInflatedId")
@@ -53,78 +55,199 @@ public class StartingRoutineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_starting_routine);
 
         trainingDuration = findViewById(R.id.chronometer);
-
         endTraining = findViewById(R.id.btnEndTraining);
         routinesLayout = findViewById(R.id.exerciseTrainContainer);
 
-        // rutinaId = 1;
         rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
-        // String routineName = "bench press";
-        obtenerRutinaName(rutinaId);
+        obtenerEjerciciosPorRutinaId(rutinaId);
 
-        updateUIWithRoutines(routineName);
+        endTraining.setOnClickListener(v -> endRoutine());
 
-        endTraining.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                endRoutine();
-            }
+        trainingDuration.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
+            int minutes = (int) (elapsedMillis / 60000);
+            int seconds = (int) ((elapsedMillis % 60000) / 1000);
+            chronometer.setText(String.format("%02dmin %02ds", minutes, seconds));
         });
 
-        trainingDuration.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-                int minutes = (int) (elapsedMillis / 60000);
-                int seconds = (int) ((elapsedMillis % 60000) / 1000);
-                chronometer.setText(String.format("%02dmin %02ds", minutes, seconds));
-            }
-        });
-
-        // Iniciar el cronómetro
         trainingDuration.setBase(SystemClock.elapsedRealtime());
         trainingDuration.start();
     }
 
+    private void updateUIWithExercises(JSONArray ejercicios) {
+        try {
+            for (int i = 0; i < ejercicios.length(); i++) {
+                JSONObject ejercicio = ejercicios.getJSONObject(i);
+                String ejercicioNombre = ejercicio.optString("nombre", "Nombre desconocido");
+                String descripcion = ejercicio.optString("descripcion", "Descripción no disponible");
+                String rutinaID = ejercicio.optString("rutinaID", "0"); // Valor predeterminado "0"
 
-    private void updateUIWithRoutines(String routineName) {
-        LinearLayout routinesLayout = findViewById(R.id.exerciseTrainContainer);
+                // Inflar la vista del ejercicio y configurar sus elementos
+                View exerciseView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
 
-        View routineView = getLayoutInflater().inflate(R.layout.exercise_training, routinesLayout, false);
-        TextView textView = routineView.findViewById(R.id.tvExerciseName);
-        Button addSerie = routineView.findViewById(R.id.btnAddSerie);
-        LinearLayout seriesContainer = routineView.findViewById(R.id.seriesContainer);
+                // Establecer el nombre del ejercicio
+                TextView textView = exerciseView.findViewById(R.id.tvExerciseName);
+                textView.setText(ejercicioNombre);
 
-        textView.setText(routineName);
+                // Establecer la descripción del ejercicio
+                TextView descriptionView = exerciseView.findViewById(R.id.tvExerciseDescription);
+                descriptionView.setText(descripcion);
 
-        addSerie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewSerie(seriesContainer);
+                // Configurar el contenedor para series
+                LinearLayout seriesContainer = exerciseView.findViewById(R.id.seriesContainer);
+
+                // Configurar botón para añadir series
+                Button addSerie = exerciseView.findViewById(R.id.btnAddSerie);
+                addSerie.setOnClickListener(v -> addNewSerie(seriesContainer));
+
+                // Configurar el botón para guardar series
+                ImageButton saveSerie = exerciseView.findViewById(R.id.saveSerie);
+                saveSerie.setOnClickListener(v -> {
+                    EditText etPesSerie = exerciseView.findViewById(R.id.etPesSerie);
+                    EditText etRepsSerie = exerciseView.findViewById(R.id.etRepsSerie);
+                    String peso = etPesSerie.getText().toString();
+                    String reps = etRepsSerie.getText().toString();
+
+                    if (peso.isEmpty() || reps.isEmpty()) {
+                        Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
+
+                    // Visual feedback for first series row
+                    LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
+                    int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
+                    firstRow.setBackgroundColor(newColor);
+                });
+
+                // Configurar botón para eliminar ejercicio
+                ImageButton eliminateExercise = exerciseView.findViewById(R.id.eliminate_cross);
+                eliminateExercise.setOnClickListener(v -> deleteExercise(exerciseView));
+
+                // Añadir la vista del ejercicio al layout principal
+                routinesLayout.addView(exerciseView);
             }
-        });
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al procesar datos de ejercicios", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        // Agregar un OnClickListener al ImageButton de la primera fila de serie por defecto
-        ImageButton saveSerieFirstRow = routineView.findViewById(R.id.saveSerie);
-        saveSerieFirstRow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
-                int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
-                firstRow.setBackgroundColor(newColor);
-            }
-        });
+    private void obtenerEjerciciosPorRutinaId(int rutinaID) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String getUrl = "http://192.168.1.97:8080/api/ejercicios/rutina/" + rutinaID;
 
-        // Agregar un OnClickListener al ImageButton para eliminar el ejercicio
-        ImageButton eliminateExercise = routineView.findViewById(R.id.eliminate_cross);
-        eliminateExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteExercise(routineView);
-            }
-        });
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, getUrl, null,
+                response -> updateUIWithExercises(response),
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(this, "Error al obtener ejercicios", Toast.LENGTH_SHORT).show();
+                }
+        );
 
-        routinesLayout.addView(routineView);
+        queue.add(getRequest);
+    }
+
+    private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String getUrl = "http://192.168.1.97:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+
+        // Realiza la solicitud GET para obtener el ejercicioid
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+                new Response.Listener <JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Obtener el ejercicioid del objeto JSON de respuesta
+                            String ejercicioid = response.getString("ejercicioID");
+                            // Llamar a la función para guardar la serie con el ejercicioid obtenido
+                            guardarSerieConEjercicioId(ejercicioid, peso, reps);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Manejo de errores en caso de problemas al analizar la respuesta JSON
+                            showAlert("Error", "Error al analizar la respuesta JSON.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejo de errores en caso de fallo en la solicitud GET
+                        error.printStackTrace();
+                        showAlert("Error", "Error en la solicitud GET para obtener el ejercicioid.");
+                    }
+                }
+        );
+
+        // Añadir la solicitud GET a la cola
+        queue.add(getRequest);
+    }
+
+    private void guardarSerieConEjercicioId(String ejercicioid, String peso, String reps) {
+        // Construye el cuerpo de la solicitud en formato JSON con el ejercicioid
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("peso", peso);
+            jsonBody.put("n_repeticiones", reps);
+            jsonBody.put("ejercicioID", ejercicioid);
+            // Agrega otros campos necesarios como nombre de la rutina, descripción, etc.
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // URL para la solicitud POST
+        String postUrl = "http://192.168.1.97:8080/api/serie";
+
+        // Crea una solicitud POST
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, postUrl, jsonBody,
+                new Response.Listener <JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // La inserción fue exitosa
+                        showAlert("Éxito", "Datos guardados correctamente en la API.");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Manejo de errores en caso de fallo en la solicitud POST
+                        error.printStackTrace();
+                        if (error.networkResponse != null) {
+                            String body;
+                            // Obtiene el cuerpo de la respuesta
+                            final String statusCode = String.valueOf(error.networkResponse.statusCode);
+                            try {
+                                body = new String(error.networkResponse.data, "UTF-8");
+                                showAlert("Error de la API", "Error al guardar los datos en la API. Código de estado: " + statusCode + " Cuerpo: " + body);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            showAlert("Error de la API", "Error al guardar los datos en la API. Error: " + error.toString());
+                        }
+                    }
+                }
+        );
+
+        // Añade la solicitud POST a la cola
+        queue.add(postRequest);
+
+    }
+
+    private void showAlert(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartingRoutineActivity.this,
+                R.style.AlertDialogTheme);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        builder.create().dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void deleteExercise(View routineView) {
@@ -182,6 +305,21 @@ public class StartingRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Cambiar el color de fondo del LinearLayout newRow
+                EditText etPesSerie = findViewById(R.id.etPesSerie);
+                EditText etRepsSerie = findViewById(R.id.etRepsSerie);
+                TextView textViewExerciseName = findViewById(R.id.tvExerciseName);
+
+                String peso = etPesSerie.getText().toString();
+                String reps = etRepsSerie.getText().toString();
+                String ejercicioNombre = textViewExerciseName.getText().toString();
+                String rutinaID = "6";
+
+                if (peso.isEmpty() || reps.isEmpty()) {
+                    Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
+
                 int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
                 newRow.setBackgroundColor(newColor);
             }
@@ -190,7 +328,6 @@ public class StartingRoutineActivity extends AppCompatActivity {
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
     }
-
 
     public void endRoutine() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -222,8 +359,6 @@ public class StartingRoutineActivity extends AppCompatActivity {
         int seconds = (int) ((elapsedMillis % 60000) / 1000);
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
-
-
 
     private void insertRegistro(final String nombreRutina, final String tiempoTardado) {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -268,23 +403,23 @@ public class StartingRoutineActivity extends AppCompatActivity {
         String url = "http://192.168.1.97:8080/api/rutinas/" + rutinaId;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-            new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        routineName = response.getString("nombre");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            routineName = response.getString("nombre");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            },
-            new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // Solo notifica al usuario que hubo un error
-                    Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
-                }
-            });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Solo notifica al usuario que hubo un error
+                        Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
+                    }
+                });
         queue.add(jsonObjectRequest);
     }
 }
