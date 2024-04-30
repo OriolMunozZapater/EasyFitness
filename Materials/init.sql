@@ -54,7 +54,7 @@ CREATE TABLE ejercicio (
   tipo VARCHAR(50),
   valoracion DOUBLE,
   grupo_muscular VARCHAR(50),
-  video BLOB
+  video BLOB,
   FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
