@@ -16,7 +16,7 @@ public class RutinaController {
     @Autowired
     private RutinaRepository rutinaRepository;
 
-    // Obtener todas las rutinas
+  // Obtener todas las rutinas
     @GetMapping
     public List<Rutina> getAllRutinas() {
         return rutinaRepository.findAll();

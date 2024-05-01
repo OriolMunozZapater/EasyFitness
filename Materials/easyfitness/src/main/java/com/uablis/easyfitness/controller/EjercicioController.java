@@ -64,4 +64,46 @@ public class EjercicioController {
   }
 
   // Métodos personalizados:
+
+  @GetMapping("/rutina/{rutinaID}")
+  public ResponseEntity<?> findExercisesByRutinaID(@PathVariable Integer rutinaID) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByRutinaID(rutinaID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
+
+  @GetMapping("/name/{ejercicioID}")
+  public ResponseEntity<?> findExercisesByExerciseID(@PathVariable String ejercicioID) {
+    // Convertir los IDs de String a un array de Integer
+    String[] idStrings = ejercicioID.split(",");
+    Integer[] ids = new Integer[idStrings.length];
+    for (int i = 0; i < idStrings.length; i++) {
+      ids[i] = Integer.parseInt(idStrings[i].trim());
+    }
+
+    List<Ejercicio> ejercicios = new ArrayList<>();
+
+    for (int id : ids) {
+      Ejercicio ejercicio = ejercicioRepository.findByEjercicioID(id);
+      if (ejercicio != null) {
+        ejercicios.add(ejercicio);
+      }
+    }
+
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
+
+  @GetMapping("/user/{userID}")
+  public ResponseEntity<?> findExercisesByUserID(@PathVariable Integer userID) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByUserID(userID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
 }
