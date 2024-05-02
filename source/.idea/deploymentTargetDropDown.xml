@@ -2,17 +2,69 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CheckTrainingsActivity">
-        <State />
+      <entry key="EditRoutineActivity">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Aniol\.android\avd\Pixel_8_Pro_API_30_2.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-01T14:45:33.525944600Z" />
+        </State>
       </entry>
-      <entry key="ChoosePreselectedRoutineActivity">
-        <State />
+      <entry key="FirstLoginActivity">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Aniol\.android\avd\Pixel_8_Pro_API_30_2.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-01T14:46:37.923251900Z" />
+        </State>
       </entry>
-      <entry key="ProfileActivity">
-        <State />
+      <entry key="LoginActivity">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Aniol\.android\avd\Pixel_8_Pro_API_30_2.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-01T14:45:41.320463200Z" />
+        </State>
       </entry>
-      <entry key="StartingRoutineActivity">
-        <State />
+      <entry key="SetObjective">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Aniol\.android\avd\Pixel_8_Pro_API_30_2.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-01T15:00:05.502453600Z" />
+        </State>
       </entry>
       <entry key="TrainingRoutinesActivity">
         <State />

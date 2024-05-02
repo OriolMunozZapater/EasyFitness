@@ -70,6 +70,9 @@
         <activity
             android:name=".CheckTrainingsActivity"
             android:exported="true" />
+        <activity
+            android:name=".SetObjective"
+            android:exported="true"/>
 
     </application>
 
