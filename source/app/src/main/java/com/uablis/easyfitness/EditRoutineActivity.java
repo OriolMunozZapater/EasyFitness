@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class EditRoutineActivity extends AppCompatActivity {
+
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private ImageView home, training_routines, training, profile;
     LinearLayout exerciseContainer;
     private EditText etEditRoutineName;
@@ -149,7 +151,10 @@ public class EditRoutineActivity extends AppCompatActivity {
     private void loadUserExercisesID() {
         RequestQueue queue = Volley.newRequestQueue(this);
         int rutinaid = 1; //ESTABLECER ID BUENO
-        String url = "http://192.168.0.19:8080/api/rutina_ejercicios/rutina/" + rutinaid;
+        String path = "rutina_ejercicios/rutina/" + rutinaid;
+        String url = urlBase.buildUrl(path);
+
+        //String url = "http://10.109.31.137:8080/api/rutina_ejercicios/rutina/" + rutinaid;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -184,7 +189,10 @@ public class EditRoutineActivity extends AppCompatActivity {
     private void loadUserExercisesName(Integer[] exerciseID, Integer rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String ids = TextUtils.join(",", exerciseID); // Convertir el array a una cadena separada por comas
-        String url = "http://192.168.0.19:8080/api/ejercicios/name/" + ids;
+
+        //String url = "http://10.109.31.137:8080/api/ejercicios/name/" + ids;
+        String path = "ejercicios/name/" + ids;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -218,7 +226,9 @@ public class EditRoutineActivity extends AppCompatActivity {
 
 
     private boolean deleteExerciseFromDatabase(Integer exerciseID, Integer rutinaID) {
-        String url="http://192.168.0.19:8080/api/rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
+        //String url="http://10.109.31.137:8080/api/rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
+        String path = "rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
+        String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
