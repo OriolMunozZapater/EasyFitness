@@ -20,6 +20,11 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_create_new_exercise.xml">
+        <config>
+          <theme>@style/Theme.EasyFitness</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_edit_exercise.xml">
         <config>
           <theme>@style/Theme.EasyFitness</theme>
@@ -60,6 +65,11 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_show_training_info.xml">
+        <config>
+          <theme>@style/Theme.EasyFitness</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_starting_routine.xml">
         <config>
           <theme>@style/Theme.EasyFitness</theme>
@@ -70,32 +80,38 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/routine_in_view_routine.xml">
-        <config>
-          <theme>@style/Theme.EasyFitness</theme>
-        </config>
-      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07677ff1-374b-4a5d-848b-b0a8c7e9f238" name="Changes" comment="Modificacio eliminar exercise">
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/migrations.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="07677ff1-374b-4a5d-848b-b0a8c7e9f238" name="Changes" comment="editar">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/.gradle/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChooseExerciseActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChooseExerciseActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChoosePreselectedRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChoosePreselectedRoutineActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateAccountActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateAccountActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditRoutineActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/source/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/FirstLoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/FirstLoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingRoutinesActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingRoutinesActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +121,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\pagui\.android\avd\Pixel_8_Pro_API_33.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[7bd865850013]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/source">
       <ProjectState />
@@ -126,11 +142,21 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -140,22 +166,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "editarRutina",
-    "last_opened_file_path": "C:/Users/pagui/StudioProjects/EasyFitness/source/settings.gradle.kts",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;editarRutina&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pagui/StudioProjects/EasyFitness/source/settings.gradle.kts&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="EasyFitness.app.main" />
@@ -247,7 +273,39 @@
       <option name="project" value="LOCAL" />
       <updated>1713965270800</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="No subir">
+      <option name="closed" value="true" />
+      <created>1714301450209</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1714301450209</updated>
+    </task>
+    <task id="LOCAL-00003" summary="creació loadUser">
+      <option name="closed" value="true" />
+      <created>1714301507163</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1714301507163</updated>
+    </task>
+    <task id="LOCAL-00004" summary="creació funció eliminar exercici dins rutina">
+      <option name="closed" value="true" />
+      <created>1714388204397</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1714388204397</updated>
+    </task>
+    <task id="LOCAL-00005" summary="editar">
+      <option name="closed" value="true" />
+      <created>1714738751332</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1714738751332</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -263,6 +321,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Modificacio eliminar exercise" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modificacio eliminar exercise" />
+    <MESSAGE value="No subir" />
+    <MESSAGE value="creació loadUser" />
+    <MESSAGE value="creació funció eliminar exercici dins rutina" />
+    <MESSAGE value="editar" />
+    <option name="LAST_COMMIT_MESSAGE" value="editar" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java</url>
+          <line>185</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

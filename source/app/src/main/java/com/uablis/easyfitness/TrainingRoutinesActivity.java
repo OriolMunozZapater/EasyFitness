@@ -37,14 +37,14 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     private Toolbar toolbar, appbar;
     private ImageButton menu;
     private Button btnAddRoutine;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_training_routine);
-        // loadUserRoutines();
-        String[] routineNames = {"superaniol", "aniolpeirna"};
-        updateUIWithRoutines(routineNames);
+        loadUserRoutines();
+
 
         profile = findViewById(R.id.profile);
         profile.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,9 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     private void loadUserRoutines() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + userId;
+        //String url = "http://10.109.31.137:8080/api/rutinas/usuario/" + userId;
+        String path = "rutinas/usuario/" + userId;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -179,7 +181,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         Intent intent = new Intent(TrainingRoutinesActivity.this, EditRoutineActivity.class);
         startActivity(intent);
     }
-
     public void goToNewRoutine() {
         Intent intent = new Intent(TrainingRoutinesActivity.this, NewRoutineActivity.class);
         startActivity(intent);

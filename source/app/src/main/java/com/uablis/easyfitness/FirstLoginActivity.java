@@ -43,6 +43,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     private ImageButton forwardArrow;
     private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo"};
     private Toolbar toolbar;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +129,9 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject jsonBody) {
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://192.168.1.97:8080/api/usuarios/" + userId;
+        //String url = "http://192.168.0.19:8080/api/usuarios/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, response -> {

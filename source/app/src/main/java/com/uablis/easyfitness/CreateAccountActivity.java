@@ -37,6 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView backArrow;
     private FirebaseAuth mAuth;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,9 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void insertUserIntoApi(final String email, final String password) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.97:8080/api/usuarios";
+        //String url = "http://10.109.31.137:8080/api/usuarios";
+        String path = "usuarios";
+        String url = urlBase.buildUrl(path);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -146,6 +149,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             @Override
             public byte[] getBody() throws AuthFailureError {
+
                 String reqBody = "{\"correo\":\"" + email + "\", \"password\":\"" + password + "\"}";
                 return reqBody.getBytes(StandardCharsets.UTF_8);
             }

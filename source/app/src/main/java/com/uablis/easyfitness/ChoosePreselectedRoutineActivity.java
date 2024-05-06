@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
 
 public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private ImageView home, training_routines, training, profile, backArrow;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,9 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private void loadPredifinedRoutine() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://192.168.1.97:8080/api/rutinas/usuario/" + 0;
+        //String url = "http://10.109.31.137:8080/api/rutinas/usuario/" + 0;
+        String path = "rutinas/usuario/" + 0;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -126,7 +129,9 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
 
     protected void copyRoutine(String copiedRoutineID, String userID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.97:8080/api/rutinas/" + copiedRoutineID;
+        //String url = "http://10.109.31.137:8080/api/rutinas/" + copiedRoutineID;
+        String path = "rutinas/" + copiedRoutineID;
+        String url = urlBase.buildUrl(path);
 
         // Primera solicitud GET para obtener los detalles de la rutina
         StringRequest getRequest = new StringRequest(Request.Method.GET, url,
@@ -163,7 +168,9 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                         }
 
                         // URL para la solicitud POST
-                        String postUrl = "http://192.168.1.97:8080/api/rutinas/";
+                        //String postUrl = "http://10.109.31.137:8080/api/rutinas/";
+                        String path = "rutinas/";
+                        String postUrl = urlBase.buildUrl(path);
 
                         // Crea una solicitud POST
                         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, postUrl, jsonBody,
@@ -173,7 +180,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
                                         // La inserción fue exitosa
                                         showAlert("Éxito", "Rutina creada exitosamente y datos guardados en la API.");
                                         String idNewRoutine = getNewRoutineID(routineName, userID);
-                                        String postUrl = "http://192.168.1.97:8080/api/rutinas/";
+                                        String path = "rutinas/";
+                                        String postUrl = urlBase.buildUrl(path);
                                     }
 
                                     private String getNewRoutineID(String routineName, String userID) {
