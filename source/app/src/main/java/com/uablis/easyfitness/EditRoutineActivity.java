@@ -23,12 +23,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpStatus;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditRoutineActivity extends AppCompatActivity {
 
@@ -149,6 +151,8 @@ public class EditRoutineActivity extends AppCompatActivity {
     }
 
     private void loadUserExercisesID() {
+        //Obtener los ID de los ejercicios que pertenecen a una rutina
+
         RequestQueue queue = Volley.newRequestQueue(this);
         int rutinaid = 1; //ESTABLECER ID BUENO
         String path = "rutina_ejercicios/rutina/" + rutinaid;
@@ -168,7 +172,6 @@ public class EditRoutineActivity extends AppCompatActivity {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 exerciseID[i] = jsonObject.getInt("ejercicioId");
                             }
-
                             loadUserExercisesName(exerciseID, rutinaid);
 
                         } catch (JSONException e) {
@@ -180,13 +183,21 @@ public class EditRoutineActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         queue.add(stringRequest);
     }
 
     private void loadUserExercisesName(Integer[] exerciseID, Integer rutinaID) {
+        //Cargar los ejercicios con los ID obtenidos anteriormente
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String ids = TextUtils.join(",", exerciseID); // Convertir el array a una cadena separada por comas
 
@@ -207,7 +218,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                                 exerciseNames[i] = jsonObject.getString("nombre");
                             }
 
-                            updateUIWithExercises(exerciseNames, exerciseID, rutinaID); //FALTA CAMBIAR
+                            updateUIWithExercises(exerciseNames, exerciseID, rutinaID);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -218,7 +229,13 @@ public class EditRoutineActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         queue.add(stringRequest);
@@ -229,6 +246,8 @@ public class EditRoutineActivity extends AppCompatActivity {
         //String url="http://10.109.31.137:8080/api/rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
         String path = "rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
         String url = urlBase.buildUrl(path);
+        // Utiliza un objeto AtomicBoolean para mantener el estado de deleted
+        AtomicBoolean deleted = new AtomicBoolean(false);
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -237,6 +256,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        deleted.set(true);
                     }
                 },
                 new Response.ErrorListener() {
@@ -249,7 +269,7 @@ public class EditRoutineActivity extends AppCompatActivity {
 
         // Agregar la solicitud a la cola de solicitudes
         queue.add(stringRequest);
-        return true;
+        return deleted.get();
     }
 
     public void deleteExercise(Integer exerciseID, Integer rutinaID) {
