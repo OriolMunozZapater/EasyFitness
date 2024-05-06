@@ -29,15 +29,6 @@ public class RutinaController {
         return rutina.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/buscar")
-    public ResponseEntity<List<Rutina>> getRutinaByUserIdAndNombre(@RequestParam Integer userID, @RequestParam String nombre) {
-        List<Rutina> rutinas = rutinaRepository.findByUserIDAndNombre(userID, nombre);
-        if (rutinas.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(rutinas);
-    }
-
     // Crear una nueva rutina
     @PostMapping
     public Rutina createRutina(@RequestBody Rutina rutina) {
@@ -60,14 +51,14 @@ public class RutinaController {
     // Eliminar una rutina
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRutina(@PathVariable Integer id) {
-        Optional<Rutina> rutinaOpt = rutinaRepository.findById(id);
-        if (rutinaOpt.isPresent()) {
-            Rutina rutina = rutinaOpt.get();
-            rutinaRepository.delete(rutina);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+      Optional<Rutina> rutinaOpt = rutinaRepository.findById(id);
+      if (rutinaOpt.isPresent()) {
+        Rutina rutina = rutinaOpt.get();
+        rutinaRepository.delete(rutina);
+        return ResponseEntity.ok().build();
+      } else {
+        return ResponseEntity.notFound().build();
+      }
     }
 
 
@@ -75,10 +66,26 @@ public class RutinaController {
 
     @GetMapping("/usuario/{userId}")
     public ResponseEntity<List<Rutina>> getRutinasByUserId(@PathVariable Integer userId) {
-        List<Rutina> rutinas = rutinaRepository.findAllByUserID(userId);
-        if(rutinas.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(rutinas);
+      List<Rutina> rutinas = rutinaRepository.findAllByUserID(userId);
+      if (rutinas.isEmpty()) {
+        return ResponseEntity.notFound().build();
+      }
+      return ResponseEntity.ok(rutinas);
     }
+
+  @GetMapping("/last/{userId}")
+  public ResponseEntity<Rutina> getRutinaMasGrandeByUserId(@PathVariable Integer userId) {
+    Optional<Rutina> rutinaMasGrande = rutinaRepository.findTopByUserIdOrderByRutinaIdDesc(userId);
+    return rutinaMasGrande.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/buscar/userID/{userID}/nombre/{nombre}")
+  public ResponseEntity<List<Rutina>> getRutinaByUserIdAndNombre(@RequestParam Integer userID, @RequestParam String nombre) {
+    List<Rutina> rutinas = rutinaRepository.findByUserIDAndNombre(userID, nombre);
+    if (rutinas.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(rutinas);
+  }
+
 }
