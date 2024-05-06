@@ -106,7 +106,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void insertUserIntoApi(final String email, final String password) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.97:8080/api/usuarios";
+        String url = "http://172.17.176.1:8080/api/usuarios";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

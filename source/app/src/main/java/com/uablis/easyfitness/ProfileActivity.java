@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //recuperarDatosPerfil();
+        recuperarDatosPerfil();
 
         profile = findViewById(R.id.profile);
         home = findViewById(R.id.home);
@@ -67,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView alturaTextView = findViewById(R.id.altura);
         TextView sexoTextView = findViewById(R.id.sexe);
 
+
         // Recuperar datos de BD
 
         // Peso objetivo
@@ -89,6 +90,10 @@ public class ProfileActivity extends AppCompatActivity {
         String sexo = preferencias.getString("sexo", "");
         sexoTextView.setText(sexo);*/
     }
+
+
+
+
     public void goToEditData() {
         Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_DETALLS_PERFIL*/EditRoutineActivity.class);
         startActivity(intent);

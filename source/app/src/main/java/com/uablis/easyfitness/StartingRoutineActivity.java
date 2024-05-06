@@ -135,7 +135,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerEjerciciosPorRutinaId(int rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://192.168.1.97:8080/api/ejercicios/rutina/" + rutinaID;
+        String getUrl = "http://172.17.176.1:8080/api/ejercicios/rutina/" + rutinaID;
 
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, getUrl, null,
                 response -> updateUIWithExercises(response),
@@ -150,7 +150,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://192.168.1.97:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+        String getUrl = "http://172.17.176.1:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
 
         // Realiza la solicitud GET para obtener el ejercicioid
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, getUrl, null,
@@ -197,7 +197,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         }
 
         // URL para la solicitud POST
-        String postUrl = "http://192.168.1.97:8080/api/serie";
+        String postUrl = "http://172.17.176.1:8080/api/serie";
 
         // Crea una solicitud POST
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, postUrl, jsonBody,
@@ -362,7 +362,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void insertRegistro(final String nombreRutina, final String tiempoTardado) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.97:8080/api/registros";
+        String url = "http://172.17.176.1:8080/api/registros";
         int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -400,7 +400,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerRutinaName(int rutinaId) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.1.97:8080/api/rutinas/" + rutinaId;
+        String url = "http://172.17.176.1:8080/api/rutinas/" + rutinaId;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {

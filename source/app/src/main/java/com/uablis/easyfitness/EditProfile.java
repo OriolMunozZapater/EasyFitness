@@ -90,7 +90,7 @@ public class EditProfile extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
 
-        String url = "http://192.168.1.97:8080/api/usuario/" + userId;
+        String url = "http://172.17.176.1:8080/api/usuario/" + userId;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -191,7 +191,7 @@ public class EditProfile extends AppCompatActivity {
         // URL de la API para actualizar el usuario
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://192.168.1.97:8080/api/usuarios/" + userId;
+        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
 
         // Construye el cuerpo de la solicitud en formato JSON
         JSONObject requestBody = new JSONObject();

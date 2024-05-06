@@ -128,7 +128,7 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject jsonBody) {
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://192.168.1.97:8080/api/usuarios/" + userId;
+        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, response -> {
