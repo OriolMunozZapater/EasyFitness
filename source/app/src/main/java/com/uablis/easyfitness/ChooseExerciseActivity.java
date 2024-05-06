@@ -68,9 +68,17 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         for (String name : routineNames) {
             View routineView = getLayoutInflater().inflate(R.layout.exercise_row2, routinesLayout, false);
             TextView textView = routineView.findViewById(R.id.tvExerciseName);
-
+            @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageButton addToRoutine = routineView.findViewById(R.id.addToRoutine);
 
             textView.setText(name);
+
+            addToRoutine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageButton button = (ImageButton) v;
+                    button.setImageResource(R.drawable.green_check);
+                }
+            });
             routineView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
