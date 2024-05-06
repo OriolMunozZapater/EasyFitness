@@ -31,7 +31,7 @@ public class EjercicioController {
   }
 
   // Crear un nuevo ejercicio
-  @PostMapping
+  @PostMapping("/crear/{ejercicio}")
   public Ejercicio createEjercicio(@RequestBody Ejercicio ejercicio) {
     return ejercicioRepository.save(ejercicio);
   }
@@ -46,7 +46,7 @@ public class EjercicioController {
           existingEjercicio.setTipo(ejercicioDetails.getTipo());
           existingEjercicio.setValoracion(ejercicioDetails.getValoracion());
           existingEjercicio.setGrupoMuscular(ejercicioDetails.getGrupoMuscular());
-          existingEjercicio.setRutinaID(ejercicioDetails.getRutinaID());
+          existingEjercicio.setUserID(ejercicioDetails.getUserID());
           existingEjercicio.setVideo(ejercicioDetails.getVideo());
 
 
@@ -65,15 +65,6 @@ public class EjercicioController {
   }
 
   // Métodos personalizados:
-
-  @GetMapping("/rutina/{rutinaID}")
-  public ResponseEntity<?> findExercisesByRutinaID(@PathVariable Integer rutinaID) {
-    List<Ejercicio> ejercicios = ejercicioRepository.findByRutinaID(rutinaID);
-    if (ejercicios.isEmpty()) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(ejercicios);
-  }
 
   @GetMapping("/name/{ejercicioID}")
   public ResponseEntity<?> findExercisesByExerciseID(@PathVariable String ejercicioID) {
@@ -102,6 +93,15 @@ public class EjercicioController {
   @GetMapping("/user/{userID}")
   public ResponseEntity<?> findExercisesByUserID(@PathVariable Integer userID) {
     List<Ejercicio> ejercicios = ejercicioRepository.findByUserID(userID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
+
+  @GetMapping("/user/{userID}/muscle/{selectedMuscle}")
+  public ResponseEntity<?> findExercisesByUserIDAndMuscles(@PathVariable Integer userID, @PathVariable String selectedMuscle) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByUserIDAndGrupoMuscular(userID, selectedMuscle);
     if (ejercicios.isEmpty()) {
       return ResponseEntity.notFound().build();
     }

@@ -16,7 +16,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Toolbar toolbar, appbar;
 
-    private ImageButton edit_profile;
+    private ImageButton edit_profile, btnPes;
 
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
 
@@ -31,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         home = findViewById(R.id.home);
         training_routines = findViewById(R.id.training_routines);
         training = findViewById(R.id.training_session);
+        btnPes = findViewById(R.id.btnEditPes);
 
         edit_profile = findViewById(R.id.btnEditPersonalData);
 
@@ -38,6 +39,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToEditData();
+            }
+        });
+
+        btnPes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToEditWeight();
             }
         });
 
@@ -86,5 +94,9 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-}
+    public void goToEditWeight() {
+        Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_PES_OBJECTIU Y PERSONAL*/EditRoutineActivity.class);
+        startActivity(intent);
+    }
 
+}

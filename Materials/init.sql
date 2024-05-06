@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS rutina;
 DROP TABLE IF EXISTS usuario;
 DROP TABLE IF EXISTS objetivo;
 DROP TABLE IF EXISTS rutina_compartida;
-DROP TABLE IF EXISTS registro;
 
 SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 
@@ -24,7 +23,7 @@ CREATE TABLE usuario (
   nombre VARCHAR(255),
   apellido VARCHAR(255),
   correo VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255),
+  password VARCHAR(255) NOT NULL,
   sexo VARCHAR(10),
   peso_actual DECIMAL(5,2),
   altura INT,
@@ -34,7 +33,6 @@ CREATE TABLE usuario (
   tiempo_entrenamiento TIME,
   objetivoID INT,
   is_first_login BOOLEAN DEFAULT TRUE,
-  fecha_nacimiento DATE,
   FOREIGN KEY (objetivoID) REFERENCES objetivo(objetivoID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -48,14 +46,13 @@ CREATE TABLE usuarios_seguidos (
 
 CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
-  userID INT,
+  rutinaID INT,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
   tipo VARCHAR(50),
   valoracion DOUBLE,
   grupo_muscular VARCHAR(50),
-  video BLOB,
-  FOREIGN KEY (userID) REFERENCES usuario(userID)
+  video BLOB
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
@@ -64,7 +61,6 @@ CREATE TABLE serie (
   n_repeticiones INT,
   peso INT,
   comentario_serie VARCHAR(255),
-  tipo VARCHAR(50),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -101,13 +97,5 @@ CREATE TABLE rutina_compartida (
   rutinaID INT NOT NULL,
   userID INT NOT NULL,
   FOREIGN KEY (rutinaID) REFERENCES rutina(rutinaID),
-  FOREIGN KEY (userID) REFERENCES usuario(userID)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE registro (
-  registroID INT AUTO_INCREMENT PRIMARY KEY,
-  nombre_rutina VARCHAR(255),
-  tiempo_tardado TIME,
-  userID INT,
   FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

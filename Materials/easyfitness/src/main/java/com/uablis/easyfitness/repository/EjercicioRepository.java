@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer> {
   // Añadir consultas personalizadas si es necesario
-  List<Ejercicio> findByRutinaID(int rutinaID);
   Ejercicio findByEjercicioID(int rutinaID);
   List<Ejercicio> findByUserID(int userID);
+  List<Ejercicio> findByUserIDAndGrupoMuscular(Integer userID, String grupoMuscular);
 
 }

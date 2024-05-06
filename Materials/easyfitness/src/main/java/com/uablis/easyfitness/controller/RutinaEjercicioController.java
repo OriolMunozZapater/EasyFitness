@@ -1,9 +1,7 @@
 package com.uablis.easyfitness.controller;
 
-import com.uablis.easyfitness.model.RutinaCompartida;
 import com.uablis.easyfitness.model.RutinaEjercicio;
 import com.uablis.easyfitness.repository.RutinaEjercicioRepository;
-import com.uablis.easyfitness.repository.RutinaCompartidaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,17 +48,35 @@ public class RutinaEjercicioController {
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
+
     // Eliminar un registro de rutina_ejercicio
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRutinaEjercicio(@PathVariable Integer id) {
-        return rutinaEjercicioRepository.findById(id)
-                .map(rutinaEjercicio -> {
-                    rutinaEjercicioRepository.delete(rutinaEjercicio);
-                    return ResponseEntity.ok().<Void>build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+    @DeleteMapping("/delete/{ejercicioID}/{rutinaID}")
+    public ResponseEntity<Void> deleteRutinaEjercicio(@PathVariable Integer ejercicioID, @PathVariable Integer rutinaID) {
+      // Buscar el registro de rutina_ejercicio por ejercicioID y rutinaID
+      Optional<RutinaEjercicio> rutinaEjercicioOptional = rutinaEjercicioRepository.findByEjercicioIDAndRutinaID(ejercicioID, rutinaID);
+
+      // Verificar si se encontró el registro
+      if (rutinaEjercicioOptional.isPresent()) {
+        // Eliminar el registro encontrado
+        rutinaEjercicioRepository.delete(rutinaEjercicioOptional.get());
+        return ResponseEntity.ok().build(); // Se eliminó correctamente
+      } else {
+        return ResponseEntity.notFound().build(); // No se encontró el registro
+      }
     }
 
     // Métodos personalizados:
+
+  @GetMapping("/rutina/{rutinaID}")
+  public ResponseEntity<?> findExercisesByRutinaID(@PathVariable Integer rutinaID) {
+    List<RutinaEjercicio> rutinaEjercicios = rutinaEjercicioRepository.findByRutinaID(rutinaID);
+    if (rutinaEjercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(rutinaEjercicios);
+  }
+
 
 }
 

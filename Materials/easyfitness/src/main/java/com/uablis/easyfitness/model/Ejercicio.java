@@ -11,7 +11,7 @@ public class Ejercicio {
   private Integer ejercicioID;
 
   @Column(nullable = false)
-  private Integer rutinaID;
+  private Integer userID;
 
   @Column(nullable = false)
   private String tipo; //normal, calentamiento, serie descendente y al fallo.
@@ -39,8 +39,8 @@ public class Ejercicio {
     this.ejercicioID = ejercicioID;
   }
 
-  public void setRutinaID(Integer rutinaID) {
-    this.rutinaID = rutinaID;
+  public void setUserID(Integer userID) {
+    this.userID = userID;
   }
 
   public void setTipo(String tipo) {
@@ -72,8 +72,8 @@ public class Ejercicio {
     return ejercicioID;
   }
 
-  public Integer getRutinaID() {
-    return rutinaID;
+  public Integer getUserID() {
+    return userID;
   }
 
   public String getTipo() {
