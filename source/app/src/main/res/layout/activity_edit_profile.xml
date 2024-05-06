@@ -32,236 +32,301 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <RelativeLayout
-        android:id="@+id/layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:background="@color/black">
+        android:layout_marginBottom="70dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="32dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- Aixo és nom de l'exercici-->
-
-                <ImageView
-                    android:id="@+id/imagePerfilUser"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/circle_background"
-                    android:src="@drawable/ic_add_image"
-                    android:contentDescription="Exercise Image"
-                    android:scaleType="centerCrop"
-                    android:onClick="selectImageFromGallery" />
-
-                <EditText
-                    android:id="@+id/nameUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Nom usuari"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/imagePerfilUser"
-                    />
-
-                <!-- Aixo és nom de l'exercici-->
-                <EditText
-                    android:id="@+id/cognomUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Cognom"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/nameUser"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/conjuntSexUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="15dp"
-                    android:layout_below="@id/cognomUser">
-
-                    <TextView
-                        android:id="@+id/textViewSex"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sex:"
-                        android:textSize="18sp"
-                        android:textColor="@color/EasyFitnessColor"/>
-
-                    <Button
-                        android:id="@+id/btnSexSelect"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Select"
-                        android:layout_marginStart="8dp"
-                        android:textSize="18sp"
-                        android:background="@android:color/transparent"
-                        android:textColor="@color/EasyFitnessColor"
-                        android:onClick="showSexoOptions"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/DateOfBirthUser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Born Date"
-                    android:textColor="#A8711D"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/conjuntSexUser"
-                    android:textSize="19dp"
-                    android:drawableEnd="@drawable/ic_calendar"
-                    android:drawablePadding="20dp"
-                    android:inputType="none"
-                    android:layout_marginTop="20dp"/>
-
-                <EditText
-                    android:id="@+id/pesActualUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Pes Actual"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/DateOfBirthUser"
-                    />
-
-                <EditText
-                    android:id="@+id/alturaUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Altura"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/pesActualUser"
-                    />
-
-                <EditText
-                    android:id="@+id/descripcioUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Descripcio"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#A8711D"
-                    android:backgroundTint="#A8711D"
-                    android:layout_below="@id/alturaUser"
-                    />
-
-                <Button
-                    android:id="@+id/btnSaveUserChanges"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center"
-                    app:backgroundTint="@color/EasyFitnessColor"
-                    android:background="@drawable/buton_background"
-                    android:text="Save"
-                    android:textColor="@color/black"
-                    android:textSize="28sp"
-                    android:layout_marginTop="40dp"
-                    android:layout_below="@+id/descripcioUser"
-                    />
-            </RelativeLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout1"
+        <RelativeLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal">
+            android:background="@color/black">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/lowBar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:background="#A8711D"
-                app:titleEnabled="false"
-                android:layout_gravity="bottom">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp">
 
-                <ImageView
-                    android:id="@+id/home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_home"
-                    android:layout_gravity="start"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="25dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="#000000"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
+                    <!-- Aixo és nom de l'exercici-->
 
-                <ImageView
-                    android:id="@+id/training_routines"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_training_routines"
-                    android:layout_gravity="start|right"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="25dp"/>
+                    <ImageView
+                        android:id="@+id/imagePerfilUser"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/circle_background"
+                        android:src="@drawable/ic_add_image"
+                        android:contentDescription="Exercise Image"
+                        android:scaleType="centerCrop"
+                        android:onClick="selectImageFromGallery" />
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="#000000"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
+                    <EditText
+                        android:id="@+id/nameUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nom usuari"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/imagePerfilUser"
+                        />
 
-                <ImageView
-                    android:id="@+id/training_session"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_training"
-                    android:layout_gravity="left|end"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="20dp"/>
+                    <!-- Aixo és nom de l'exercici-->
+                    <EditText
+                        android:id="@+id/cognomUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Cognom"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/nameUser"
+                        />
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="#000000"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"/>
+                    <LinearLayout
+                        android:id="@+id/conjuntSexUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp"
+                        android:layout_below="@id/cognomUser">
 
-                <ImageView
-                    android:id="@+id/profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_profile"
-                    android:layout_gravity="end"
-                    android:paddingRight="20dp"
-                    android:paddingLeft="20dp"/>
+                        <TextView
+                            android:id="@+id/textViewSex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sex:"
+                            android:textSize="18sp"
+                            android:textColor="@color/EasyFitnessColor"/>
 
-            </androidx.appcompat.widget.Toolbar>
-        </LinearLayout>
-    </RelativeLayout>
+                        <Button
+                            android:id="@+id/btnSexSelect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select"
+                            android:layout_marginStart="8dp"
+                            android:textSize="18sp"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:onClick="showSexoOptions"/>
+                    </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/DateOfBirthUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Born Date"
+                        android:textColor="#A8711D"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/conjuntSexUser"
+                        android:textSize="19dp"
+                        android:drawableEnd="@drawable/ic_calendar"
+                        android:drawablePadding="20dp"
+                        android:inputType="none"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/pesActualUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Pes Actual"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/DateOfBirthUser"
+                        />
+
+                    <EditText
+                        android:id="@+id/alturaUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Altura"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/pesActualUser"
+                        />
+
+                    <EditText
+                        android:id="@+id/descripcioUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Descripcio"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/alturaUser"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/conjuntSocialUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp"
+                        android:layout_below="@id/descripcioUser">
+
+                        <TextView
+                            android:id="@+id/text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Xarxes Socials:"
+                            android:textSize="18sp"
+                            android:textColor="@color/EasyFitnessColor"/>
+
+                        <Button
+                            android:id="@+id/btnSocialUser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select"
+                            android:layout_marginStart="8dp"
+                            android:textSize="18sp"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:onClick="showSocialOptions"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/conjuntGimnasUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp"
+                        android:layout_below="@id/conjuntSocialUser">
+
+                        <TextView
+                            android:id="@+id/textGimnas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gimnas"
+                            android:textSize="18sp"
+                            android:textColor="@color/EasyFitnessColor"/>
+
+                        <Button
+                            android:id="@+id/btnSelectGimnas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select"
+                            android:layout_marginStart="8dp"
+                            android:textSize="18sp"
+                            android:background="@android:color/transparent"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:onClick="showSocialOptions"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSaveUserChanges"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        app:backgroundTint="@color/EasyFitnessColor"
+                        android:background="@drawable/buton_background"
+                        android:text="Save"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:layout_marginTop="40dp"
+                        android:layout_below="@+id/conjuntGimnasUser"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <!-- Linear layout para la barra de abajo -->
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <!-- Toolbar para la barra inferior -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/lowBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#A8711D"
+            app:titleEnabled="false"
+            android:layout_gravity="bottom">
+
+            <!-- Iconos de la barra inferior -->
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_home"
+                android:layout_gravity="start"
+                android:paddingLeft="20dp"
+                android:paddingRight="25dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/training_routines"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_training_routines"
+                android:layout_gravity="start|right"
+                android:paddingLeft="20dp"
+                android:paddingRight="25dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/training_session"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_training"
+                android:layout_gravity="left|end"
+                android:paddingLeft="25dp"
+                android:paddingRight="20dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile"
+                android:layout_gravity="end"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"/>
+
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 </RelativeLayout>
