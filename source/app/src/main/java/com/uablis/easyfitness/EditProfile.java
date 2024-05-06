@@ -38,11 +38,11 @@ public class EditProfile extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo", "Croissant"};
-
+    private CharSequence[] SocialOptions = {"Instagram", "Facebook", "X"};
     private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser;
     private TextView DateOfBirthUser;
     private ImageView imagePerfilUser;
-    private Button btnSexSelect, btnSaveUserChanges;
+    private Button btnSexSelect, btnSaveUserChanges, btnSocialUser, btnSelectGimnas;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +58,8 @@ public class EditProfile extends AppCompatActivity {
         DateOfBirthUser = findViewById(R.id.DateOfBirthUser);
         imagePerfilUser = findViewById(R.id.imagePerfilUser);
         btnSexSelect = findViewById(R.id.btnSexSelect);
+        btnSocialUser = findViewById(R.id.btnSocialUser);
+        btnSelectGimnas = findViewById(R.id.btnSelectGimnas);
         btnSaveUserChanges = findViewById(R.id.btnSaveUserChanges);
 
         // Set click listener for image selection
@@ -70,6 +72,7 @@ public class EditProfile extends AppCompatActivity {
 
         // Set click listener for gender selection
         btnSexSelect.setOnClickListener(this::showSexoOptions);
+        btnSexSelect.setOnClickListener(this::showSocialOptions);
 
         DateOfBirthUser.setOnClickListener(v -> showDatePickerDialog());
 
@@ -82,7 +85,7 @@ public class EditProfile extends AppCompatActivity {
                         nameUser.toString(), btnSexSelect.getText().toString(), cognomUser.toString(), descripcioUser.toString(), DateOfBirthUser.toString());
             }
         });
-         getUserData();
+        getUserData();
 
     }
 
@@ -163,6 +166,14 @@ public class EditProfile extends AppCompatActivity {
         builder.setItems(genderOptions, (dialog, which) -> btnSexSelect.setText(genderOptions[which]));
         builder.show();
     }
+    /*TODO: linkar redes sociales del usuario*/
+    public void showSocialOptions(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecciona tu RED SOCIAL");
+        builder.setItems(SocialOptions, (dialog, which) -> btnSexSelect.setText(SocialOptions[which]));
+        builder.show();
+    }
+    /*TODO: linkar localizacion maps del gimnasio*/
 
     private void selectImageFromGallery() {
         Intent intent = new Intent();
@@ -228,4 +239,3 @@ public class EditProfile extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 }
-
