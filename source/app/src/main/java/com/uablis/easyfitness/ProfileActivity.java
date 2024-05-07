@@ -6,9 +6,21 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -25,7 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        recuperarDatosPerfil();
+        pesObjectiu = findViewById(R.id.pesObjectiu);
+        pesPropi = findViewById(R.id.pesPropi);
+        nomUser = findViewById(R.id.nomUser);
+        altura = findViewById(R.id.altura);
+        sexe = findViewById(R.id.sexe);
+
+
 
         profile = findViewById(R.id.profile);
         home = findViewById(R.id.home);
@@ -34,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         btnPes = findViewById(R.id.btnEditPes);
 
         edit_profile = findViewById(R.id.btnEditPersonalData);
+
+        getUserData();
 
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,36 +79,58 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void recuperarDatosPerfil() {
-        // Obtener referencias a los elementos de la interfaz
-        TextView pesoObjetivoTextView = findViewById(R.id.pesObjectiu);
-        TextView pesoActualTextView = findViewById(R.id.pesPropi);
-        TextView nombreTextView = findViewById(R.id.nomUser);
-        TextView alturaTextView = findViewById(R.id.altura);
-        TextView sexoTextView = findViewById(R.id.sexe);
+    private void getUserData(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String userId = UsuarioActual.getInstance().getUserId();
+
+        String url = "http://172.17.176.1:8080/api/usuario/" + userId;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            JSONObject jsonObject = jsonArray.getJSONObject(0);
+                            String userName = jsonObject.getString("nombre");
+                            String userSurname = jsonObject.getString("apellido");
+                            String userEmail = jsonObject.getString("correo");
+                            String userGender = jsonObject.getString("sexo");
+                            String userActualWeight = jsonObject.getString("peso_actual");
+                            String userHeight = jsonObject.getString("altura");
+                            String userFoto = jsonObject.getString("foto");
+                            String userDescription = jsonObject.getString("descripcion");
+                            String userSocialMedia = jsonObject.getString("redes_sociales");
+                            String userObjective = jsonObject.getString("objetivo");
+                            String userFirstLogin = jsonObject.getString("firslLogin");
 
 
-        // Recuperar datos de BD
 
-        // Peso objetivo
-        /*int pesoObjetivo = preferencias.getInt("peso_objetivo", 0);
-        pesoObjetivoTextView.setText(String.valueOf(pesoObjetivo) + " Kg");
+                            updateUIWithUserData(userActualWeight, userName, userGender, userHeight);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(ProfileActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        // Peso actual
-        int pesoActual = preferencias.getInt("peso_actual", 0);
-        pesoActualTextView.setText(String.valueOf(pesoActual) + " Kg");
+        queue.add(stringRequest);
+    }
 
-        // Nombre
-        String nombre = preferencias.getString("nombre", "");
-        nombreTextView.setText(nombre);
+    private void updateUIWithUserData(String userName,String userActualWeight,
+                                      String userHeight, String userGender) {
+        // Actualiza las vistas con la información del usuario
+        nomUser.setText(userName);
+        sexe.setText(userGender);
+        pesPropi.setText(userActualWeight);
+        altura.setText(userHeight);
 
-        // Altura
-        int altura = preferencias.getInt("altura", 0);
-        alturaTextView.setText(String.valueOf(altura) + " cm");
-
-        // Sexo
-        String sexo = preferencias.getString("sexo", "");
-        sexoTextView.setText(sexo);*/
     }
 
 
