@@ -2,6 +2,7 @@ package com.uablis.easyfitness;
 
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -41,7 +42,7 @@ public class EditProfile extends AppCompatActivity {
     private CharSequence[] SocialOptions = {"Instagram", "Facebook", "X"};
     private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser;
     private TextView DateOfBirthUser;
-    private ImageView imagePerfilUser;
+    private ImageView imagePerfilUser, backArrow;
     private Button btnSexSelect, btnSaveUserChanges, btnSocialUser, btnSelectGimnas;
 
     @Override
@@ -61,12 +62,20 @@ public class EditProfile extends AppCompatActivity {
         btnSocialUser = findViewById(R.id.btnSocialUser);
         btnSelectGimnas = findViewById(R.id.btnSelectGimnas);
         btnSaveUserChanges = findViewById(R.id.btnSaveUserChanges);
+        backArrow = findViewById(R.id.back_arrow);
 
         // Set click listener for image selection
         imagePerfilUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImageFromGallery();
+            }
+        });
+
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
             }
         });
 
@@ -87,6 +96,25 @@ public class EditProfile extends AppCompatActivity {
         });
         getUserData();
 
+    }
+
+    public void save() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you don't want to save the changes?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // No hacer nada, simplemente cerrar el diálogo
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     private void getUserData(){
