@@ -79,12 +79,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
                     button.setImageResource(R.drawable.green_check);
                 }
             });
-            routineView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+
             routinesLayout.addView(routineView);
         }
     }
