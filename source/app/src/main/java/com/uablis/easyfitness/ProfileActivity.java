@@ -95,12 +95,12 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void goToEditData() {
-        Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_DETALLS_PERFIL*/EditRoutineActivity.class);
+        Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
         startActivity(intent);
     }
 
     public void goToEditWeight() {
-        Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_PES_OBJECTIU Y PERSONAL*/EditRoutineActivity.class);
+        Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
         startActivity(intent);
     }
 
