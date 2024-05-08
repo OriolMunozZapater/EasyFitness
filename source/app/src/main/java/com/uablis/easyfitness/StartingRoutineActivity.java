@@ -103,18 +103,16 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 // Configurar el botón para guardar series
                 ImageButton saveSerie = exerciseView.findViewById(R.id.saveSerie);
                 saveSerie.setOnClickListener(v -> {
-                    EditText etPesSerie = seriesContainer.findViewById(R.id.etPesSerie);
-                    EditText etRepsSerie = seriesContainer.findViewById(R.id.etRepsSerie);
-                    EditText etCommentSerie = seriesContainer.findViewById(R.id.etCommentSerie);
+                    EditText etPesSerie = exerciseView.findViewById(R.id.etPesSerie);
+                    EditText etRepsSerie = exerciseView.findViewById(R.id.etRepsSerie);
                     String peso = etPesSerie.getText().toString();
                     String reps = etRepsSerie.getText().toString();
-                    String comentario = etCommentSerie.getText().toString();
 
                     if (peso.isEmpty() || reps.isEmpty()) {
                         Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID, comentario);
+                    obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
 
                     // Visual feedback for first series row
                     LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
@@ -150,7 +148,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID, String comentario) {
+    private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String getUrl = "http://172.17.176.1:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
 
@@ -163,7 +161,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
                             // Obtener el ejercicioid del objeto JSON de respuesta
                             String ejercicioid = response.getString("ejercicioID");
                             // Llamar a la función para guardar la serie con el ejercicioid obtenido
-                            guardarSerieConEjercicioId(ejercicioid, peso, reps, comentario);
+                            guardarSerieConEjercicioId(ejercicioid, peso, reps);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Manejo de errores en caso de problemas al analizar la respuesta JSON
@@ -185,7 +183,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void guardarSerieConEjercicioId(String ejercicioid, String peso, String reps, String comentario) {
+    private void guardarSerieConEjercicioId(String ejercicioid, String peso, String reps) {
         // Construye el cuerpo de la solicitud en formato JSON con el ejercicioid
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonBody = new JSONObject();
@@ -193,7 +191,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
             jsonBody.put("peso", peso);
             jsonBody.put("n_repeticiones", reps);
             jsonBody.put("ejercicioID", ejercicioid);
-            jsonBody.put("comentario_serie", comentario);
+            // Agrega otros campos necesarios como nombre de la rutina, descripción, etc.
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -309,12 +307,10 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 // Cambiar el color de fondo del LinearLayout newRow
                 EditText etPesSerie = findViewById(R.id.etPesSerie);
                 EditText etRepsSerie = findViewById(R.id.etRepsSerie);
-                EditText etCommentSerie = findViewById(R.id.etCommentSerie);
                 TextView textViewExerciseName = findViewById(R.id.tvExerciseName);
 
                 String peso = etPesSerie.getText().toString();
                 String reps = etRepsSerie.getText().toString();
-                String comentario = etCommentSerie.getText().toString();
                 String ejercicioNombre = textViewExerciseName.getText().toString();
                 String rutinaID = "6";
 
@@ -322,7 +318,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
                     Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID, comentario);
+                obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
 
                 int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
                 newRow.setBackgroundColor(newColor);

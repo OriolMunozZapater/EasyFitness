@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,4 +108,21 @@ public class EjercicioController {
     }
     return ResponseEntity.ok(ejercicios);
   }
+
+  @GetMapping("/getEjercicioID")
+  public ResponseEntity<?> getEjercicioByNomAndRutinaId(@RequestParam String nom, @RequestParam Integer rutinaID) {
+    Optional<Ejercicio> ejercicio = ejercicioRepository.findByNombreAndRutinaID(nom, rutinaID);
+    return ejercicio.map(e -> ResponseEntity.ok(Collections.singletonMap("ejercicioID", e.getEjercicioID())))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+  @GetMapping("/rutina/{rutinaID}")
+  public ResponseEntity<List<Ejercicio>> getEjerciciosByRutinaId(@PathVariable Integer rutinaID) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByRutinaID(rutinaID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    } else {
+      return ResponseEntity.ok(ejercicios);
+    }
+  }
+
 }
