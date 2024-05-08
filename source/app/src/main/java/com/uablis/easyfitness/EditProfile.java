@@ -40,10 +40,10 @@ public class EditProfile extends AppCompatActivity {
 
     private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo", "Croissant"};
     private CharSequence[] SocialOptions = {"Instagram", "Facebook", "X"};
-    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser;
+    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser, descripcioXX, descripcioGimnas;
     private TextView DateOfBirthUser;
     private ImageView imagePerfilUser, backArrow;
-    private Button btnSexSelect, btnSaveUserChanges, btnSocialUser, btnSelectGimnas;
+    private Button btnSexSelect, btnSaveUserChanges;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +59,11 @@ public class EditProfile extends AppCompatActivity {
         DateOfBirthUser = findViewById(R.id.DateOfBirthUser);
         imagePerfilUser = findViewById(R.id.imagePerfilUser);
         btnSexSelect = findViewById(R.id.btnSexSelect);
-        btnSocialUser = findViewById(R.id.btnSocialUser);
-        btnSelectGimnas = findViewById(R.id.btnSelectGimnas);
         btnSaveUserChanges = findViewById(R.id.btnSaveUserChanges);
         backArrow = findViewById(R.id.back_arrow);
+
+        descripcioXX = findViewById(R.id.descripcioXX);
+        descripcioGimnas = findViewById(R.id.descripcioGimnas);
 
         // Set click listener for image selection
         imagePerfilUser.setOnClickListener(new View.OnClickListener() {
