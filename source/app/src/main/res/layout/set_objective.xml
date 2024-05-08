@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#A8711D"
+        app:titleEnabled="false">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:contentDescription="Back Arrow" />
+
+        <!-- TextView personalizado para el título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SET OBJECTIVE"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Save"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_gravity="end"/>
+
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <!-- Dentro de activity_view_training_routine.xml -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:layout_below="@id/toolbar">
+
+                <!-- Este LinearLayout contendrá dinámicamente cada rutina -->
+                <LinearLayout
+                    android:id="@+id/objectiveContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current wieght:"
+                        android:textColor="@color/EasyFitnessColor"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="15dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <TextView
+                            android:id="@+id/currentWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:text="75"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/currentWeightUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" kg"
+                            android:gravity="center"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:textSize="20sp"
+                            />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/EasyFitnessColor"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginTop="25dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Objective wieght:"
+                        android:textColor="@color/EasyFitnessColor"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="15dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                        <EditText
+                            android:id="@+id/objectiveWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="68"
+                            android:textColor="#FF0000"
+                            android:textSize="20sp"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:inputType="number"
+                            android:maxLength="3"/>
+
+                        <TextView
+                            android:id="@+id/objectiveWeightUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" kg"
+                            android:gravity="center"
+                            android:textColor="#FF0000"
+                            android:textSize="20sp"
+                            />
+
+                </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/EasyFitnessColor"
+                        android:layout_marginBottom="25dp"
+                        android:layout_marginTop="25dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Objective date:"
+                        android:textColor="@color/EasyFitnessColor"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="15dp"/>
+                    <TextView
+                        android:id="@+id/objectiveDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Select date"
+                        android:textColor="#A8711D"
+                        android:textColorHint="#A8711D"
+                        android:textSize="20dp"
+                        android:drawableEnd="@drawable/ic_calendar"
+                        android:drawablePadding="20dp"
+                        android:layout_gravity="center"
+                        android:inputType="none"
+                        android:layout_marginBottom="20dp"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:layout_below="@id/layout"
+            android:layout_alignParentBottom="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/lowBar"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="#A8711D"
+                app:titleEnabled="false"
+                android:layout_gravity="bottom">
+
+                <ImageView
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_home"
+                    android:layout_gravity="start"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="25dp"/>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:id="@+id/training_routines"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_training_routines"
+                    android:layout_gravity="start|right"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="25dp"/>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:id="@+id/training_session"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_training"
+                    android:layout_gravity="left|end"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="20dp"/>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#000000"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:id="@+id/profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_profile"
+                    android:layout_gravity="end"
+                    android:paddingRight="20dp"
+                    android:paddingLeft="20dp"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
