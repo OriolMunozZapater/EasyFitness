@@ -4,16 +4,16 @@ INSERT INTO usuario (userID, correo, password, is_first_login) VALUES
 UPDATE `easyfitness`.`usuario` SET `userID` = '0' WHERE (`userID` = '1');
 
 -- Inserts para Ejercicios
-INSERT INTO ejercicio (nombre, descripcion, tipo, grupo_muscular) VALUES
-('Sentadillas', 'Ejercicio completo para piernas', 'Fuerza', 'Piernas'),
-('Press de banca', 'Ejercicio para pecho', 'Fuerza', 'Pecho'),
-('Pull-up', 'Ejercicio de espalda superior', 'Calistenia', 'Espalda'),
-('Jogging', 'Correr a un ritmo moderado', 'Cardio', 'Todo el cuerpo'),
-('Yoga', 'Sesión de yoga para mejorar flexibilidad', 'Flexibilidad', 'Todo el cuerpo'),
-('Tai Chi', 'Formas lentas y meditativas', 'Equilibrio', 'Todo el cuerpo');
+INSERT INTO ejercicio (nombre, descripcion, tipo, grupo_muscular, userID, rutinaID) VALUES
+('Sentadillas', 'Ejercicio completo para piernas', 'Fuerza', 'Piernas', 0, 0),
+('Press de banca', 'Ejercicio para pecho', 'Fuerza', 'Pecho', 0, 0),
+('Pull-up', 'Ejercicio de espalda superior', 'Calistenia', 'Espalda', 0, 0),
+('Jogging', 'Correr a un ritmo moderado', 'Cardio', 'Todo el cuerpo', 0, 0),
+('Yoga', 'Sesión de yoga para mejorar flexibilidad', 'Flexibilidad', 'Todo el cuerpo', 0, 0),
+('Tai Chi', 'Formas lentas y meditativas', 'Equilibrio', 'Todo el cuerpo', 0, 0);
 
 -- Inserts para Rutinas
-INSERT INTO rutina (nombre, descripcion, user_ID, publico) VALUES
+INSERT INTO rutina (nombre, descripcion, userID, publico) VALUES
 ('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 0, TRUE),
 ('Rutina de Calistenia', 'Rutina usando peso corporal', 0, TRUE),
 ('Rutina de Cardio', 'Rutina para mejorar la capacidad cardiovascular', 0, TRUE),
