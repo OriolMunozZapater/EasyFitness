@@ -181,55 +181,65 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingTop="15dp"
+                        android:paddingTop="20dp"
                         android:layout_below="@id/descripcioUser">
 
                         <TextView
-                            android:id="@+id/text"
+                            android:id="@+id/textURL"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:text="Xarxes Socials:"
                             android:textSize="18sp"
-                            android:textColor="@color/EasyFitnessColor"/>
-
-                        <Button
-                            android:id="@+id/btnSocialUser"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Select"
-                            android:layout_marginStart="8dp"
-                            android:textSize="18sp"
-                            android:background="@android:color/transparent"
                             android:textColor="@color/EasyFitnessColor"
-                            android:onClick="showSocialOptions"/>
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="20dp"/>
+
+                        <EditText
+                            android:id="@+id/descripcioXX"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Introduce tu URL"
+                            android:inputType="textEmailAddress"
+                            android:layout_marginTop="15dp"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="#A8711D"
+                            android:backgroundTint="#A8711D"
+                            android:layout_gravity="center_horizontal"
+                            />
+
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/conjuntGimnasUser"
+                        android:id="@+id/conjuntGimnasLoc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingTop="15dp"
+                        android:paddingTop="20dp"
                         android:layout_below="@id/conjuntSocialUser">
 
                         <TextView
                             android:id="@+id/textGimnas"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Gimnas"
+                            android:layout_height="match_parent"
+                            android:text="Gimnas:"
                             android:textSize="18sp"
-                            android:textColor="@color/EasyFitnessColor"/>
-
-                        <Button
-                            android:id="@+id/btnSelectGimnas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Select"
-                            android:layout_marginStart="8dp"
-                            android:textSize="18sp"
-                            android:background="@android:color/transparent"
                             android:textColor="@color/EasyFitnessColor"
-                            android:onClick="showSocialOptions"/>
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="80dp"/>
+
+                        <EditText
+                            android:id="@+id/descripcioGimnas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Introduce tu URL"
+                            android:inputType="textEmailAddress"
+                            android:layout_marginTop="15dp"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="#A8711D"
+                            android:backgroundTint="#A8711D"
+                            android:layout_gravity="center_horizontal"
+                            />
+
                     </LinearLayout>
 
                     <Button
@@ -243,7 +253,7 @@
                         android:textColor="@color/black"
                         android:textSize="25sp"
                         android:layout_marginTop="40dp"
-                        android:layout_below="@+id/conjuntGimnasUser"
+                        android:layout_below="@+id/conjuntGimnasLoc"
                         />
                 </RelativeLayout>
 
