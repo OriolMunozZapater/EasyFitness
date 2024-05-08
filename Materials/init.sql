@@ -26,6 +26,7 @@ CREATE TABLE usuario (
   password VARCHAR(255) NOT NULL,
   sexo VARCHAR(10),
   peso_actual DECIMAL(5,2),
+  gimnasio VARCHAR(255),
   altura INT,
   foto BLOB,
   descripcion VARCHAR(255),
