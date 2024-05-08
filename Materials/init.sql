@@ -47,12 +47,14 @@ CREATE TABLE usuarios_seguidos (
 CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT,
+  userID INT,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
   tipo VARCHAR(50),
   valoracion DOUBLE,
   grupo_muscular VARCHAR(50),
-  video BLOB
+  video BLOB,
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE serie (
@@ -79,9 +81,9 @@ CREATE TABLE rutina (
   rutinaID INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
-  user_ID INT NOT NULL,
+  userID INT NOT NULL,
   publico BOOLEAN,
-  FOREIGN KEY (user_ID) REFERENCES usuario(userID)
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE rutina_ejercicio (
