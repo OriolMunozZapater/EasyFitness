@@ -32,11 +32,13 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class TrainingRoutinesActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView hola;
     private ImageView home, training_routines, training, profile, training_session;
     private Toolbar toolbar, appbar;
     private ImageButton menu;
     private Button btnAddRoutine;
+    private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,8 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     private void loadUserRoutines() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/rutinas/usuario/" + userId;
+        String path = "rutinas/usuario/" + userId;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -196,9 +199,24 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_EXERCISE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                // Aquí puedes hacer lo que necesitas después de volver de ChooseExerciseActivity
+                LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
+                routinesLayout.removeAllViews();
+                loadUserRoutines();
+            }
+        }
+    }
+
     public void goToNewRoutine() {
         Intent intent = new Intent(TrainingRoutinesActivity.this, NewRoutineActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
     }
 
     public void goToPreCreatedRoutine() {

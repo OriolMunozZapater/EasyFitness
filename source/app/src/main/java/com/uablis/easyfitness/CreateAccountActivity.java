@@ -32,6 +32,7 @@ import java.util.Map;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private EditText etNewEmail, etNewPassword, etConfirmPassword;
     private Button btnSubmitCreateAccount;
     private Toolbar toolbar;
@@ -106,7 +107,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void insertUserIntoApi(final String email, final String password) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/usuarios";
+        String path = "usuarios";
+        String url = urlBase.buildUrl(path);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {

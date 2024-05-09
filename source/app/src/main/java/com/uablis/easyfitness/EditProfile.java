@@ -1,18 +1,16 @@
 package com.uablis.easyfitness;
 
-
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,24 +24,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.uablis.easyfitness.R;
-import com.uablis.easyfitness.UsuarioActual;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
+import java.io.ByteArrayOutputStream;
 
 public class EditProfile extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
-
-    private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo", "Croissant"};
-    private CharSequence[] SocialOptions = {"Instagram", "Facebook", "X"};
-    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser, descripcioXX, descripcioGimnas;
-    private TextView DateOfBirthUser;
-    private ImageView imagePerfilUser, backArrow;
-    private Button btnSexSelect, btnSaveUserChanges;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo"};
+    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser;
+    private ImageView imagePerfilUser;
+    private Button btnSexSelect, btnSaveUserChanges, btnSocialUser;
+    private Bitmap selectedBitmap = null;  // To hold the image from gallery
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,153 +50,66 @@ public class EditProfile extends AppCompatActivity {
         pesActualUser = findViewById(R.id.pesActualUser);
         alturaUser = findViewById(R.id.alturaUser);
         descripcioUser = findViewById(R.id.descripcioUser);
-        DateOfBirthUser = findViewById(R.id.DateOfBirthUser);
         imagePerfilUser = findViewById(R.id.imagePerfilUser);
         btnSexSelect = findViewById(R.id.btnSexSelect);
+        btnSocialUser = findViewById(R.id.btnSocialUser);
         btnSaveUserChanges = findViewById(R.id.btnSaveUserChanges);
-        backArrow = findViewById(R.id.back_arrow);
 
-        descripcioXX = findViewById(R.id.descripcioXX);
-        descripcioGimnas = findViewById(R.id.descripcioGimnas);
+        // Set click listeners
+        imagePerfilUser.setOnClickListener(v -> selectImageFromGallery());
+        btnSexSelect.setOnClickListener(this::showGenderOptions);
+        btnSocialUser.setOnClickListener(this::showSocialOptions);
+        btnSaveUserChanges.setOnClickListener(v -> saveUserData());
 
-        // Set click listener for image selection
-        imagePerfilUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImageFromGallery();
-            }
-        });
-
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save();
-            }
-        });
-
-        // Set click listener for gender selection
-        btnSexSelect.setOnClickListener(this::showSexoOptions);
-        btnSexSelect.setOnClickListener(this::showSocialOptions);
-
-        DateOfBirthUser.setOnClickListener(v -> showDatePickerDialog());
-
-        // Set click listener for save button
-        btnSaveUserChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Implement save functionality here
-                updateUserData(pesActualUser.toString(), alturaUser.toString(), imagePerfilUser.toString(),
-                        nameUser.toString(), btnSexSelect.getText().toString(), cognomUser.toString(), descripcioUser.toString(), DateOfBirthUser.toString());
-            }
-        });
         getUserData();
-
     }
 
-    public void save() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you don't want to save the changes?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacer nada, simplemente cerrar el diálogo
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-    }
-
-    private void getUserData(){
+    private void getUserData() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-
-        String url = "http://172.17.176.1:8080/api/usuario/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                            String userName = jsonObject.getString("nombre");
-                            String userSurname = jsonObject.getString("apellido");
-                            String userEmail = jsonObject.getString("correo");
-                            String userGender = jsonObject.getString("sexo");
-                            String userActualWeight = jsonObject.getString("peso_actual");
-                            String userHeight = jsonObject.getString("altura");
-                            String userFoto = jsonObject.getString("foto");
-                            String userDescription = jsonObject.getString("descripcion");
-                            String userSocialMedia = jsonObject.getString("redes_sociales");
-                            String userObjective = jsonObject.getString("objetivo");
-                            String userFirstLogin = jsonObject.getString("firslLogin");
-
-
-
-                            updateUIWithUserData(userName, userSurname, userEmail, userGender, userActualWeight,
-                                    userHeight, userFoto, userDescription, userSocialMedia, userObjective, userFirstLogin);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(EditProfile.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        nameUser.setText(jsonObject.getString("nombre"));
+                        cognomUser.setText(jsonObject.getString("apellido"));
+                        pesActualUser.setText(jsonObject.getString("peso_actual"));
+                        alturaUser.setText(jsonObject.getString("altura"));
+                        descripcioUser.setText(jsonObject.getString("descripcion"));
+                        btnSexSelect.setText(jsonObject.getString("sexo"));
+                        String encodedImage = jsonObject.optString("foto");
+                        if (!encodedImage.isEmpty()) {
+                            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            imagePerfilUser.setImageBitmap(decodedByte);
                         }
+                    } catch (JSONException e) {
+                        Toast.makeText(EditProfile.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(EditProfile.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                },
+                error -> Toast.makeText(EditProfile.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show());
 
         queue.add(stringRequest);
     }
 
-    private void updateUIWithUserData(String userName, String userSurname, String userEmail, String userGender, String userActualWeight,
-                                      String userHeight, String userFoto, String userDescription, String userSocialMedia, String userObjective, String userFirstLogin) {
-        // Actualiza las vistas con la información del usuario
-        nameUser.setText(userName);
-        cognomUser.setText(userSurname);
-        pesActualUser.setText(userActualWeight);
-        alturaUser.setText(userHeight);
-        descripcioUser.setText(userDescription);
-        DateOfBirthUser.setText(userObjective); // No está claro qué vista debería mostrar el objetivo del usuario
-        // Puedes manejar la foto del usuario si lo deseas, por ejemplo, cargándola en el ImageView
-        // imagePerfilUser.setImageURI(Uri.parse(userFoto));
-
-        // Resto del código...
-    }
-
-
-    private void showDatePickerDialog() {
-        final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                EditProfile.this,
-                (view, year, month, dayOfMonth) -> DateOfBirthUser.setText(String.format("%d-%02d-%02d", year, month + 1, dayOfMonth)),
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-        );
-        datePickerDialog.show();
-    }
-
-    public void showSexoOptions(View view) {
+    private void showGenderOptions(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona tu sexo");
         builder.setItems(genderOptions, (dialog, which) -> btnSexSelect.setText(genderOptions[which]));
         builder.show();
     }
-    /*TODO: linkar redes sociales del usuario*/
-    public void showSocialOptions(View view) {
+
+    private void showSocialOptions(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona tu RED SOCIAL");
-        builder.setItems(SocialOptions, (dialog, which) -> btnSexSelect.setText(SocialOptions[which]));
+        builder.setItems(new CharSequence[]{"Instagram", "Facebook", "Twitter"}, (dialog, which) -> {
+            // Handle selection
+        });
         builder.show();
     }
-    /*TODO: linkar localizacion maps del gimnasio*/
 
     private void selectImageFromGallery() {
         Intent intent = new Intent();
@@ -214,57 +121,50 @@ public class EditProfile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Aquí puedes setear el bitmap en tu ImageView
-                imagePerfilUser.setImageBitmap(bitmap);
+                selectedBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imagePerfilUser.setImageBitmap(selectedBitmap);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void updateUserData(String pesoActual, String altura, String foto, String nombre, String sexo, String cognom, String descripcio, String neixement) {
-        // URL de la API para actualizar el usuario
+    private void saveUserData() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
-        // Construye el cuerpo de la solicitud en formato JSON
         JSONObject requestBody = new JSONObject();
         try {
-            requestBody.put("nombre", nombre);
-            requestBody.put("peso_actual", pesoActual);
-            requestBody.put("altura", altura);
-            //requestBody.put("peso_objetivo", pesoObjetivo); Esto se tiene que modificar en la tabla objetivo
-            requestBody.put("foto", foto);
-            requestBody.put("sexo", sexo);
+            requestBody.put("nombre", nameUser.getText().toString());
+            requestBody.put("apellido", cognomUser.getText().toString());
+            requestBody.put("peso_actual", pesActualUser.getText().toString());
+            requestBody.put("altura", alturaUser.getText().toString());
+            requestBody.put("descripcion", descripcioUser.getText().toString());
+            requestBody.put("sexo", btnSexSelect.getText().toString());
+            if (selectedBitmap != null) {
+                requestBody.put("foto", convertBitmapToString(selectedBitmap));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
-            return; // Sale de la función si hay un error al construir el JSON
+            return;
         }
 
-        // Crea una solicitud PUT
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Aquí puedes manejar la respuesta exitosa, si es necesario
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        // Aquí puedes manejar el error de la solicitud, si es necesario
-                    }
-                });
-
-        // Añade la solicitud a la cola de solicitudes
+                response -> Toast.makeText(EditProfile.this, "Perfil actualizado correctamente.", Toast.LENGTH_SHORT).show(),
+                error -> Toast.makeText(EditProfile.this, "Error updating profile: " + error.toString(), Toast.LENGTH_SHORT).show());
 
         queue.add(jsonObjectRequest);
+    }
+
+    private String convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

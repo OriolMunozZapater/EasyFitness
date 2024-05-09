@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirstLoginActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private EditText etWeight, etName, etSecondName, etHeight;
     private TextView etDateOfBirth;
     private Button btnSexSelect;
@@ -128,7 +129,8 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject jsonBody) {
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, response -> {

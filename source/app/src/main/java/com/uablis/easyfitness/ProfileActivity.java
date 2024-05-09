@@ -7,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,127 +22,71 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ProfileActivity extends AppCompatActivity {
-
-    private ImageView home, training_routines, training, profile, profile_image;
-
-    private Toolbar toolbar, appbar;
-
-    private ImageButton edit_profile, btnPes;
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
+    private ImageButton edit_profile, btnPes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        initializeViews();
+        getUserData();
+        setupListeners();
+    }
+
+    private void initializeViews() {
         pesObjectiu = findViewById(R.id.pesObjectiu);
         pesPropi = findViewById(R.id.pesPropi);
         nomUser = findViewById(R.id.nomUser);
-        altura = findViewById(R.id.altura);
         sexe = findViewById(R.id.sexe);
-
-
-
-        profile = findViewById(R.id.profile);
-        home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
-        btnPes = findViewById(R.id.btnEditPes);
-
+        altura = findViewById(R.id.altura);
         edit_profile = findViewById(R.id.btnEditPersonalData);
-
-        getUserData();
-
-        edit_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToEditData();
-            }
-        });
-
-        btnPes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToEditWeight();
-            }
-        });
-
-        training_routines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, TrainingRoutinesActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        btnPes = findViewById(R.id.btnEditPes);
     }
 
-    private void getUserData(){
+    private void setupListeners() {
+        edit_profile.setOnClickListener(v -> goToEditData());
+        btnPes.setOnClickListener(v -> goToEditWeight());
+        findViewById(R.id.training_routines).setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, TrainingRoutinesActivity.class)));
+    }
+
+    private void getUserData() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-
-        String url = "http://172.17.176.1:8080/api/usuario/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                            String userName = jsonObject.getString("nombre");
-                            String userSurname = jsonObject.getString("apellido");
-                            String userEmail = jsonObject.getString("correo");
-                            String userGender = jsonObject.getString("sexo");
-                            String userActualWeight = jsonObject.getString("peso_actual");
-                            String userHeight = jsonObject.getString("altura");
-                            String userFoto = jsonObject.getString("foto");
-                            String userDescription = jsonObject.getString("descripcion");
-                            String userSocialMedia = jsonObject.getString("redes_sociales");
-                            String userObjective = jsonObject.getString("objetivo");
-                            String userFirstLogin = jsonObject.getString("firslLogin");
-
-
-
-                            updateUIWithUserData(userActualWeight, userName, userGender, userHeight);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Toast.makeText(ProfileActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                response -> handleResponse(response),
+                error -> Toast.makeText(ProfileActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show());
 
         queue.add(stringRequest);
     }
 
-    private void updateUIWithUserData(String userName,String userActualWeight,
-                                      String userHeight, String userGender) {
-        // Actualiza las vistas con la información del usuario
-        nomUser.setText(userName);
-        sexe.setText(userGender);
-        pesPropi.setText(userActualWeight);
-        altura.setText(userHeight);
-
+    private void handleResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            nomUser.setText(jsonObject.getString("nombre"));
+            sexe.setText(jsonObject.getString("sexo"));
+            pesPropi.setText(jsonObject.getString("peso_actual") + " Kg");
+            altura.setText(jsonObject.getString("altura") + " cm");
+            // You can set the target weight if it's included in the response
+            // pesObjectiu.setText(jsonObject.getString("peso_objetivo") + " Kg");
+        } catch (JSONException e) {
+            Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+        }
     }
 
-
-
-
     public void goToEditData() {
-        Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
+        Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
     }
 
     public void goToEditWeight() {
-        Intent intent = new Intent(ProfileActivity.this, EditProfile.class);
+        // This currently redirects to the same EditProfile activity, consider a specific weight editing activity or modal
+        Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
     }
-
 }

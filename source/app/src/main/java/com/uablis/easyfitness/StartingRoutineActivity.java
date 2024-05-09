@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StartingRoutineActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private Chronometer trainingDuration;
     private Button endTraining;
     private LinearLayout routinesLayout;
@@ -57,7 +58,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         trainingDuration = findViewById(R.id.chronometer);
         endTraining = findViewById(R.id.btnEndTraining);
         routinesLayout = findViewById(R.id.exerciseTrainContainer);
-
+        rutinaID = getIntent().getStringExtra("ROUTINE_ID");
         rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
         obtenerEjerciciosPorRutinaId(rutinaId);
 
@@ -103,18 +104,16 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 // Configurar el botón para guardar series
                 ImageButton saveSerie = exerciseView.findViewById(R.id.saveSerie);
                 saveSerie.setOnClickListener(v -> {
-                    EditText etPesSerie = seriesContainer.findViewById(R.id.etPesSerie);
-                    EditText etRepsSerie = seriesContainer.findViewById(R.id.etRepsSerie);
-                    EditText etCommentSerie = seriesContainer.findViewById(R.id.etCommentSerie);
+                    EditText etPesSerie = exerciseView.findViewById(R.id.etPesSerie);
+                    EditText etRepsSerie = exerciseView.findViewById(R.id.etRepsSerie);
                     String peso = etPesSerie.getText().toString();
                     String reps = etRepsSerie.getText().toString();
-                    String comentario = etCommentSerie.getText().toString();
 
                     if (peso.isEmpty() || reps.isEmpty()) {
                         Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID, comentario);
+                    obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
 
                     // Visual feedback for first series row
                     LinearLayout firstRow = (LinearLayout) seriesContainer.getChildAt(0);
@@ -137,9 +136,10 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerEjerciciosPorRutinaId(int rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://172.17.176.1:8080/api/ejercicios/rutina/" + rutinaID;
+        String path = "ejercicios/rutina/" + rutinaID;
+        String url = urlBase.buildUrl(path);
 
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, getUrl, null,
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> updateUIWithExercises(response),
                 error -> {
                     error.printStackTrace();
@@ -150,12 +150,13 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID, String comentario) {
+    private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://172.17.176.1:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+        String path = "ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+        String url = urlBase.buildUrl(path);
 
         // Realiza la solicitud GET para obtener el ejercicioid
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener <JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -163,7 +164,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
                             // Obtener el ejercicioid del objeto JSON de respuesta
                             String ejercicioid = response.getString("ejercicioID");
                             // Llamar a la función para guardar la serie con el ejercicioid obtenido
-                            guardarSerieConEjercicioId(ejercicioid, peso, reps, comentario);
+                            guardarSerieConEjercicioId(ejercicioid, peso, reps);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Manejo de errores en caso de problemas al analizar la respuesta JSON
@@ -185,7 +186,7 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void guardarSerieConEjercicioId(String ejercicioid, String peso, String reps, String comentario) {
+    private void guardarSerieConEjercicioId(String ejercicioid, String peso, String reps) {
         // Construye el cuerpo de la solicitud en formato JSON con el ejercicioid
         RequestQueue queue = Volley.newRequestQueue(this);
         JSONObject jsonBody = new JSONObject();
@@ -193,16 +194,17 @@ public class StartingRoutineActivity extends AppCompatActivity {
             jsonBody.put("peso", peso);
             jsonBody.put("n_repeticiones", reps);
             jsonBody.put("ejercicioID", ejercicioid);
-            jsonBody.put("comentario_serie", comentario);
+            // Agrega otros campos necesarios como nombre de la rutina, descripción, etc.
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         // URL para la solicitud POST
-        String postUrl = "http://172.17.176.1:8080/api/serie";
+        String path = "serie";
+        String url = urlBase.buildUrl(path);
 
         // Crea una solicitud POST
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, postUrl, jsonBody,
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
                 new Response.Listener <JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -309,20 +311,17 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 // Cambiar el color de fondo del LinearLayout newRow
                 EditText etPesSerie = findViewById(R.id.etPesSerie);
                 EditText etRepsSerie = findViewById(R.id.etRepsSerie);
-                EditText etCommentSerie = findViewById(R.id.etCommentSerie);
                 TextView textViewExerciseName = findViewById(R.id.tvExerciseName);
 
                 String peso = etPesSerie.getText().toString();
                 String reps = etRepsSerie.getText().toString();
-                String comentario = etCommentSerie.getText().toString();
                 String ejercicioNombre = textViewExerciseName.getText().toString();
-                String rutinaID = "6";
 
                 if (peso.isEmpty() || reps.isEmpty()) {
                     Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID, comentario);
+                obtenerEjercicioId(ejercicioNombre, peso, reps, rutinaID);
 
                 int newColor = ContextCompat.getColor(StartingRoutineActivity.this, R.color.green);
                 newRow.setBackgroundColor(newColor);
@@ -336,24 +335,16 @@ public class StartingRoutineActivity extends AppCompatActivity {
     public void endRoutine() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to end this training session?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //guardar les vaines a la bd
-                long elapsedMillis = SystemClock.elapsedRealtime() - trainingDuration.getBase();
-                String tiempoTardado = formatElapsedTime(elapsedMillis);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            long elapsedMillis = SystemClock.elapsedRealtime() - trainingDuration.getBase();
+            String tiempoTardado = formatElapsedTime(elapsedMillis);
+            obtenerRutinaName(rutinaId, () -> {
                 insertRegistro(routineName, tiempoTardado);
                 trainingDuration.stop();
                 finish();
-            }
+            });
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacer nada, simplemente cerrar el diálogo
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -366,7 +357,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void insertRegistro(final String nombreRutina, final String tiempoTardado) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/registros";
+        String path = "registros";
+        String url = urlBase.buildUrl(path);
+
         int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -402,28 +395,26 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void obtenerRutinaName(int rutinaId) {
+    private void obtenerRutinaName(int rutinaId, Runnable callback) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/rutinas/" + rutinaId;
+        String path = "rutinas/" + rutinaId;
+        String url = urlBase.buildUrl(path);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            routineName = response.getString("nombre");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Solo notifica al usuario que hubo un error
+                response -> {
+                    try {
+                        routineName = response.getString("nombre");
+                        callback.run();  // Execute callback after name is fetched
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                         Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
                     }
+                },
+                error -> {
+                    // Log error or notify user
+                    Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
                 });
         queue.add(jsonObjectRequest);
     }
+
 }

@@ -24,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TrainingLogActivity extends AppCompatActivity {
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private LinearLayout routinesLayout;
     private TextView totalHoursTextView;
     private ImageView training_routines;
@@ -66,8 +66,9 @@ public class TrainingLogActivity extends AppCompatActivity {
     private void loadTrainingLogs() {
         totalSeconds = 0; // Reset the total seconds
         routinesLayout.removeAllViews(); // Clear all routine views
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId()); // Get the current user ID
-        String url = "http://172.17.176.1:8080/api/registros/user/" + userID; // Your API endpoint
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        String path = "registros/user/" + userID;
+        String url = urlBase.buildUrl(path);
 
         // Instantiate the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
