@@ -29,7 +29,6 @@
             android:layout_gravity="start"
             android:layout_marginStart="10dp"
             android:contentDescription="Back Arrow" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
@@ -54,8 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <!-- Aixo és nom de l'exercici-->
-
+                    <!-- Campos editables relacionados a la tabla de usuario -->
                     <ImageView
                         android:id="@+id/imagePerfilUser"
                         android:layout_width="100dp"
@@ -63,7 +61,7 @@
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/circle_background"
                         android:src="@drawable/ic_add_image"
-                        android:contentDescription="Exercise Image"
+                        android:contentDescription="Profile Image"
                         android:scaleType="centerCrop"
                         android:onClick="selectImageFromGallery" />
 
@@ -71,47 +69,92 @@
                         android:id="@+id/nameUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nom usuari"
+                        android:hint="Nombre"
                         android:inputType="textEmailAddress"
                         android:layout_marginTop="15dp"
                         android:textColor="@android:color/white"
                         android:textColorHint="#A8711D"
                         android:backgroundTint="#A8711D"
-                        android:layout_below="@id/imagePerfilUser"
-                        />
+                        android:layout_below="@id/imagePerfilUser"/>
 
-                    <!-- Aixo és nom de l'exercici-->
                     <EditText
                         android:id="@+id/cognomUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Cognom"
+                        android:hint="Apellido"
                         android:inputType="textEmailAddress"
                         android:layout_marginTop="15dp"
                         android:textColor="@android:color/white"
                         android:textColorHint="#A8711D"
                         android:backgroundTint="#A8711D"
-                        android:layout_below="@id/nameUser"
-                        />
+                        android:layout_below="@id/nameUser"/>
+
+                    <EditText
+                        android:id="@+id/pesActualUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Peso Actual"
+                        android:inputType="numberDecimal"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/cognomUser"/>
+
+                    <EditText
+                        android:id="@+id/alturaUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Altura"
+                        android:inputType="number"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/pesActualUser"/>
+
+                    <EditText
+                        android:id="@+id/descripcioUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Descripción"
+                        android:inputType="textMultiLine"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="#A8711D"
+                        android:backgroundTint="#A8711D"
+                        android:layout_below="@id/alturaUser"/>
+
+                    <Button
+                        android:id="@+id/btnSexSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Sex"
+                        android:layout_marginTop="15dp"
+                        android:textSize="18sp"
+                        android:background="@android:color/transparent"
+                        android:textColor="@color/EasyFitnessColor"
+                        android:layout_below="@id/descripcioUser"
+                        android:onClick="showSexoOptions"/>
 
                     <LinearLayout
-                        android:id="@+id/conjuntSexUser"
+                        android:id="@+id/conjuntSocialUser"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingTop="15dp"
-                        android:layout_below="@id/cognomUser">
+                        android:layout_below="@id/btnSexSelect">
 
                         <TextView
-                            android:id="@+id/textViewSex"
+                            android:id="@+id/text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sex:"
+                            android:text="Redes Sociales:"
                             android:textSize="18sp"
                             android:textColor="@color/EasyFitnessColor"/>
 
                         <Button
-                            android:id="@+id/btnSexSelect"
+                            android:id="@+id/btnSocialUser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Select"
@@ -119,127 +162,7 @@
                             android:textSize="18sp"
                             android:background="@android:color/transparent"
                             android:textColor="@color/EasyFitnessColor"
-                            android:onClick="showSexoOptions"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/DateOfBirthUser"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="Born Date"
-                        android:textColor="#A8711D"
-                        android:textColorHint="#A8711D"
-                        android:backgroundTint="#A8711D"
-                        android:layout_below="@id/conjuntSexUser"
-                        android:textSize="19dp"
-                        android:drawableEnd="@drawable/ic_calendar"
-                        android:drawablePadding="20dp"
-                        android:inputType="none"
-                        android:layout_marginTop="20dp"/>
-
-                    <EditText
-                        android:id="@+id/pesActualUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Pes Actual"
-                        android:inputType="textEmailAddress"
-                        android:layout_marginTop="20dp"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="#A8711D"
-                        android:backgroundTint="#A8711D"
-                        android:layout_below="@id/DateOfBirthUser"
-                        />
-
-                    <EditText
-                        android:id="@+id/alturaUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Altura"
-                        android:inputType="textEmailAddress"
-                        android:layout_marginTop="15dp"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="#A8711D"
-                        android:backgroundTint="#A8711D"
-                        android:layout_below="@id/pesActualUser"
-                        />
-
-                    <EditText
-                        android:id="@+id/descripcioUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Descripcio"
-                        android:inputType="textEmailAddress"
-                        android:layout_marginTop="15dp"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="#A8711D"
-                        android:backgroundTint="#A8711D"
-                        android:layout_below="@id/alturaUser"
-                        />
-
-                    <LinearLayout
-                        android:id="@+id/conjuntSocialUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="20dp"
-                        android:layout_below="@id/descripcioUser">
-
-                        <TextView
-                            android:id="@+id/textURL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="Xarxes Socials:"
-                            android:textSize="18sp"
-                            android:textColor="@color/EasyFitnessColor"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="20dp"/>
-
-                        <EditText
-                            android:id="@+id/descripcioXX"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Introduce tu URL"
-                            android:inputType="textEmailAddress"
-                            android:layout_marginTop="15dp"
-                            android:textColor="@android:color/white"
-                            android:textColorHint="#A8711D"
-                            android:backgroundTint="#A8711D"
-                            android:layout_gravity="center_horizontal"
-                            />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/conjuntGimnasLoc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="20dp"
-                        android:layout_below="@id/conjuntSocialUser">
-
-                        <TextView
-                            android:id="@+id/textGimnas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="Gimnas:"
-                            android:textSize="18sp"
-                            android:textColor="@color/EasyFitnessColor"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="80dp"/>
-
-                        <EditText
-                            android:id="@+id/descripcioGimnas"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Introduce tu URL"
-                            android:inputType="textEmailAddress"
-                            android:layout_marginTop="15dp"
-                            android:textColor="@android:color/white"
-                            android:textColorHint="#A8711D"
-                            android:backgroundTint="#A8711D"
-                            android:layout_gravity="center_horizontal"
-                            />
-
+                            android:onClick="showSocialOptions"/>
                     </LinearLayout>
 
                     <Button
@@ -249,14 +172,12 @@
                         android:layout_gravity="bottom|center"
                         app:backgroundTint="@color/EasyFitnessColor"
                         android:background="@drawable/buton_background"
-                        android:text="Save"
+                        android:text="Guardar"
                         android:textColor="@color/black"
-                        android:textSize="25sp"
+                        android:textSize="28sp"
                         android:layout_marginTop="40dp"
-                        android:layout_below="@+id/conjuntGimnasLoc"
-                        />
+                        android:layout_below="@+id/conjuntSocialUser"/>
                 </RelativeLayout>
-
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

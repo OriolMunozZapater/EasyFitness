@@ -10,5 +10,6 @@
     <color name="layout_type1">#4A4A4A</color>
     <color name="layout_type2">#BD8D46</color>
     <color name="green">#33FF66</color>
+    <color name="warning_color">#FF0000</color>
 
 </resources>
