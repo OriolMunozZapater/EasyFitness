@@ -10,11 +10,13 @@ public class Ejercicio {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer ejercicioID;
 
-  @Column(nullable = false)
+  @Column
   private Integer userID;
+  @Column
+  private Integer rutinaID;
 
   @Column(nullable = false)
-  private String tipo; //normal, calentamiento, serie descendente y al fallo.
+  private String tipo;
 
   @Column(nullable = false)
   private String descripcion;
@@ -30,6 +32,13 @@ public class Ejercicio {
   private byte[] video;
 
   //Setters
+  public Integer getRutinaID() {
+    return rutinaID;
+  }
+
+  public void setRutinaID(Integer rutinaID) {
+    this.rutinaID = rutinaID;
+  }
 
   public void setVideo(byte[] video) {
     this.video = video;

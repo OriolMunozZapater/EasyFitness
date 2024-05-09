@@ -11,8 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface RutinaEjercicioRepository extends JpaRepository<RutinaEjercicio, Integer> {
-    // Puedes añadir métodos personalizados si es necesario
-    List<RutinaEjercicio> findByRutinaID(int rutinaID);
-
+    List<RutinaEjercicio> findByRutinaID(Integer rutinaID);
     Optional<RutinaEjercicio> findByEjercicioIDAndRutinaID(Integer ejercicioID, Integer rutinaID);
 }
+
