@@ -31,13 +31,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity {
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private EditText etEmail, etPassword;
     private Button btnLogin, btnCreateAccount, btnRecoverPassword;
     private Toolbar toolbar;
     private ImageView backArrow;
     private FirebaseAuth mAuth;
-    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserIdFromDatabase(String email) {
-        //String url = "http://10.109.31.137:8080/api/usuarios/findUserIdByEmail?email=" + email;
         String path = "usuarios/findUserIdByEmail?email=" + email;
         String url = urlBase.buildUrl(path);
 
@@ -131,7 +129,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void checkFirstLogin(String email) {
-        //String url = "http://10.109.31.137:8080/api/usuarios/firstlogin?email=" + email;
         String path = "usuarios/firstlogin?email=" + email;
         String url = urlBase.buildUrl(path);
 

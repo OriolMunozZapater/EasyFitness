@@ -37,13 +37,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirstLoginActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private EditText etWeight, etName, etSecondName, etHeight;
     private TextView etDateOfBirth;
     private Button btnSexSelect;
     private ImageButton forwardArrow;
     private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo"};
     private Toolbar toolbar;
-    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +129,6 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject jsonBody) {
         String userId = UsuarioActual.getInstance().getUserId();
-        //String url = "http://192.168.0.19:8080/api/usuarios/" + userId;
         String path = "usuarios/" + userId;
         String url = urlBase.buildUrl(path);
 

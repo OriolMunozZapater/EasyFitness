@@ -30,6 +30,11 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_edit_profile.xml">
+        <config>
+          <theme>@style/Theme.EasyFitness</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_edit_routine.xml">
         <config>
           <theme>@style/Theme.EasyFitness</theme>
@@ -65,6 +70,11 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_review.xml">
+        <config>
+          <theme>@style/Theme.EasyFitness</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/activity_show_training_info.xml">
         <config>
           <theme>@style/Theme.EasyFitness</theme>
@@ -80,37 +90,88 @@
           <theme>@style/Theme.EasyFitness</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/source/app/src/main/res/layout/exercise_row2.xml">
+        <config>
+          <theme>@style/Theme.EasyFitness</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07677ff1-374b-4a5d-848b-b0a8c7e9f238" name="Changes" comment="editar">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+    <list default="true" id="07677ff1-374b-4a5d-848b-b0a8c7e9f238" name="Changes" comment="editRoutine">
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/8.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/source/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CheckTrainingsActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CheckTrainingsActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChooseExerciseActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChooseExerciseActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChoosePreselectedRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChoosePreselectedRoutineActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateAccountActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateAccountActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditProfile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/EditRoutineActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/FirstLoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/FirstLoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/StartingRoutineActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/StartingRoutineActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingLogActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingLogActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingRoutinesActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/TrainingRoutinesActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/drawable/background_routine_entry.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/drawable/background_routine_entry.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_add.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_check.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_check.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/drawable/rounded_corner_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/drawable/rounded_corner_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_check_trainings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_check_trainings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_edit_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_edit_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_show_training_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_show_training_info.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_starting_routine.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_starting_routine.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_training_log.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/activity_training_log.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/check_routine.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/check_routine.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_row.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_row.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_row2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_row2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_training.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/exercise_training.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_check_trainings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_choose_exercise.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_choose_preselected_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_create_account.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_create_new_exercise.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_edit_exercise.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_edit_profile.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_edit_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_first_login.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_home.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_login.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_new_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_password_recovery.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_profile.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_show_training_info.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_starting_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_training_log.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/activity_view_training_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/check_routine.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/exercise_row.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/exercise_row2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/exercise_training.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/loading_dialog.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/routine_entry.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/routine_item.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/row_serie.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/layout/tutorial.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/loading_dialog.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/loading_dialog.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/routine_entry.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/routine_entry.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/layout/row_serie.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/layout/row_serie.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/values/colors.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/source/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -176,10 +237,14 @@
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;editarRutina&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/pagui/StudioProjects/EasyFitness/source/settings.gradle.kts&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDK Location&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+    ]
   }
 }</component>
   <component name="RunManager">
@@ -305,7 +370,39 @@
       <option name="project" value="LOCAL" />
       <updated>1714738751332</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Implementacio crear exercici">
+      <option name="closed" value="true" />
+      <created>1715027886393</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1715027886393</updated>
+    </task>
+    <task id="LOCAL-00007" summary="no subir">
+      <option name="closed" value="true" />
+      <created>1715028006238</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1715028006238</updated>
+    </task>
+    <task id="LOCAL-00008" summary="no subir">
+      <option name="closed" value="true" />
+      <created>1715028043961</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1715028043961</updated>
+    </task>
+    <task id="LOCAL-00009" summary="editRoutine">
+      <option name="closed" value="true" />
+      <created>1715028101168</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1715028101168</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,15 +422,38 @@
     <MESSAGE value="creació loadUser" />
     <MESSAGE value="creació funció eliminar exercici dins rutina" />
     <MESSAGE value="editar" />
-    <option name="LAST_COMMIT_MESSAGE" value="editar" />
+    <MESSAGE value="Implementacio crear exercici" />
+    <MESSAGE value="no subir" />
+    <MESSAGE value="editRoutine" />
+    <option name="LAST_COMMIT_MESSAGE" value="editRoutine" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java</url>
+          <line>409</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java</url>
+          <line>392</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/NewRoutineActivity.java</url>
+          <line>382</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/CreateNewExercise.java</url>
-          <line>185</line>
-          <option name="timeStamp" value="14" />
+          <line>227</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/source/app/src/main/java/com/uablis/easyfitness/ChooseExerciseActivity.java</url>
+          <line>278</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

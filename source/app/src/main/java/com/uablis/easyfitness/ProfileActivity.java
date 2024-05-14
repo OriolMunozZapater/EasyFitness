@@ -6,102 +6,87 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ProfileActivity extends AppCompatActivity {
-
-    private ImageView home, training_routines, training, profile, profile_image;
-
-    private Toolbar toolbar, appbar;
-
-    private ImageButton edit_profile, btnPes;
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
+    private ImageButton edit_profile, btnPes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        recuperarDatosPerfil();
+        initializeViews();
+        getUserData();
+        setupListeners();
+    }
 
-        profile = findViewById(R.id.profile);
-        home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
-        btnPes = findViewById(R.id.btnEditPes);
-
+    private void initializeViews() {
+        pesObjectiu = findViewById(R.id.pesObjectiu);
+        pesPropi = findViewById(R.id.pesPropi);
+        nomUser = findViewById(R.id.nomUser);
+        sexe = findViewById(R.id.sexe);
+        altura = findViewById(R.id.altura);
         edit_profile = findViewById(R.id.btnEditPersonalData);
-
-        edit_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToEditData();
-            }
-        });
-
-        btnPes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToEditWeight();
-            }
-        });
-
-        training_routines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, TrainingRoutinesActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        btnPes = findViewById(R.id.btnEditPes);
     }
 
-    public void recuperarDatosPerfil() {
-        // Obtener referencias a los elementos de la interfaz
-        TextView pesoObjetivoTextView = findViewById(R.id.pesObjectiu);
-        TextView pesoActualTextView = findViewById(R.id.pesPropi);
-        TextView nombreTextView = findViewById(R.id.nomUser);
-        TextView alturaTextView = findViewById(R.id.altura);
-        TextView sexoTextView = findViewById(R.id.sexe);
-
-
-        // Recuperar datos de BD
-
-        // Peso objetivo
-        /*int pesoObjetivo = preferencias.getInt("peso_objetivo", 0);
-        pesoObjetivoTextView.setText(String.valueOf(pesoObjetivo) + " Kg");
-
-        // Peso actual
-        int pesoActual = preferencias.getInt("peso_actual", 0);
-        pesoActualTextView.setText(String.valueOf(pesoActual) + " Kg");
-
-        // Nombre
-        String nombre = preferencias.getString("nombre", "");
-        nombreTextView.setText(nombre);
-
-        // Altura
-        int altura = preferencias.getInt("altura", 0);
-        alturaTextView.setText(String.valueOf(altura) + " cm");
-
-        // Sexo
-        String sexo = preferencias.getString("sexo", "");
-        sexoTextView.setText(sexo);*/
+    private void setupListeners() {
+        edit_profile.setOnClickListener(v -> goToEditData());
+        btnPes.setOnClickListener(v -> goToEditWeight());
+        findViewById(R.id.training_routines).setOnClickListener(v -> startActivity(new Intent(ProfileActivity.this, TrainingRoutinesActivity.class)));
     }
 
+    private void getUserData() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String userId = UsuarioActual.getInstance().getUserId();
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> handleResponse(response),
+                error -> Toast.makeText(ProfileActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show());
 
+        queue.add(stringRequest);
+    }
+
+    private void handleResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            nomUser.setText(jsonObject.getString("nombre"));
+            sexe.setText(jsonObject.getString("sexo"));
+            pesPropi.setText(jsonObject.getString("peso_actual") + " Kg");
+            altura.setText(jsonObject.getString("altura") + " cm");
+            // You can set the target weight if it's included in the response
+            // pesObjectiu.setText(jsonObject.getString("peso_objetivo") + " Kg");
+        } catch (JSONException e) {
+            Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void goToEditData() {
-        Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_DETALLS_PERFIL*/EditRoutineActivity.class);
+        Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
     }
 
     public void goToEditWeight() {
-        Intent intent = new Intent(ProfileActivity.this, /*CAMBIAR LO SIGUIENTE POR EDITAR_PES_OBJECTIU Y PERSONAL*/EditRoutineActivity.class);
+        // This currently redirects to the same EditProfile activity, consider a specific weight editing activity or modal
+        Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
     }
-
 }
