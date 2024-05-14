@@ -81,7 +81,7 @@ CREATE TABLE rutina (
   rutinaID INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
-  user_ID INT NOT NULL,
+  userID INT NOT NULL,
   publico BOOLEAN,
   FOREIGN KEY (user_ID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
