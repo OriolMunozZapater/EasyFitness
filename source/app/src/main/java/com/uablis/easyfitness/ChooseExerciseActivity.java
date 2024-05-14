@@ -3,6 +3,7 @@ package com.uablis.easyfitness;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,12 +34,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChooseExerciseActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private SearchBar exerciseSearch;
     LinearLayout exerciseContainer;
     private Button selectMuscle, newExercise;
     private ImageView backArrow;
+    private SharedPreferences tempExerciseIDs;
+    private List<Integer> currentExerciseIds = new ArrayList<>();
+    private Integer userID=Integer.parseInt(UsuarioActual.getInstance().getUserId());
+    private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +59,14 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         backArrow = findViewById(R.id.back_arrow);
         newExercise = findViewById(R.id.btnNewExercise);
 
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
-        //loadEjercicios(0);
+
+        tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        loadArray(); //Inicializar lista con ID de BD
+
+        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+        routinesLayout.removeAllViews();
+
+        loadEjercicios(0); //TODO
         loadEjercicios(userID);
 
         newExercise.setOnClickListener(new View.OnClickListener() {
@@ -82,25 +96,30 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         String path = "ejercicios/user/" + userID;
         String url = urlBase.buildUrl(path);
 
-        //String url = "http://10.109.31.137:8080/api/ejercicios/user/" + userID;
-
-
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            String[] exerciseNames = new String[jsonArray.length()];
+                            List<String> exerciseNameList = new ArrayList<>();
+                            List<Integer> exerciseIDList = new ArrayList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                exerciseNames[i] = jsonObject.getString("nombre");
+                                int exerciseId = Integer.parseInt(jsonObject.getString("ejercicioID"));
+
+                                if (!currentExerciseIds.contains(exerciseId)) {
+                                    exerciseNameList.add(jsonObject.getString("nombre"));
+                                    exerciseIDList.add(exerciseId);
+                                }
                             }
 
-                            LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
-                            routinesLayout.removeAllViews();
-                            updateUIWithExercices(exerciseNames);
+                            // Convertir listas a arrays si es necesario para la función updateUIWithExercises
+                            String[] exerciseNames = exerciseNameList.toArray(new String[0]);
+                            Integer[] exerciseIDs = exerciseIDList.toArray(new Integer[0]);
+
+                            updateUIWithExercices(exerciseNames, exerciseIDs);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -111,25 +130,97 @@ public class ChooseExerciseActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios para usuario: "+userID, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         queue.add(stringRequest);
     }
 
-    private void updateUIWithExercices(String[] exerciseNames) {
+    private void loadWithMuscle(int userID, String selectedMuscle) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String path = "ejercicios/user/" + userID + "/muscle/" + selectedMuscle;
+        String url = urlBase.buildUrl(path);
+        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+        routinesLayout.removeAllViews();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            List<String> exerciseNameList = new ArrayList<>();
+                            List<Integer> exerciseIDList = new ArrayList<>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                int exerciseId = Integer.parseInt(jsonObject.getString("ejercicioID"));
+
+                                if (!currentExerciseIds.contains(exerciseId)) {
+                                    exerciseNameList.add(jsonObject.getString("nombre"));
+                                    exerciseIDList.add(exerciseId);
+                                }
+                            }
+
+                            // Convertir listas a arrays si es necesario para la función updateUIWithExercises
+                            String[] exerciseNames = exerciseNameList.toArray(new String[0]);
+                            Integer[] exerciseIDs = exerciseIDList.toArray(new Integer[0]);
+                            updateUIWithExercices(exerciseNames,exerciseIDs);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ChooseExerciseActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios para usuario: "+userID, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+
+    //TODO CAMBIAR DUPLICAR CODIGO
+    private void updateUIWithExercices(String[] exerciseNames, Integer[] exerciseIDs) {
+        //Visualizacion en la pantalla
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
 
-        for (String name : exerciseNames) {
+        for (int pos=0; pos<exerciseNames.length;pos++) {
             View exerciseView = getLayoutInflater().inflate(R.layout.exercise_row2, routinesLayout, false);
             TextView textView = exerciseView.findViewById(R.id.tvExerciseName);
 
+            @SuppressLint({"MissingInflatedId", "LocalSuppress"}) ImageButton addToRoutine = exerciseView.findViewById(R.id.addToRoutine);
 
-            textView.setText(name);
+            textView.setText(exerciseNames[pos]);
+            int finalPos = pos;
+            addToRoutine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageButton button = (ImageButton) v;
+                    button.setImageResource(R.drawable.green_check);
+                    afegirExercisiPreference(exerciseIDs[finalPos]);
+                    currentExerciseIds.add(exerciseIDs[finalPos]);
+                }
+            });
             exerciseView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     finish();
                 }
             });
@@ -139,14 +230,27 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     public void goToNewExercise(int userID) {
         Intent intent = new Intent(ChooseExerciseActivity.this, CreateNewExercise.class);
-        startActivity(intent);
-        LinearLayout exerciseLayout = findViewById(R.id.exerciseContainer);
-        exerciseLayout.removeAllViews();
-        //loadEjercicios(0);
-        loadEjercicios(userID);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_EXERCISE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // Aquí puedes hacer lo que necesitas después de volver de ChooseExerciseActivity
+                LinearLayout exerciseLayout = findViewById(R.id.exerciseContainer);
+                exerciseLayout.removeAllViews();
+                loadEjercicios(0);
+                loadEjercicios(userID);
+            }
+        }
     }
 
     public void backScreen() {
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
@@ -165,56 +269,63 @@ public class ChooseExerciseActivity extends AppCompatActivity {
                         // Puedes hacer algo con el músculo seleccionado, como mostrar un Toast
                         Toast.makeText(getApplicationContext(), "Has seleccionado: " + selectedMuscle, Toast.LENGTH_SHORT).show();
                         selectMuscle.setText(selectedMuscle);
-                        if(selectedMuscle.equals("All"))
+                        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+                        routinesLayout.removeAllViews();
+
+                        if(selectedMuscle.equals("All")){
+                            loadEjercicios(0);
                             loadEjercicios(userID);
-                        else
+                        }
+                        else{
+                            loadWithMuscle(0, selectedMuscle);
                             loadWithMuscle(userID, selectedMuscle);
+                        }
                     }
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void loadWithMuscle(int userID, String selectedMuscle) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        //String url = "http://192.168.100.1:8080/api/ejercicios/user/" + userID + "/" + selectedMuscle;
-        String path = "ejercicios/user/" + userID + "/muscle/" + selectedMuscle;
-        String url = urlBase.buildUrl(path);
-        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
-        routinesLayout.removeAllViews();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray jsonArray = new JSONArray(response);
-                            String[] exerciseNames = new String[jsonArray.length()];
+    public void afegirExercisiPreference(int exerciseID){
+        // Obtener la cadena existente de IDs de SharedPreferences con el nuevo identificador
+        String existingIds = tempExerciseIDs.getString("selectedExerciseIds", "");
+        String newIds;
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                exerciseNames[i] = jsonObject.getString("nombre");
-                            }
-                            updateUIWithExercices(exerciseNames);
+        // Comprobar si ya existen IDs guardados
+        if (!existingIds.isEmpty()) {
+            newIds = existingIds + "," + exerciseID; // Añadir el nuevo ID a la cadena existente
+        } else {
+            newIds = Integer.toString(exerciseID); // No había IDs antes, iniciar la cadena con el nuevo ID
+        }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(ChooseExerciseActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
-                    // No se encontraron ejercicios relacionados con ese músculo
-                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Error al hacer la llamada al servidor
-                    Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+        // Guardar la nueva cadena de IDs en SharedPreferences usando el nuevo identificador
+        SharedPreferences.Editor editor = tempExerciseIDs.edit();
+        editor.putString("selectedExerciseIds", newIds);
+        editor.apply(); // Guardar los cambios de forma asincrónica
+    }
+
+    private void loadArray() {
+
+        SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        String idsBD = prefs.getString("exerciseIdsBD", "");
+        String selectedIds = prefs.getString("selectedExerciseIds", "");
+        String idsString = idsBD + (idsBD.isEmpty() || selectedIds.isEmpty() ? "" : ",") + selectedIds;
+
+        currentExerciseIds.clear();
+
+        // Convertir la cadena de IDs a la lista
+        if (!idsString.isEmpty()) {
+            String[] idsArray = idsString.split(",");
+            for (String idStr : idsArray) {
+                try {
+                    int id = Integer.parseInt(idStr);
+                    currentExerciseIds.add(id);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
-        });
-        queue.add(stringRequest);
+        }
     }
+
 }

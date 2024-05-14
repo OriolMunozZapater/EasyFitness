@@ -32,12 +32,13 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class TrainingRoutinesActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView hola;
-    private ImageView home, training_routines, training, profile;
+    private ImageView home, training_routines, training, profile, training_session;
     private Toolbar toolbar, appbar;
     private ImageButton menu;
     private Button btnAddRoutine;
-    ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +46,21 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_training_routine);
         loadUserRoutines();
 
-
         profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TrainingRoutinesActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainingRoutinesActivity.this, TrainingLogActivity.class);
                 startActivity(intent);
             }
         });
@@ -59,7 +69,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     private void loadUserRoutines() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        //String url = "http://10.109.31.137:8080/api/rutinas/usuario/" + userId;
         String path = "rutinas/usuario/" + userId;
         String url = urlBase.buildUrl(path);
 
@@ -70,12 +79,13 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
                             String[] routineNames = new String[jsonArray.length()];
+                            String[] routineIDs = new String[jsonArray.length()];
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 routineNames[i] = jsonObject.getString("nombre");
-
+                                routineIDs[i] = jsonObject.getString("rutinaID");
                             }
-                            updateUIWithRoutines(routineNames);
+                            updateUIWithRoutines(routineNames, routineIDs);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(TrainingRoutinesActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
@@ -92,15 +102,16 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void updateUIWithRoutines(String[] routineNames) {
+    private void updateUIWithRoutines(String[] routineNames, String[] routineIDs) {
         LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
-
-        for (String name : routineNames) {
+        for (int i = 0; i < routineNames.length; i++) {
             View routineView = getLayoutInflater().inflate(R.layout.routine_item, routinesLayout, false);
             TextView textView = routineView.findViewById(R.id.textViewRoutineName);
             ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
 
-            textView.setText(name);
+            textView.setText(routineNames[i]);
+            // Guardar el ID de la rutina como un tag en el ImageButton
+            menuButton.setTag(routineIDs[i]);
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,6 +123,7 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     }
 
     public void menuPopUpRoutine(View view) {
+        final String routineID = view.getTag().toString();
         PopupMenu popupMenu = new PopupMenu(this, view);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.menu_type1, popupMenu.getMenu());
@@ -120,22 +132,24 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.edit) {
-                    goToEditRoutine();
+                    goToEditRoutine(routineID);
                     return true;
                 } else if (item.getItemId() == R.id.delete_option) {
-                    showAlert();
+                    showAlert(routineID);
                 } else if (item.getItemId() == R.id.start_option){
-                    goToStartRoutine();
+                    goToStartRoutine(routineID);
                 }
                 return false;
             }
         });
     }
 
-    public void goToStartRoutine() {
+    public void goToStartRoutine(String rutinaID) {
         Intent intent = new Intent(TrainingRoutinesActivity.this, StartingRoutineActivity.class);
+        intent.putExtra("ROUTINE_ID", rutinaID);
         startActivity(intent);
     }
+
 
     public void menuPopUpAddRoutine(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
@@ -158,9 +172,9 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         });
     }
 
-    public void showAlert() {
+    public void showAlert(String rutinaID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete this exercise?");
+        builder.setMessage("Are you sure you want to delete this routine?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -177,13 +191,31 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public void goToEditRoutine() {
+    public void goToEditRoutine(String rutinaID) {
+        Integer rutinaId=Integer.parseInt(rutinaID);
         Intent intent = new Intent(TrainingRoutinesActivity.this, EditRoutineActivity.class);
+        intent.putExtra("ROUTINE_ID", rutinaId);
         startActivity(intent);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_EXERCISE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                // Aquí puedes hacer lo que necesitas después de volver de ChooseExerciseActivity
+                LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
+                routinesLayout.removeAllViews();
+                loadUserRoutines();
+            }
+        }
+    }
+
     public void goToNewRoutine() {
         Intent intent = new Intent(TrainingRoutinesActivity.this, NewRoutineActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
     }
 
     public void goToPreCreatedRoutine() {

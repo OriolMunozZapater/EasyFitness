@@ -24,5 +24,6 @@
         <item>All</item>
     </string-array>
 
+    <string name="comment_hint">Escribe un comentario...</string>
 
 </resources>

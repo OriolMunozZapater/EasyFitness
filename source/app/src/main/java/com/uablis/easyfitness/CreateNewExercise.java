@@ -66,7 +66,7 @@ public class CreateNewExercise extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createExercise();
-                //finish();
+
             }
         });
     }
@@ -105,8 +105,9 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
-                startActivity(intent);
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
+                finish();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -193,6 +194,7 @@ public class CreateNewExercise extends AppCompatActivity {
             jsonBody.put("nombre", nombre);
             jsonBody.put("descripcion", descripcion);
             jsonBody.put("grupoMuscular", grupoMuscular);
+            jsonBody.put("tipo","a"); //TODO ELIMINAR
             //IF VIDEO/FOTO
 
         } catch (JSONException e) {
@@ -204,8 +206,7 @@ public class CreateNewExercise extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject requestBody) {
         //String url = "http://192.168.100.1:8080/api/ejercicio/";
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
-        String path = "ejercicios/crear/"+userID;
+        String path = "ejercicios/crear";
         String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -214,6 +215,8 @@ public class CreateNewExercise extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(CreateNewExercise.this, "Ejercicio creado correctamente", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        setResult(RESULT_OK, returnIntent);
                         finish();
                     }
                 },

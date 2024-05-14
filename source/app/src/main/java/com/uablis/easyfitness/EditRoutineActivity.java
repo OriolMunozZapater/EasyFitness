@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Button;
 import android.view.View;
@@ -29,21 +31,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditRoutineActivity extends AppCompatActivity {
 
+    //TODO ARREGLAR GUARDAR NOMBRE RUTINA
+
+    private List<Integer> currentExerciseIds = new ArrayList<>();
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private ImageView home, training_routines, training, profile;
     LinearLayout exerciseContainer;
     private EditText etEditRoutineName;
     private ImageView backArrow;
     private Button btnAddExercise, btnSave;
+    private Integer rutinaID;
+    private SharedPreferences tempExerciseIDs;
+    private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_routine);
 
@@ -56,6 +71,15 @@ public class EditRoutineActivity extends AppCompatActivity {
         etEditRoutineName = findViewById(R.id.etEditRoutineName);
         btnSave = findViewById(R.id.btnSave);
 
+        rutinaID=getIntent().getIntExtra("ROUTINE_ID", 0); // 0 es un valor predeterminado en caso de no encontrarse el dato.
+
+
+        tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = tempExerciseIDs.edit();
+        // Elimina todos los datos
+        editor.clear();
+        // Guarda los cambios
+        editor.apply();
         loadUserExercisesID();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +111,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUIWithExercises(String[] exerciseNames, Integer[] exerciseID, Integer rutinaID) {
+    private void updateUIWithExercises(String[] exerciseNames, Integer[] exerciseID) {
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
         int pos=0;
 
@@ -110,7 +134,7 @@ public class EditRoutineActivity extends AppCompatActivity {
             eliminateCross.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteExercise(exerciseID[finalPos],rutinaID);
+                    deleteExercise(exerciseID[finalPos]);
                 }
             });
             routinesLayout.addView(exerciseView);
@@ -124,7 +148,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //afegir rutina a la bd
+                saveExercisesToDatabase();
                 finish();
             }
         });
@@ -152,10 +176,8 @@ public class EditRoutineActivity extends AppCompatActivity {
 
     private void loadUserExercisesID() {
         //Obtener los ID de los ejercicios que pertenecen a una rutina
-
         RequestQueue queue = Volley.newRequestQueue(this);
-        int rutinaid = 1; //ESTABLECER ID BUENO
-        String path = "rutina_ejercicios/rutina/" + rutinaid;
+        String path = "rutina_ejercicios/rutina/" + rutinaID;
         String url = urlBase.buildUrl(path);
 
         //String url = "http://10.109.31.137:8080/api/rutina_ejercicios/rutina/" + rutinaid;
@@ -166,13 +188,20 @@ public class EditRoutineActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONArray jsonArray = new JSONArray(response);
-                            Integer[] exerciseID = new Integer[jsonArray.length()];
+                            currentExerciseIds.clear();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                exerciseID[i] = jsonObject.getInt("ejercicioId");
+                                currentExerciseIds.add(jsonObject.getInt("ejercicioId"));
                             }
-                            loadUserExercisesName(exerciseID, rutinaid);
+
+                            //Guardar la cadena en SharedPreferences
+                            SharedPreferences.Editor editor = tempExerciseIDs.edit(); // Usar la variable de instancia
+                            String idsString = TextUtils.join(",", currentExerciseIds);
+                            editor.putString("exerciseIdsBD", idsString);
+                            editor.apply();
+
+                            loadUserExercisesName();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -185,7 +214,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                 error.printStackTrace();
                 if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
                     // No se encontraron ejercicios relacionados con ese músculo
-                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios en la rutina", Toast.LENGTH_SHORT).show();
                 } else {
                     // Error al hacer la llamada al servidor
                     Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
@@ -195,11 +224,15 @@ public class EditRoutineActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void loadUserExercisesName(Integer[] exerciseID, Integer rutinaID) {
-        //Cargar los ejercicios con los ID obtenidos anteriormente
+    private void loadUserExercisesName() {
 
+        List<Integer> loadedIds = loadExerciseIdsFromPrefs(); // Carga los IDs de SharedPreferences
+        currentExerciseIds.addAll(loadedIds);
+
+        //Cargar los ejercicios con los ID obtenidos anteriormente
         RequestQueue queue = Volley.newRequestQueue(this);
-        String ids = TextUtils.join(",", exerciseID); // Convertir el array a una cadena separada por comas
+        String ids = TextUtils.join(",", currentExerciseIds); // Convertir el array a una cadena separada por comas
+
 
         //String url = "http://10.109.31.137:8080/api/ejercicios/name/" + ids;
         String path = "ejercicios/name/" + ids;
@@ -218,8 +251,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                                 exerciseNames[i] = jsonObject.getString("nombre");
                             }
 
-                            updateUIWithExercises(exerciseNames, exerciseID, rutinaID);
-
+                            updateUIWithExercises(exerciseNames, currentExerciseIds.toArray(new Integer[0]));
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(EditRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
@@ -242,12 +274,12 @@ public class EditRoutineActivity extends AppCompatActivity {
     }
 
 
-    private boolean deleteExerciseFromDatabase(Integer exerciseID, Integer rutinaID) {
+    private boolean deleteExerciseFromDatabase(Integer exerciseID) {
         //String url="http://10.109.31.137:8080/api/rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
         String path = "rutina_ejercicios/delete/"+exerciseID+"/"+rutinaID;
         String url = urlBase.buildUrl(path);
         // Utiliza un objeto AtomicBoolean para mantener el estado de deleted
-        AtomicBoolean deleted = new AtomicBoolean(false);
+        AtomicBoolean deleted = new AtomicBoolean(true);
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -256,7 +288,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        deleted.set(true);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -264,6 +296,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // Manejar cualquier error de la solicitud DELETE
                         error.printStackTrace();
+                        deleted.set(false);
                     }
                 });
 
@@ -272,27 +305,50 @@ public class EditRoutineActivity extends AppCompatActivity {
         return deleted.get();
     }
 
-    public void deleteExercise(Integer exerciseID, Integer rutinaID) {
+    public void deleteExercise(Integer exerciseID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("¿Estás seguro de eliminar?")
                 .setCancelable(false)
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(deleteExerciseFromDatabase(exerciseID, rutinaID)) {
-                            Toast.makeText(EditRoutineActivity.this, "Ejercicio eliminado exitosamente", Toast.LENGTH_SHORT).show();
-                            //RELOAD pantalla
-                            LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
-                            routinesLayout.removeAllViews();
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
 
-                            loadUserExercisesID();
-                        }else{
-                            Toast.makeText(EditRoutineActivity.this, "Error al eliminar el ejercicio", Toast.LENGTH_SHORT).show();
+                        SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+                        String idsString = prefs.getString("selectedExerciseIds", "");
+                        List<Integer> idsList = new ArrayList<>();
+
+                        // Convertir la cadena a una lista
+                        if (!idsString.isEmpty()) {
+                            for (String idStr : idsString.split(",")) {
+                                try {
+                                    idsList.add(Integer.parseInt(idStr));
+                                } catch (NumberFormatException e) {
+                                    Log.e("RemoveID", "Error parsing ID: " + idStr, e);
+                                }
+                            }
                         }
+
+                        Toast.makeText(EditRoutineActivity.this, "Ejercicio eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                        //RELOAD pantalla
+                        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+                        routinesLayout.removeAllViews();
+
+                        if(!idsList.contains(exerciseID)){
+                            if(deleteExerciseFromDatabase(exerciseID)) {
+                                try {
+                                    Thread.sleep(150);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }else{
+                                Toast.makeText(EditRoutineActivity.this, "Error al eliminar el ejercicio", Toast.LENGTH_SHORT).show();
+                            }
+                        } else{
+                            currentExerciseIds.remove(exerciseID);
+                            removeExerciseIdFromPrefs(exerciseID, idsList);
+                        }
+
+                        loadUserExercisesID();
+
                     }
 
                 })
@@ -309,6 +365,128 @@ public class EditRoutineActivity extends AppCompatActivity {
 
     public void goToAddExerciseScreen() {
         Intent intent = new Intent(EditRoutineActivity.this, ChooseExerciseActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
+    }
+    public void saveExercisesToDatabase() {
+        SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        String idsString = prefs.getString("selectedExerciseIds", "");
+        List<Integer> idsList = new ArrayList<>();
+
+        // Convertir la cadena a una lista
+        if (!idsString.isEmpty()) {
+            for (String idStr : idsString.split(",")) {
+                try {
+                    idsList.add(Integer.parseInt(idStr));
+                } catch (NumberFormatException e) {
+                    Log.e("RemoveID", "Error parsing ID: " + idStr, e);
+                }
+            }
+        }
+
+        for( int id:idsList){
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("rutinaId", rutinaID);
+                jsonBody.put("ejercicioId", id);
+                jsonBody.put("orden",3);
+                //TODO METER ORDEN
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+            sendUpdateRequest(jsonBody);
+        }
+    }
+
+    private void sendUpdateRequest(JSONObject requestBody) {
+        //CAMBIAR
+
+        //String url = "http://192.168.100.1:8080/api/ejercicio/";
+        String path = "rutina_ejercicios";
+        String url = urlBase.buildUrl(path);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(EditRoutineActivity.this, "Rutina modificada correctamente", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Ocurrió un error al hacer la solicitud
+                        error.printStackTrace();
+                        Log.e("VolleyError", "Error: " + error.toString());
+                        if (error.networkResponse != null) {
+                            Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                            Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                        }
+                        //Toast.makeText(CreateNewExercise.this, "Error al crear el ejercicio: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        ) {
+            @Override
+            public byte[] getBody() {
+                return requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(stringRequest);
+    }
+    private List<Integer> loadExerciseIdsFromPrefs() {
+        SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        String idsString = prefs.getString("selectedExerciseIds", "");
+        List<Integer> exerciseIds = new ArrayList<>();
+        if (!idsString.isEmpty()) {
+            for (String id : idsString.split(",")) {
+                try {
+                    exerciseIds.add(Integer.parseInt(id));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return exerciseIds;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_EXERCISE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // Aquí puedes hacer lo que necesitas después de volver de ChooseExerciseActivity
+                LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+                routinesLayout.removeAllViews();
+                loadUserExercisesName();
+            }
+        }
+    }
+
+    public void removeExerciseIdFromPrefs(int idToRemove,  List<Integer> idsList) {
+
+        SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
+        // Remover el ID deseado
+        idsList.remove((Integer) idToRemove);  // Usa (Integer) para asegurarte de que eliminas por objeto, no por índice
+
+        // Convertir la lista de vuelta a una cadena
+        StringBuilder newIdsString = new StringBuilder();
+        for (int i = 0; i < idsList.size(); i++) {
+            newIdsString.append(i > 0 ? "," : "").append(idsList.get(i));
+        }
+
+        // Guardar la cadena actualizada en SharedPreferences
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("selectedExerciseIds", newIdsString.toString());
+        editor.apply();
     }
 }
