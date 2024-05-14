@@ -118,8 +118,19 @@ public class RutinaController {
 
     // Crear una nueva rutina
     @PostMapping
-    public Rutina createRutina(@RequestBody Rutina rutina) {
-        return rutinaRepository.save(rutina);
+    public ResponseEntity<Object> createRutina(@RequestBody Rutina rutina) {
+      log.info("Received Rutina: " + rutina.toString());
+      if (rutina.getUserID() == null) {
+        log.error("UserID is null");
+        return ResponseEntity.badRequest().body(null);
+      }
+      try {
+        Rutina savedRutina = rutinaRepository.save(rutina);
+        return ResponseEntity.ok(savedRutina);
+      } catch (Exception e) {
+        log.error("Error saving Rutina: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+      }
     }
 
     // Actualizar una rutina
@@ -161,9 +172,14 @@ public class RutinaController {
     }
 
   @GetMapping("/last/{userId}")
-  public ResponseEntity<Rutina> getRutinaMasGrandeByUserId(@PathVariable Integer userId) {
-    Optional<Rutina> rutinaMasGrande = rutinaRepository.findTopByUserIdOrderByRutinaIdDesc(userId);
-    return rutinaMasGrande.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  public ResponseEntity<Integer> getRutinaMasGrandeByUserId(@PathVariable Integer userId) {
+    Optional<Rutina> rutinaMasGrande = rutinaRepository.findTopByUserIDOrderByRutinaIDDesc(userId);
+
+    if (rutinaMasGrande.isPresent()) {
+      return ResponseEntity.ok(rutinaMasGrande.get().getRutinaID());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @GetMapping("/buscar/userID/{userID}/nombre/{nombre}")

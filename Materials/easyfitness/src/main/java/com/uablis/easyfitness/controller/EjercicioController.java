@@ -32,7 +32,7 @@ public class EjercicioController {
   }
 
   // Crear un nuevo ejercicio
-  @PostMapping("/crear/{ejercicio}")
+  @PostMapping("/crear")
   public Ejercicio createEjercicio(@RequestBody Ejercicio ejercicio) {
     return ejercicioRepository.save(ejercicio);
   }
