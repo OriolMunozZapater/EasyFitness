@@ -66,7 +66,7 @@ public class CreateNewExercise extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createExercise();
-                //finish();
+
             }
         });
     }
@@ -105,6 +105,8 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -192,6 +194,7 @@ public class CreateNewExercise extends AppCompatActivity {
             jsonBody.put("nombre", nombre);
             jsonBody.put("descripcion", descripcion);
             jsonBody.put("grupoMuscular", grupoMuscular);
+            jsonBody.put("tipo","a"); //TODO ELIMINAR
             //IF VIDEO/FOTO
 
         } catch (JSONException e) {
@@ -212,6 +215,8 @@ public class CreateNewExercise extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(CreateNewExercise.this, "Ejercicio creado correctamente", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        setResult(RESULT_OK, returnIntent);
                         finish();
                     }
                 },

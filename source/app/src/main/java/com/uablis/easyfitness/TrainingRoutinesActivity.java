@@ -45,8 +45,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_training_routine);
         loadUserRoutines();
-        // String[] routineNames = {"superaniol", "aniolpeirna"};
-        // updateUIWithRoutines(routineNames);
 
         profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
@@ -194,8 +192,9 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
     }
 
     public void goToEditRoutine(String rutinaID) {
+        Integer rutinaId=Integer.parseInt(rutinaID);
         Intent intent = new Intent(TrainingRoutinesActivity.this, EditRoutineActivity.class);
-        intent.putExtra("ROUTINE_ID", rutinaID);
+        intent.putExtra("ROUTINE_ID", rutinaId);
         startActivity(intent);
     }
 

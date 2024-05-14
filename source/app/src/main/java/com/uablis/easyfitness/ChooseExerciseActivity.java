@@ -45,6 +45,8 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     private ImageView backArrow;
     private SharedPreferences tempExerciseIDs;
     private List<Integer> currentExerciseIds = new ArrayList<>();
+    private Integer userID=Integer.parseInt(UsuarioActual.getInstance().getUserId());
+    private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +60,13 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         newExercise = findViewById(R.id.btnNewExercise);
 
 
-
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
         tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
         loadArray(); //Inicializar lista con ID de BD
 
-        //loadEjercicios(0); //TODO
+        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+        routinesLayout.removeAllViews();
+
+        loadEjercicios(0); //TODO
         loadEjercicios(userID);
 
         newExercise.setOnClickListener(new View.OnClickListener() {
@@ -92,9 +95,6 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String path = "ejercicios/user/" + userID;
         String url = urlBase.buildUrl(path);
-
-        //String url = "http://10.109.31.137:8080/api/ejercicios/user/" + userID;
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -130,7 +130,13 @@ public class ChooseExerciseActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios para usuario: "+userID, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         queue.add(stringRequest);
@@ -138,7 +144,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     private void loadWithMuscle(int userID, String selectedMuscle) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        //String url = "http://192.168.100.1:8080/api/ejercicios/user/" + userID + "/" + selectedMuscle;
+
         String path = "ejercicios/user/" + userID + "/muscle/" + selectedMuscle;
         String url = urlBase.buildUrl(path);
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
@@ -179,7 +185,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
                 error.printStackTrace();
                 if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
                     // No se encontraron ejercicios relacionados con ese músculo
-                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChooseExerciseActivity.this, "No se encontraron ejercicios para usuario: "+userID, Toast.LENGTH_SHORT).show();
                 } else {
                     // Error al hacer la llamada al servidor
                     Toast.makeText(ChooseExerciseActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
@@ -194,7 +200,6 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     private void updateUIWithExercices(String[] exerciseNames, Integer[] exerciseIDs) {
         //Visualizacion en la pantalla
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
-        routinesLayout.removeAllViews();
 
         for (int pos=0; pos<exerciseNames.length;pos++) {
             View exerciseView = getLayoutInflater().inflate(R.layout.exercise_row2, routinesLayout, false);
@@ -225,11 +230,22 @@ public class ChooseExerciseActivity extends AppCompatActivity {
 
     public void goToNewExercise(int userID) {
         Intent intent = new Intent(ChooseExerciseActivity.this, CreateNewExercise.class);
-        startActivity(intent);
-        LinearLayout exerciseLayout = findViewById(R.id.exerciseContainer);
-        exerciseLayout.removeAllViews();
-        //loadEjercicios(0);
-        loadEjercicios(userID);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_EXERCISE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // Aquí puedes hacer lo que necesitas después de volver de ChooseExerciseActivity
+                LinearLayout exerciseLayout = findViewById(R.id.exerciseContainer);
+                exerciseLayout.removeAllViews();
+                loadEjercicios(0);
+                loadEjercicios(userID);
+            }
+        }
     }
 
     public void backScreen() {
@@ -253,10 +269,17 @@ public class ChooseExerciseActivity extends AppCompatActivity {
                         // Puedes hacer algo con el músculo seleccionado, como mostrar un Toast
                         Toast.makeText(getApplicationContext(), "Has seleccionado: " + selectedMuscle, Toast.LENGTH_SHORT).show();
                         selectMuscle.setText(selectedMuscle);
-                        if(selectedMuscle.equals("All"))
+                        LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
+                        routinesLayout.removeAllViews();
+
+                        if(selectedMuscle.equals("All")){
+                            loadEjercicios(0);
                             loadEjercicios(userID);
-                        else
+                        }
+                        else{
+                            loadWithMuscle(0, selectedMuscle);
                             loadWithMuscle(userID, selectedMuscle);
+                        }
                     }
                 });
         AlertDialog dialog = builder.create();

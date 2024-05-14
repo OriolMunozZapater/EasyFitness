@@ -42,6 +42,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditRoutineActivity extends AppCompatActivity {
 
+    //TODO ARREGLAR GUARDAR NOMBRE RUTINA
+
     private List<Integer> currentExerciseIds = new ArrayList<>();
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private ImageView home, training_routines, training, profile;
@@ -69,7 +71,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         etEditRoutineName = findViewById(R.id.etEditRoutineName);
         btnSave = findViewById(R.id.btnSave);
 
-        rutinaID=getIntent().getIntExtra("rutinaID", 0); // 0 es un valor predeterminado en caso de no encontrarse el dato.
+        rutinaID=getIntent().getIntExtra("ROUTINE_ID", 0); // 0 es un valor predeterminado en caso de no encontrarse el dato.
 
 
         tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
@@ -212,7 +214,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                 error.printStackTrace();
                 if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
                     // No se encontraron ejercicios relacionados con ese músculo
-                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios en la rutina", Toast.LENGTH_SHORT).show();
                 } else {
                     // Error al hacer la llamada al servidor
                     Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
@@ -400,7 +402,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         //CAMBIAR
 
         //String url = "http://192.168.100.1:8080/api/ejercicio/";
-        String path = "rutina_ejercicios/crear";
+        String path = "rutina_ejercicios";
         String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
