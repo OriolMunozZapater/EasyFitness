@@ -104,4 +104,16 @@ public class Ejercicio {
   public String getGrupoMuscular() {
     return grupoMuscular;
   }
+
+  @Override
+  public String toString() {
+    return "Ejercicio{" +
+        "ejercicioID=" + ejercicioID +
+        ", userID='" + userID + '\'' +
+        ", nombre='" + nombre + '\'' +
+        ", descripcion='" + descripcion + '\'' +
+        ", grupo_muscular='" + grupoMuscular +
+        '}';
+  }
+
 }

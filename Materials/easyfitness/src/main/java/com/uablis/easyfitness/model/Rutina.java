@@ -16,7 +16,7 @@ public class Rutina {
     @Column
     private String descripcion;
 
-    @Column(name = "user_ID", nullable = false)
+    @Column(nullable = false)
     private Integer userID;
 
     @Column(nullable = false)
