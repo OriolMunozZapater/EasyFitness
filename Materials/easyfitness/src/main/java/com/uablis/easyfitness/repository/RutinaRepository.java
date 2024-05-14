@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface RutinaRepository extends JpaRepository<Rutina, Integer> {
   List<Rutina> findAllByUserID(Integer userID);
   List<Rutina> findByUserIDAndNombre(Integer userID, String nombre);
-  @Query("SELECT r FROM Rutina r WHERE r.userID = :userId ORDER BY r.rutinaID DESC")
-  Optional<Rutina> findTopByUserIdOrderByRutinaIdDesc(Integer userId);
+  //@Query("SELECT r FROM Rutina r WHERE r.userID = :userId ORDER BY r.rutinaID DESC")
+  Optional<Rutina> findTopByUserIDOrderByRutinaIDDesc(Integer userID);
 }
 
