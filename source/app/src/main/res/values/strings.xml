@@ -3,6 +3,9 @@
     <string name="background_image_description">Descripción de la imagen de fondo</string>
     <string name="welcome_message">Bienvenido a Easy Fitness!\nComienza creando una cuenta o iniciando sesión en una existente</string>
     <string name="login_button">Iniciar Sesión</string>
+    <string name="weight_format">%1$.2f Kg</string>
+    <string name="progress_format">Progress: %1$d Kg left</string>
+
 
     <string-array name="gender_options">
         <item>Sexo</item>
