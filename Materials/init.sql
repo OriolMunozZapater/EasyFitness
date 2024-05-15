@@ -32,7 +32,7 @@ CREATE TABLE usuario (
   descripcion VARCHAR(255),
   redes_sociales VARCHAR(255),
   tiempo_entrenamiento TIME,
-  fecha_nacimiento date,
+  fecha_nacimiento DATE,
   objetivoID INT,
   is_first_login BOOLEAN DEFAULT TRUE,
   FOREIGN KEY (objetivoID) REFERENCES objetivo(objetivoID)
@@ -83,7 +83,7 @@ CREATE TABLE rutina (
   descripcion VARCHAR(255),
   userID INT NOT NULL,
   publico BOOLEAN,
-  FOREIGN KEY (user_ID) REFERENCES usuario(userID)
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE rutina_ejercicio (
@@ -111,9 +111,8 @@ CREATE TABLE registro (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Inserts para Usuario Repositorio
-INSERT INTO usuario (userID, correo, password, is_first_login) VALUES
-(0, 'repositorio@tuapp.com', 'password_segura', FALSE);
-UPDATE `easyfitness`.`usuario` SET `userID` = '0' WHERE (`userID` = '1');
+INSERT INTO usuario (correo, password, is_first_login) VALUES
+('repositorio@tuapp.com', 'password_segura', FALSE);
 
 -- Inserts para Ejercicios
 INSERT INTO ejercicio (nombre, descripcion, tipo, grupo_muscular) VALUES
@@ -125,14 +124,14 @@ INSERT INTO ejercicio (nombre, descripcion, tipo, grupo_muscular) VALUES
 ('Tai Chi', 'Formas lentas y meditativas', 'Equilibrio', 'Todo el cuerpo');
 
 -- Inserts para Rutinas
-INSERT INTO rutina (nombre, descripcion, user_ID, publico) VALUES
-('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 0, TRUE),
-('Rutina de Calistenia', 'Rutina usando peso corporal', 0, TRUE),
-('Rutina de Cardio', 'Rutina para mejorar la capacidad cardiovascular', 0, TRUE),
-('Rutina de Flexibilidad', 'Mejora la flexibilidad general', 0, TRUE),
-('Rutina de Equilibrio', 'Fomenta el equilibrio y la serenidad', 0, TRUE);
+INSERT INTO rutina (nombre, descripcion, userID, publico) VALUES
+('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 1, TRUE),
+('Rutina de Calistenia', 'Rutina usando peso corporal', 1, TRUE),
+('Rutina de Cardio', 'Rutina para mejorar la capacidad cardiovascular', 1, TRUE),
+('Rutina de Flexibilidad', 'Mejora la flexibilidad general', 1, TRUE),
+('Rutina de Equilibrio', 'Fomenta el equilibrio y la serenidad', 1, TRUE);
 
--- Inserts corregidos para Series sin la columna 'tipo'
+-- Inserts para Series sin la columna 'tipo'
 INSERT INTO serie (ejercicioID, n_repeticiones, peso) VALUES
 (1, 10, 50),
 (2, 8, 70),
