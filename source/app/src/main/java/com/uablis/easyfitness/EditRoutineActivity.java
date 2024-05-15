@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
@@ -42,7 +43,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditRoutineActivity extends AppCompatActivity {
 
-    //TODO ARREGLAR GUARDAR NOMBRE RUTINA
 
     private List<Integer> currentExerciseIds = new ArrayList<>();
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
@@ -80,7 +80,7 @@ public class EditRoutineActivity extends AppCompatActivity {
         editor.clear();
         // Guarda los cambios
         editor.apply();
-        loadUserExercisesID();
+        loadRoutineName();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +149,9 @@ public class EditRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 saveExercisesToDatabase();
-                finish();
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
+                showAddingRoutinePopup();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -174,13 +176,47 @@ public class EditRoutineActivity extends AppCompatActivity {
         finish();
     }
 
+    private void loadRoutineName(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String path = "rutinas/" + rutinaID;
+        String url = urlBase.buildUrl(path);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String name=jsonObject.getString("nombre");
+                            etEditRoutineName.setText(name);
+
+                            loadUserExercisesID();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EditRoutineActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                if (error.networkResponse != null && error.networkResponse.statusCode == HttpStatus.SC_NOT_FOUND) {
+                    // No se encontraron ejercicios relacionados con ese músculo
+                    Toast.makeText(EditRoutineActivity.this, "No se encontraron ejercicios en la rutina", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Error al hacer la llamada al servidor
+                    Toast.makeText(EditRoutineActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        queue.add(stringRequest);
+
+    }
     private void loadUserExercisesID() {
         //Obtener los ID de los ejercicios que pertenecen a una rutina
         RequestQueue queue = Volley.newRequestQueue(this);
         String path = "rutina_ejercicios/rutina/" + rutinaID;
         String url = urlBase.buildUrl(path);
-
-        //String url = "http://10.109.31.137:8080/api/rutina_ejercicios/rutina/" + rutinaid;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -383,25 +419,26 @@ public class EditRoutineActivity extends AppCompatActivity {
             }
         }
 
+
         for( int id:idsList){
             JSONObject jsonBody = new JSONObject();
             try {
                 jsonBody.put("rutinaId", rutinaID);
                 jsonBody.put("ejercicioId", id);
-                jsonBody.put("orden",3);
-                //TODO METER ORDEN
+                jsonBody.put("orden",3); //TODO Eliminar
             } catch (JSONException e) {
                 e.printStackTrace();
                 return;
             }
             sendUpdateRequest(jsonBody);
+
         }
+        sendUpdateRequestName();
+
     }
 
     private void sendUpdateRequest(JSONObject requestBody) {
-        //CAMBIAR
 
-        //String url = "http://192.168.100.1:8080/api/ejercicio/";
         String path = "rutina_ejercicios";
         String url = urlBase.buildUrl(path);
 
@@ -410,8 +447,51 @@ public class EditRoutineActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Ocurrió un error al hacer la solicitud
+                        error.printStackTrace();
+                        Log.e("VolleyError", "Error: " + error.toString());
+                        if (error.networkResponse != null) {
+                            Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                            Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                        }
+
+                    }
+
+                }
+        ) {
+            @Override
+            public byte[] getBody() {
+                return requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(stringRequest);
+    }
+    private void sendUpdateRequestName() {
+
+        String path = "rutinas/actualizarNombre/"+rutinaID+"/"+etEditRoutineName.getText();
+        String url = urlBase.buildUrl(path);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
                         Toast.makeText(EditRoutineActivity.this, "Rutina modificada correctamente", Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent returnIntent = new Intent();
+                        setResult(RESULT_OK, returnIntent);
+                        showAddingRoutinePopup();
                     }
                 },
                 new Response.ErrorListener() {
@@ -430,10 +510,6 @@ public class EditRoutineActivity extends AppCompatActivity {
                 }
         ) {
             @Override
-            public byte[] getBody() {
-                return requestBody.toString().getBytes(StandardCharsets.UTF_8);
-            }
-            @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
@@ -442,6 +518,8 @@ public class EditRoutineActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);
     }
+
+
     private List<Integer> loadExerciseIdsFromPrefs() {
         SharedPreferences prefs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
         String idsString = prefs.getString("selectedExerciseIds", "");
@@ -488,5 +566,20 @@ public class EditRoutineActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("selectedExerciseIds", newIdsString.toString());
         editor.apply();
+    }
+
+    private void showAddingRoutinePopup() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.loading_routine);
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Cerrar el diálogo después de 3 segundos (3000 milisegundos)
+        new Handler().postDelayed(() -> {
+            dialog.dismiss();
+            finish();
+        }, 3000);
     }
 }

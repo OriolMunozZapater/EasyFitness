@@ -3,7 +3,7 @@ package com.uablis.easyfitness;
 
 public class ApiUrlBuilder {
 
-    private static String BASE_URL = "http://192.168.1.97:8080/api";
+    private static String BASE_URL = "http://80.103.131.109:8080/api";
 
     public ApiUrlBuilder() {
 

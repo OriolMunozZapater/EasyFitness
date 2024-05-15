@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
@@ -210,7 +211,7 @@ public class NewRoutineActivity extends AppCompatActivity {
                 addRoutine();
                 Intent returnIntent = new Intent();
                 setResult(RESULT_OK, returnIntent);
-                finish();
+                showAddingRoutinePopup();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -397,7 +398,7 @@ public class NewRoutineActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Intent returnIntent = new Intent();
                         setResult(RESULT_OK, returnIntent);
-                        finish();
+                        showAddingRoutinePopup();
                     }
                 },
                 new Response.ErrorListener() {
@@ -474,5 +475,20 @@ public class NewRoutineActivity extends AppCompatActivity {
             }
         };
         queue.add(stringRequest);
+    }
+
+    private void showAddingRoutinePopup() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.loading_routine);
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Cerrar el diálogo después de 3 segundos (3000 milisegundos)
+        new Handler().postDelayed(() -> {
+            dialog.dismiss();
+            finish();
+        }, 3000);
     }
 }

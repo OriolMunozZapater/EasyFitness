@@ -66,7 +66,6 @@ public class CreateNewExercise extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createExercise();
-
             }
         });
     }

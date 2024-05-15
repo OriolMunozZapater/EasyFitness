@@ -59,10 +59,10 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         backArrow = findViewById(R.id.back_arrow);
         newExercise = findViewById(R.id.btnNewExercise);
 
-
         tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
         loadArray(); //Inicializar lista con ID de BD
 
+        //loadEjercicios(0); //TODO
         LinearLayout routinesLayout = findViewById(R.id.exerciseContainer);
         routinesLayout.removeAllViews();
 
@@ -95,6 +95,9 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String path = "ejercicios/user/" + userID;
         String url = urlBase.buildUrl(path);
+
+        //String url = "http://10.109.31.137:8080/api/ejercicios/user/" + userID;
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
