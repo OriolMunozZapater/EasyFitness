@@ -191,4 +191,12 @@ public class RutinaController {
     return ResponseEntity.ok(rutinas);
   }
 
+  @PutMapping("/actualizarNombre/{id}/{nombre}")
+  public ResponseEntity<Rutina> updateRutinaName(@PathVariable String nombre, @PathVariable Integer id) {
+    return rutinaRepository.findById(id)
+        .map(existingRutina -> {
+          existingRutina.setNombre(nombre);
+          return ResponseEntity.ok(rutinaRepository.save(existingRutina));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }

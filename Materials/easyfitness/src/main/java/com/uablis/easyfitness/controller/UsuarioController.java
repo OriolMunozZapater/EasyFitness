@@ -112,24 +112,6 @@ public class UsuarioController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @Transactional
-  @PutMapping("/{id}/updateWithObjective")
-  public ResponseEntity<?> updateUsuarioWithObjective(@PathVariable Integer id, @RequestBody Map<String, Object> updateData) {
-    return usuarioRepository.findById(id).map(user -> {
-      // Update user details
-      updateUsuarioDetails(user, updateData);
-
-      // Create a new objective and link it
-      Objetivo newObjective = createAndSaveObjective(updateData);
-      user.setObjetivo(newObjective);
-
-      // Save updated user details
-      usuarioRepository.save(user);
-
-      return ResponseEntity.ok(user);
-    }).orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
   private void updateUsuarioDetails(Usuario user, Map<String, Object> updateData) {
     Optional.ofNullable(updateData.get("nombre")).ifPresent(value -> user.setNombre((String) value));
     Optional.ofNullable(updateData.get("apellido")).ifPresent(value -> user.setApellido((String) value));
@@ -194,4 +176,30 @@ public class UsuarioController {
         })
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
+
+  @PutMapping("/{id}/updateWithObjective")
+  public ResponseEntity<?> updateUsuarioWithObjective(@PathVariable Integer id, @RequestBody Map<String, Object> updateData) {
+    return usuarioRepository.findById(id).map(user -> {
+      updateUsuarioDetails(user, updateData);
+      if (user.getObjetivo() != null) {
+        if (updateData.containsKey("peso_objetivo")) {
+          // Asegúrate de convertir correctamente aquí
+          double pesoObjetivo = Double.parseDouble(updateData.get("peso_objetivo").toString());
+          user.getObjetivo().setPesoObjetivo(pesoObjetivo);
+        }
+        if (updateData.containsKey("descripcion_objetivo")) {
+          String descripcionObjetivo = updateData.get("descripcion_objetivo").toString();
+          user.getObjetivo().setDescripcion(descripcionObjetivo);
+        }
+        objetivoRepository.save(user.getObjetivo());
+      } else {
+        // Crear y guardar un nuevo objetivo si no existe uno
+        Objetivo newObjective = createAndSaveObjective(updateData);
+        user.setObjetivo(newObjective);
+      }
+      usuarioRepository.save(user);
+      return ResponseEntity.ok(user);
+    }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
 }
