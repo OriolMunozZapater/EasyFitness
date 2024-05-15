@@ -1,4 +1,4 @@
-- Acceder a mariadb via terminal:
+- **Acceder a mariadb via terminal:**
 
 ```cmd
 sudo mysql -u root -p
@@ -7,36 +7,35 @@ sudo mysql -u root -p
 sudo mysql -u easyfitness -p
 ```
 
-- Claves de acceso mariadb
+- **Claves de acceso mariadb**
 
-	user: root
-	contra: cnet1342
+- user: root
+- contra: cnet1342
 
-	user: easyfitness
-	contra: cnet1342
+- user: easyfitness
+- contra: cnet1342
 
-- Conexion ssh a raspberry desde wifi interno:
+- **Conexion ssh a raspberry desde wifi interno:**
 
 ```cmd
 ssh josmoleir@192.168.1.132
 
 ```
-- Conexion ssh a raspberry remoto:
+- **Conexion ssh a raspberry remoto:**
 
 ```cmd
 ssh backend@easyfitness-uab.duckdns.org
 ```
 
-- Usuarios Raspberry:
+- **Usuarios Raspberry:**
 
-user: josmoleir
-contra: 2003
+- user: josmoleir
+- contra: 2003
 
-**user: backend**
-**contra: oriolpaki**
+- **user: backend**
+- **contra: oriolpaki**
 
-- phpmyadmin user:
+- **Phpmyadmin user:**
 
-user: root
-contra: cnet1342
-
+- user: root
+- contra: cnet1342
