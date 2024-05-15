@@ -50,6 +50,7 @@ CREATE TABLE ejercicio (
   ejercicioID INT AUTO_INCREMENT PRIMARY KEY,
   rutinaID INT,
   userID INT,
+  comentario VARCHAR(255),
   nombre VARCHAR(255) NOT NULL,
   descripcion VARCHAR(255),
   tipo VARCHAR(50),
