@@ -36,7 +36,6 @@ public class EjercicioController {
   public Ejercicio createEjercicio(@RequestBody Ejercicio ejercicio) {
     return ejercicioRepository.save(ejercicio);
   }
-
   // Actualizar un ejercicio
   @PutMapping("/{id}")
   public ResponseEntity<Ejercicio> updateObjetivo(@PathVariable Integer id, @RequestBody Ejercicio ejercicioDetails) {

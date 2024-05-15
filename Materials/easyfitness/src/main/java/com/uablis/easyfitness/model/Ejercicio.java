@@ -115,5 +115,4 @@ public class Ejercicio {
         ", grupo_muscular='" + grupoMuscular +
         '}';
   }
-
 }

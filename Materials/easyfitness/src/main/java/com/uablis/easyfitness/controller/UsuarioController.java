@@ -1,14 +1,18 @@
 package com.uablis.easyfitness.controller;
 
+import com.uablis.easyfitness.model.Objetivo;
 import com.uablis.easyfitness.model.Usuario;
 import com.uablis.easyfitness.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.uablis.easyfitness.repository.ObjetivoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -16,6 +20,9 @@ public class UsuarioController {
 
   @Autowired
   private UsuarioRepository usuarioRepository;
+
+  @Autowired
+  private ObjetivoRepository objetivoRepository;
 
   // Obtener todos los usuarios
   @GetMapping
@@ -74,7 +81,7 @@ public class UsuarioController {
           if (usuarioDetails.getTiempo_entrenamiento() != null) {
             existingUsuario.setTiempo_entrenamiento(usuarioDetails.getTiempo_entrenamiento());
           }
-          existingUsuario.setFirstLogin(usuarioDetails.getFirstLogin());
+          existingUsuario.setFirstLogin(false); // Directly set to false
 
           return ResponseEntity.ok(usuarioRepository.save(existingUsuario));
         }).orElseGet(() -> ResponseEntity.notFound().build());
@@ -105,4 +112,86 @@ public class UsuarioController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  @Transactional
+  @PutMapping("/{id}/updateWithObjective")
+  public ResponseEntity<?> updateUsuarioWithObjective(@PathVariable Integer id, @RequestBody Map<String, Object> updateData) {
+    return usuarioRepository.findById(id).map(user -> {
+      // Update user details
+      updateUsuarioDetails(user, updateData);
+
+      // Create a new objective and link it
+      Objetivo newObjective = createAndSaveObjective(updateData);
+      user.setObjetivo(newObjective);
+
+      // Save updated user details
+      usuarioRepository.save(user);
+
+      return ResponseEntity.ok(user);
+    }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  private void updateUsuarioDetails(Usuario user, Map<String, Object> updateData) {
+    Optional.ofNullable(updateData.get("nombre")).ifPresent(value -> user.setNombre((String) value));
+    Optional.ofNullable(updateData.get("apellido")).ifPresent(value -> user.setApellido((String) value));
+    Optional.ofNullable(updateData.get("correo")).ifPresent(value -> user.setCorreo((String) value));
+    Optional.ofNullable(updateData.get("password")).ifPresent(value -> user.setPassword((String) value));
+    Optional.ofNullable(updateData.get("sexo")).ifPresent(value -> user.setSexo((String) value));
+    Optional.ofNullable(updateData.get("peso_actual")).ifPresent(value -> user.setPeso_actual(Double.parseDouble((String) value)));
+    Optional.ofNullable(updateData.get("altura")).ifPresent(value -> user.setAltura(Integer.parseInt((String) value)));
+    Optional.ofNullable(updateData.get("fecha_nacimiento")).ifPresent(value -> user.setFechaNacimiento(parseDate((String) value)));
+    Optional.ofNullable(updateData.get("descripcion")).ifPresent(value -> user.setDescripcion((String) value));
+    Optional.ofNullable(updateData.get("redes_sociales")).ifPresent(value -> user.setRedes_sociales((String) value));
+    Optional.ofNullable(updateData.get("tiempo_entrenamiento")).ifPresent(value -> user.setTiempo_entrenamiento((String) value));
+    user.setFirstLogin(false);
+  }
+
+  private Objetivo createAndSaveObjective(Map<String, Object> updateData) {
+    Objetivo objetivo = new Objetivo();
+    Optional.ofNullable(updateData.get("peso_objetivo")).ifPresent(value -> {
+      BigDecimal bd = new BigDecimal((String) value);
+      objetivo.setPesoObjetivo(bd.doubleValue());
+    });
+    Optional.ofNullable(updateData.get("descripcion_objetivo")).ifPresent(value -> objetivo.setDescripcion((String) value));
+    objetivoRepository.save(objetivo);
+    return objetivo;
+  }
+
+  private Date parseDate(String dateString) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      return sdf.parse(dateString);
+    } catch (ParseException e) {
+      throw new RuntimeException("Error parsing date", e);
+    }
+  }
+
+  // Métodos personalizados:
+  @GetMapping("/{id}/objetivo")
+  public ResponseEntity<?> getUsuarioObjetivo(@PathVariable Integer id) {
+    return usuarioRepository.findById(id)
+        .map(usuario -> {
+          if (usuario.getObjetivo() != null) {
+            return ResponseEntity.ok(Collections.singletonMap("pesoObjetivo", usuario.getObjetivo().getPesoObjetivo()));
+          } else {
+            return ResponseEntity.notFound().build();
+          }
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/{userId}/objetivo/detalles")
+  public ResponseEntity<Map<String, Object>> getObjetivoDetalles(@PathVariable Integer userId) {
+    return (ResponseEntity<Map<String, Object>>) usuarioRepository.findById(userId)
+        .map(usuario -> {
+          Objetivo objetivo = usuario.getObjetivo();
+          if (objetivo != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("peso_objetivo", objetivo.getPesoObjetivo());
+            response.put("descripcion", objetivo.getDescripcion());
+            return ResponseEntity.ok(response);
+          } else {
+            return ResponseEntity.notFound().build();
+          }
+        })
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }
