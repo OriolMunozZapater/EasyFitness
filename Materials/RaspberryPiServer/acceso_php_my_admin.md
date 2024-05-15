@@ -9,6 +9,11 @@ http://localhost:8888/phpmyadmin
 ```
 Desde aqui podeis acceder al phpMyAdmin.
 
+Una vez acabeis de configurar lo que sea, cerrad la conexion ssh con
+```cmd
+exit
+```
+
 **Claves para acceder**
 
 usuario: root
