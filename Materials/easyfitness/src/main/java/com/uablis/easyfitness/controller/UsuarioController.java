@@ -25,7 +25,7 @@ public class UsuarioController {
   private ObjetivoRepository objetivoRepository;
 
   // Obtener todos los usuarios
-  @GetMapping
+  @GetMapping("/all_users")
   public List<Usuario> getAllUsuarios() {
     return usuarioRepository.findAll();
   }
@@ -201,5 +201,26 @@ public class UsuarioController {
       return ResponseEntity.ok(user);
     }).orElseGet(() -> ResponseEntity.notFound().build());
   }
+    // New endpoint to get followed users' details
+    @GetMapping("/{userId}/seguidos/detalles")
+    public ResponseEntity<List<Map<String, Object>>> getFollowedUsersDetails(@PathVariable Integer userId) {
+        return usuarioRepository.findById(userId).map(usuario -> {
+            Set<Usuario> followedUsers = usuario.getSeguidos();
+            List<Map<String, Object>> followedUsersDetails = new ArrayList<>();
 
+            for (Usuario followedUser : followedUsers) {
+                Map<String, Object> userDetails = new HashMap<>();
+                userDetails.put("nombre", followedUser.getNombre());
+                userDetails.put("sexo", followedUser.getSexo());
+                userDetails.put("peso_actual", followedUser.getPeso_actual());
+                userDetails.put("foto", followedUser.getFoto());
+                userDetails.put("altura", followedUser.getAltura());
+                userDetails.put("descripcion", followedUser.getDescripcion());
+                userDetails.put("redes_sociales", followedUser.getRedes_sociales());
+                followedUsersDetails.add(userDetails);
+            }
+
+            return ResponseEntity.ok(followedUsersDetails);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
