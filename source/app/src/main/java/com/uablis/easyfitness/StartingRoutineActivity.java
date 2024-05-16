@@ -341,6 +341,13 @@ public class StartingRoutineActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
+        LinearLayout effectiveSeries = dialogView.findViewById(R.id.effective_series);
+        effectiveSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.green_check);
+            Toast.makeText(this, "Serie efectiva seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
         normalSeries.setOnClickListener(v -> {
             typeSerie.setImageResource(R.drawable.ic_normal_serie);
             Toast.makeText(this, "Serie normal seleccionada", Toast.LENGTH_SHORT).show();
@@ -361,7 +368,6 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
     private void addNewSerie(LinearLayout seriesContainer) {
         // Obtener el número de serie de la última fila agregada al contenedor
