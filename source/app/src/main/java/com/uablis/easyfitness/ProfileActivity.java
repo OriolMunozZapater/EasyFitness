@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
     private ImageButton edit_profile;
+    private ImageView training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,16 @@ public class ProfileActivity extends AppCompatActivity {
         sexe = findViewById(R.id.sexe);
         altura = findViewById(R.id.altura);
         edit_profile = findViewById(R.id.btnEditPersonalData);
+        training_session = findViewById(R.id.training_session);
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ProfileActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupListeners() {

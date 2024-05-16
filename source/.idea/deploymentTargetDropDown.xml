@@ -2,23 +2,36 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="CheckTrainingsActivity">
+      <entry key="DiscoverNewUsersActivity">
         <State />
       </entry>
-      <entry key="ChoosePreselectedRoutineActivity">
+      <entry key="DiscoverUsersActivity">
         <State />
       </entry>
-      <entry key="ProfileActivity">
+      <entry key="MainNetworkActivity">
         <State />
       </entry>
-      <entry key="StartingRoutineActivity">
+      <entry key="ShowProfileActivity">
         <State />
       </entry>
-      <entry key="TrainingRoutinesActivity">
+      <entry key="UserProfileActivity">
         <State />
       </entry>
       <entry key="app">
-        <State />
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="f96fadd6" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-16T19:23:38.333811400Z" />
+        </State>
       </entry>
     </value>
   </component>

@@ -76,6 +76,24 @@
         <activity
             android:name=".EditProfile"
             android:exported="true" />
+        <activity
+            android:name=".SocialMediaActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainNetworkActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FollowedUsersActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FollowersUsersActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ShowProfileActivity"
+            android:exported="true" />
+        <activity android:name=".DiscoverUsersActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
