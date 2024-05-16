@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="EDITAR PERFIL"
+            android:text="A QUIEN SEGUIR"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
