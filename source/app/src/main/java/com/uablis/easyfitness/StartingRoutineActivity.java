@@ -330,8 +330,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         // Obtener las vistas del cuadro de diálogo
         LinearLayout warmupSeries = dialogView.findViewById(R.id.warmup_series);
-        LinearLayout effectiveSeries = dialogView.findViewById(R.id.effective_series);
+        LinearLayout normalSeries = dialogView.findViewById(R.id.normal_series);
         LinearLayout descendingSeries = dialogView.findViewById(R.id.descending_series);
+        LinearLayout failureSeries = dialogView.findViewById(R.id.failure_series);
 
         // Configurar los clics en las opciones
         warmupSeries.setOnClickListener(v -> {
@@ -340,9 +341,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
-        effectiveSeries.setOnClickListener(v -> {
-            typeSerie.setImageResource(R.drawable.green_check);
-            Toast.makeText(this, "Serie efectiva seleccionada", Toast.LENGTH_SHORT).show();
+        normalSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_normal_serie);
+            Toast.makeText(this, "Serie normal seleccionada", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
 
@@ -352,8 +353,15 @@ public class StartingRoutineActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
+        failureSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_failure_serie);
+            Toast.makeText(this, "Serie al fallo seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
         dialog.show();
     }
+
 
     private void addNewSerie(LinearLayout seriesContainer) {
         // Obtener el número de serie de la última fila agregada al contenedor
