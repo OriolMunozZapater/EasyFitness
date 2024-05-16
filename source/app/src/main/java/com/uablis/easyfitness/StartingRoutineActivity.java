@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -44,10 +45,14 @@ public class StartingRoutineActivity extends AppCompatActivity {
     private Chronometer trainingDuration;
     private Button endTraining;
     private LinearLayout routinesLayout;
+    private ImageButton stopTime;
+    private ImageButton goTime;
     private long startTime;
     private int rutinaId;
     private String rutinaID;
+    private boolean isChronometerRunning;
     private String routineName;
+    private long pauseOffset;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -60,7 +65,11 @@ public class StartingRoutineActivity extends AppCompatActivity {
         routinesLayout = findViewById(R.id.exerciseTrainContainer);
         rutinaID = getIntent().getStringExtra("ROUTINE_ID");
         rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
+        stopTime = findViewById(R.id.stopTime);
+        goTime = findViewById(R.id.goTime);
         obtenerEjerciciosPorRutinaId(rutinaId);
+        isChronometerRunning = true;
+        pauseOffset = 0;
 
         endTraining.setOnClickListener(v -> endRoutine());
 
@@ -73,6 +82,35 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         trainingDuration.setBase(SystemClock.elapsedRealtime());
         trainingDuration.start();
+
+        stopTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pauseChronometer();
+            }
+        });
+
+        goTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resumeChronometer();
+            }
+        });
+
+    }
+
+    private void pauseChronometer() {
+        if (isChronometerRunning) {
+            trainingDuration.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - trainingDuration.getBase();
+            isChronometerRunning = false;
+        }
+    }
+
+    private void resumeChronometer() {
+        trainingDuration.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+        trainingDuration.start();
+        isChronometerRunning = true;
     }
 
     private void updateUIWithExercises(JSONArray ejercicios) {
@@ -124,6 +162,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 // Configurar botón para eliminar ejercicio
                 ImageButton eliminateExercise = exerciseView.findViewById(R.id.eliminate_cross);
                 eliminateExercise.setOnClickListener(v -> deleteExercise(exerciseView));
+
+                ImageButton typeSerie = exerciseView.findViewById(R.id.typeSerie);
+                typeSerie.setOnClickListener(v -> showMessage(typeSerie));
 
                 // Añadir la vista del ejercicio al layout principal
                 routinesLayout.addView(exerciseView);
@@ -278,6 +319,42 @@ public class StartingRoutineActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Función para mostrar un mensaje
+    private void showMessage(ImageButton typeSerie) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_type_serie, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        // Obtener las vistas del cuadro de diálogo
+        LinearLayout warmupSeries = dialogView.findViewById(R.id.warmup_series);
+        LinearLayout effectiveSeries = dialogView.findViewById(R.id.effective_series);
+        LinearLayout descendingSeries = dialogView.findViewById(R.id.descending_series);
+
+        // Configurar los clics en las opciones
+        warmupSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_warmup_serie);
+            Toast.makeText(this, "Serie de calentamiento seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        effectiveSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.green_check);
+            Toast.makeText(this, "Serie efectiva seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        descendingSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_descending_serie);
+            Toast.makeText(this, "Serie descendente seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
     private void addNewSerie(LinearLayout seriesContainer) {
         // Obtener el número de serie de la última fila agregada al contenedor
         int lastSerieNumber = seriesContainer.getChildCount();
@@ -328,10 +405,12 @@ public class StartingRoutineActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton typeSerie = newRow.findViewById(R.id.typeSerie);
+        typeSerie.setOnClickListener(v -> showMessage(typeSerie));
+
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
     }
-
     public void endRoutine() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to end this training session?");

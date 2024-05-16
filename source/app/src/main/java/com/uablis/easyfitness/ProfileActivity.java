@@ -23,6 +23,7 @@ public class ProfileActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
     private ImageButton edit_profile;
+    private String userDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void handleResponse(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -63,10 +63,13 @@ public class ProfileActivity extends AppCompatActivity {
             sexe.setText(jsonObject.getString("sexo"));
             pesPropi.setText(String.format(Locale.getDefault(), "%.2f Kg", jsonObject.getDouble("peso_actual")));
             altura.setText(String.format(Locale.getDefault(), "%d cm", jsonObject.getInt("altura")));
+            userDescription = jsonObject.optString("descripcion", ""); // Guardar descripción sin mostrar
         } catch (JSONException e) {
             Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void handleObjectiveResponse(String response) {
         try {
@@ -122,13 +125,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void goToObjectiveDetails() {
         Intent intent = new Intent(this, ObjectiveDetailsActivity.class);
-        // Agregar datos extras al Intent
         String currentWeight = pesPropi.getText().toString();
         String targetWeight = pesObjectiu.getText().toString();
         intent.putExtra("CURRENT_WEIGHT", currentWeight);
         intent.putExtra("TARGET_WEIGHT", targetWeight);
+        intent.putExtra("DESCRIPTION", userDescription);
 
         startActivity(intent);
     }
+
 
 }
