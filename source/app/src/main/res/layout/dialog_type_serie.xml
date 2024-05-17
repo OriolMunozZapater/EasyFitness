@@ -73,4 +73,53 @@
             android:text="Serie descendente"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <!-- Nueva sección para serie normal -->
+    <LinearLayout
+        android:id="@+id/normal_series"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_normal_serie" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="Serie normal"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Nueva sección para serie al fallo -->
+    <LinearLayout
+        android:id="@+id/failure_series"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_failure_serie" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="Serie al fallo"
+            android:textSize="16sp" />
+    </LinearLayout>
+
 </LinearLayout>
