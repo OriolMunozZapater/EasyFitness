@@ -48,6 +48,7 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
 
         profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
+        home = findViewById(R.id.home);
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,15 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TrainingRoutinesActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(TrainingRoutinesActivity.this, MainNetworkActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,10 +1,15 @@
 package com.uablis.easyfitness;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +36,7 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
     private TextView tvProgressLabel;
     private ProgressBar pbWeightProgress;
     private Button btnSaveChanges;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,21 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
         initializeViews();
         retrieveDataFromIntent();
         setupListeners();
+        scheduleWeeklyNotification();
+    }
+
+    private void scheduleWeeklyNotification() {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);  // Configura la alarma para dentro de una semana
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
 
     private void initializeViews() {
@@ -48,6 +70,7 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
         tvProgressLabel = findViewById(R.id.tvProgressLabel);
         pbWeightProgress = findViewById(R.id.pbWeightProgress);
         btnSaveChanges = findViewById(R.id.btnSaveChanges);
+        backButton = findViewById(R.id.backButton);
     }
 
     private void retrieveDataFromIntent() {
@@ -57,18 +80,17 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
             String targetWeight = intent.getStringExtra("TARGET_WEIGHT");
             String description = intent.getStringExtra("DESCRIPTION");
 
-            if (currentWeight != null && targetWeight != null) {
+            if(currentWeight != null) {
                 tvCurrentWeight.setText(currentWeight);
+            }
+            if(targetWeight != null) {
                 tvTargetWeight.setText(targetWeight);
-                updateProgressBarBasedOnWeights(currentWeight, targetWeight);
-            } else {
-                Toast.makeText(this, "Error retrieving weight data.", Toast.LENGTH_SHORT).show();
             }
-            if (description != null && !description.isEmpty()) {
+            if(description != null) {
                 tvDescription.setText(description);
-            } else {
-                tvDescription.setText("No description provided.");
             }
+
+            updateProgressBarBasedOnWeights(currentWeight, targetWeight);
         }
     }
 
@@ -76,22 +98,27 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
         double currentWeight = Double.parseDouble(currentWeightStr.split(" ")[0].replace(",", "."));
         double targetWeight = Double.parseDouble(targetWeightStr.split(" ")[0].replace(",", "."));
 
-        double progress = ((currentWeight - targetWeight) / targetWeight) * 100;
-        pbWeightProgress.setProgress((int) Math.abs(progress));
-        tvProgressLabel.setText(String.format(Locale.getDefault(), "Progress: %d%% left to goal", (int) (100 - Math.abs(progress))));
+        double progressPercentage;
+        if (currentWeight >= targetWeight) {
+            progressPercentage = 100;
+        } else {
+            progressPercentage = (currentWeight / targetWeight) * 100; // Porcentaje de progreso hacia el objetivo
+        }
+        pbWeightProgress.setProgress((int) progressPercentage); // Establece el progreso actual
+        tvProgressLabel.setText(String.format(Locale.getDefault(), "Progress: %.2f%% of goal achieved", progressPercentage));
     }
-
     private void setupListeners() {
+
         btnSaveChanges.setOnClickListener(v -> saveObjectiveDetails());
+        backButton.setOnClickListener(v -> startActivity(new Intent(ObjectiveDetailsActivity.this, ProfileActivity.class)));
     }
 
     private void saveObjectiveDetails() {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String userId = UsuarioActual.getInstance().getUserId();
+        Integer userId = UsuarioActual.getInstance().getUserIdAsInteger();
         String path = "usuarios/" + userId + "/updateWithObjective";
         String url = urlBase.buildUrl(path);
 
-        // Extraer solo la parte numérica de los pesos antes de enviar
         String currentWeightClean = tvCurrentWeight.getText().toString().split(" ")[0].replace(",", ".");
         String targetWeightClean = tvTargetWeight.getText().toString().split(" ")[0].replace(",", ".");
 
@@ -99,14 +126,18 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
         try {
             params.put("peso_objetivo", Double.parseDouble(targetWeightClean));
             params.put("peso_actual", Double.parseDouble(currentWeightClean));
-            params.put("descripcion_objetivo", tvDescription.getText().toString());
+            params.put("descripcion", tvDescription.getText().toString());
         } catch (JSONException e) {
             Toast.makeText(this, "Error creating JSON params", Toast.LENGTH_SHORT).show();
             return;
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, params,
-                response -> Toast.makeText(ObjectiveDetailsActivity.this, "Update successful", Toast.LENGTH_SHORT).show(),
+                response -> {
+                    Toast.makeText(ObjectiveDetailsActivity.this, "Update successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ObjectiveDetailsActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                },
                 error -> Toast.makeText(ObjectiveDetailsActivity.this, "Error in update: " + error.toString(), Toast.LENGTH_SHORT).show()
         ) {
             @Override
@@ -119,5 +150,4 @@ public class ObjectiveDetailsActivity extends AppCompatActivity {
 
         queue.add(jsonObjectRequest);
     }
-
 }

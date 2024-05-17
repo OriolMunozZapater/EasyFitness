@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +24,9 @@ public class ProfileActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
     private ImageButton edit_profile;
+    private String userDescription;
     private ImageView training_session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
         getUserData();
         getObjectiveData();
         setupListeners();
-    }
-
-    private void initializeViews() {
-        pesObjectiu = findViewById(R.id.targetWeight);
-        pesPropi = findViewById(R.id.currentWeight);
-        nomUser = findViewById(R.id.nomUser);
-        sexe = findViewById(R.id.sexe);
-        altura = findViewById(R.id.altura);
-        edit_profile = findViewById(R.id.btnEditPersonalData);
         training_session = findViewById(R.id.training_session);
 
         training_session.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +47,15 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeViews() {
+        pesObjectiu = findViewById(R.id.targetWeight);
+        pesPropi = findViewById(R.id.currentWeight);
+        nomUser = findViewById(R.id.nomUser);
+        sexe = findViewById(R.id.sexe);
+        altura = findViewById(R.id.altura);
+        edit_profile = findViewById(R.id.btnEditPersonalData);
     }
 
     private void setupListeners() {
@@ -67,7 +69,6 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void handleResponse(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -75,10 +76,13 @@ public class ProfileActivity extends AppCompatActivity {
             sexe.setText(jsonObject.getString("sexo"));
             pesPropi.setText(String.format(Locale.getDefault(), "%.2f Kg", jsonObject.getDouble("peso_actual")));
             altura.setText(String.format(Locale.getDefault(), "%d cm", jsonObject.getInt("altura")));
+            userDescription = jsonObject.optString("descripcion", ""); // Guardar descripción sin mostrar
         } catch (JSONException e) {
             Toast.makeText(ProfileActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void handleObjectiveResponse(String response) {
         try {
@@ -134,13 +138,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void goToObjectiveDetails() {
         Intent intent = new Intent(this, ObjectiveDetailsActivity.class);
-        // Agregar datos extras al Intent
         String currentWeight = pesPropi.getText().toString();
         String targetWeight = pesObjectiu.getText().toString();
         intent.putExtra("CURRENT_WEIGHT", currentWeight);
         intent.putExtra("TARGET_WEIGHT", targetWeight);
+        intent.putExtra("DESCRIPTION", userDescription);
 
         startActivity(intent);
     }
+
 
 }
