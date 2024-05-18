@@ -15,4 +15,5 @@ public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer> {
   List<Ejercicio> findByUserID(int userID);
   List<Ejercicio> findByUserIDAndGrupoMuscular(Integer userID, String grupoMuscular);
   Optional<Ejercicio> findByNombreAndRutinaID(String nom, Integer rutinaID);
+  List<Ejercicio> findByGrupoMuscular(String grupoMuscular);
 }
