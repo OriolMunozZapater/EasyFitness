@@ -30,6 +30,7 @@ CREATE TABLE usuario (
   altura INT,
   foto BLOB,
   descripcion VARCHAR(255),
+  gimnasio VARCHAR(255),
   redes_sociales VARCHAR(255),
   tiempo_entrenamiento TIME,
   fecha_nacimiento DATE,

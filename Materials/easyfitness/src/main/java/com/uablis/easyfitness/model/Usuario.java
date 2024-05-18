@@ -32,7 +32,6 @@ public class Usuario {
   private Double peso_actual;
 
   private Integer altura;
-
   @Lob
   @Column
   private byte[] foto;
