@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#A8711D"
+        app:titleEnabled="false">
+
+        <!-- TextView personalizado para el título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XARXA SOCIAL"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="70dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_boto_xx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp">
+
+            <LinearLayout
+                android:id="@+id/boton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:background="@color/layout_type1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Seguidos"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonSeguidos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="178dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/boton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:layout_below="@id/boton1"
+                android:layout_marginTop="20dp"
+                android:background="@color/layout_type1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Seguidores"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonSeguidores"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="160dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/boton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:layout_below="@id/boton2"
+                android:layout_marginTop="20dp"
+                android:background="@color/layout_type1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Consultar Rutinas en Linea"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonConsultaRutinas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/boton4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:layout_below="@id/boton3"
+                android:layout_marginTop="20dp"
+                android:background="@color/layout_type1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descubrir Usuarios"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonUsersSeguir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="90dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+</RelativeLayout>
+
+    </ScrollView>
+
+    <!-- Linear layout para la barra de abajo -->
+    <LinearLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <!-- Toolbar para la barra inferior -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/lowBar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#A8711D"
+            app:titleEnabled="false"
+            android:layout_gravity="bottom">
+
+            <!-- Iconos de la barra inferior -->
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_home"
+                android:layout_gravity="start"
+                android:paddingLeft="20dp"
+                android:paddingRight="25dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/training_routines"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_training_routines"
+                android:layout_gravity="start|right"
+                android:paddingLeft="20dp"
+                android:paddingRight="25dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/training_session"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_training"
+                android:layout_gravity="left|end"
+                android:paddingLeft="25dp"
+                android:paddingRight="20dp"/>
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_profile"
+                android:layout_gravity="end"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"/>
+
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
+</RelativeLayout>
