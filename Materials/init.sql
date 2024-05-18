@@ -136,11 +136,11 @@ INSERT INTO ejercicio (userID, nombre, descripcion, tipo, grupo_muscular) VALUES
 
 -- Inserts para Rutinas
 INSERT INTO rutina (nombre, descripcion, userID, publico) VALUES
-('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 0, TRUE),
-('Rutina de Calistenia', 'Rutina usando peso corporal', 0, TRUE),
-('Rutina de Cardio', 'Rutina para mejorar la capacidad cardiovascular', 0, TRUE),
-('Rutina de Flexibilidad', 'Mejora la flexibilidad general', 0, TRUE),
-('Rutina de Equilibrio', 'Fomenta el equilibrio y la serenidad', 0, TRUE);
+('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 0, FALSE),
+('Rutina de Calistenia', 'Rutina usando peso corporal', 0, FALSE),
+('Rutina de Cardio', 'Rutina para mejorar la capacidad cardiovascular', 0, FALSE),
+('Rutina de Flexibilidad', 'Mejora la flexibilidad general', 0, FALSE),
+('Rutina de Equilibrio', 'Fomenta el equilibrio y la serenidad', 0, FALSE);
 
 -- Inserts para Series sin la columna 'tipo'
 INSERT INTO serie (ejercicioID, n_repeticiones, peso) VALUES
