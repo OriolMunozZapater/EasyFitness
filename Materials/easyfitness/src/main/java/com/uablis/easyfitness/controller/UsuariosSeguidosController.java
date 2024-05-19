@@ -7,8 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -47,12 +46,26 @@ public class UsuariosSeguidosController {
 
   // Método para obtener todos los usuarios que un usuario específico sigue
   @GetMapping("/{usuarioId}/seguidos")
-  public ResponseEntity<Set<Usuario>> obtenerUsuariosSeguidos(@PathVariable Integer usuarioId) {
+  public ResponseEntity<List<Map<String, Object>>> obtenerUsuariosSeguidos(@PathVariable Integer usuarioId) {
     Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
     if (usuarioOpt.isPresent()) {
       Usuario usuario = usuarioOpt.get();
-      usuario.getSeguidos().forEach(seguido -> seguido.setSeguidores(null)); // Evitar recursión infinita
-      return ResponseEntity.ok(usuario.getSeguidos());
+      List<Map<String, Object>> seguidosList = new ArrayList<>();
+      for (Usuario seguido : usuario.getSeguidos()) {
+        Map<String, Object> seguidoMap = new HashMap<>();
+        seguidoMap.put("userID", seguido.getUserID());
+        seguidoMap.put("nombre", seguido.getNombre());
+        seguidoMap.put("apellido", seguido.getApellido());
+        seguidoMap.put("correo", seguido.getCorreo());
+        seguidoMap.put("sexo", seguido.getSexo());
+        seguidoMap.put("peso_actual", seguido.getPeso_actual());
+        seguidoMap.put("altura", seguido.getAltura());
+        seguidoMap.put("descripcion", seguido.getDescripcion());
+        seguidoMap.put("redes_sociales", seguido.getRedes_sociales());
+        seguidoMap.put("foto", seguido.getFoto());
+        seguidosList.add(seguidoMap);
+      }
+      return ResponseEntity.ok(seguidosList);
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
   }
@@ -68,5 +81,7 @@ public class UsuariosSeguidosController {
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
   }
+
+
 }
 

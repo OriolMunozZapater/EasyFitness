@@ -25,7 +25,7 @@ public class UsuarioController {
   private ObjetivoRepository objetivoRepository;
 
   // Obtener todos los usuarios
-  @GetMapping
+  @GetMapping("/all_users")
   public List<Usuario> getAllUsuarios() {
     return usuarioRepository.findAll();
   }
@@ -113,19 +113,35 @@ public class UsuarioController {
   }
 
   private void updateUsuarioDetails(Usuario user, Map<String, Object> updateData) {
-    Optional.ofNullable(updateData.get("nombre")).ifPresent(value -> user.setNombre((String) value));
-    Optional.ofNullable(updateData.get("apellido")).ifPresent(value -> user.setApellido((String) value));
-    Optional.ofNullable(updateData.get("correo")).ifPresent(value -> user.setCorreo((String) value));
-    Optional.ofNullable(updateData.get("password")).ifPresent(value -> user.setPassword((String) value));
-    Optional.ofNullable(updateData.get("sexo")).ifPresent(value -> user.setSexo((String) value));
-    Optional.ofNullable(updateData.get("peso_actual")).ifPresent(value -> user.setPeso_actual(Double.parseDouble((String) value)));
-    Optional.ofNullable(updateData.get("altura")).ifPresent(value -> user.setAltura(Integer.parseInt((String) value)));
-    Optional.ofNullable(updateData.get("fecha_nacimiento")).ifPresent(value -> user.setFechaNacimiento(parseDate((String) value)));
-    Optional.ofNullable(updateData.get("descripcion")).ifPresent(value -> user.setDescripcion((String) value));
-    Optional.ofNullable(updateData.get("redes_sociales")).ifPresent(value -> user.setRedes_sociales((String) value));
-    Optional.ofNullable(updateData.get("tiempo_entrenamiento")).ifPresent(value -> user.setTiempo_entrenamiento((String) value));
+    Optional.ofNullable(updateData.get("nombre")).ifPresent(value -> user.setNombre(value.toString()));
+    Optional.ofNullable(updateData.get("apellido")).ifPresent(value -> user.setApellido(value.toString()));
+    Optional.ofNullable(updateData.get("correo")).ifPresent(value -> user.setCorreo(value.toString()));
+    Optional.ofNullable(updateData.get("password")).ifPresent(value -> user.setPassword(value.toString()));
+    Optional.ofNullable(updateData.get("sexo")).ifPresent(value -> user.setSexo(value.toString()));
+
+    Optional.ofNullable(updateData.get("peso_actual")).ifPresent(value -> {
+      if (value instanceof String) {
+        user.setPeso_actual(Double.parseDouble((String) value));
+      } else if (value instanceof Number) {
+        user.setPeso_actual(((Number) value).doubleValue());
+      }
+    });
+
+    Optional.ofNullable(updateData.get("altura")).ifPresent(value -> {
+      if (value instanceof String) {
+        user.setAltura(Integer.parseInt((String) value));
+      } else if (value instanceof Number) {
+        user.setAltura(((Number) value).intValue());
+      }
+    });
+
+    Optional.ofNullable(updateData.get("fecha_nacimiento")).ifPresent(value -> user.setFechaNacimiento(parseDate(value.toString())));
+    Optional.ofNullable(updateData.get("descripcion")).ifPresent(value -> user.setDescripcion(value.toString()));
+    Optional.ofNullable(updateData.get("redes_sociales")).ifPresent(value -> user.setRedes_sociales(value.toString()));
+    Optional.ofNullable(updateData.get("tiempo_entrenamiento")).ifPresent(value -> user.setTiempo_entrenamiento(value.toString()));
     user.setFirstLogin(false);
   }
+
 
   private Objetivo createAndSaveObjective(Map<String, Object> updateData) {
     Objetivo objetivo = new Objetivo();
@@ -199,6 +215,29 @@ public class UsuarioController {
       }
       usuarioRepository.save(user);
       return ResponseEntity.ok(user);
+    }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  // New endpoint to get followed users' details
+  @GetMapping("/{userId}/seguidos/detalles")
+  public ResponseEntity<List<Map<String, Object>>> getFollowedUsersDetails(@PathVariable Integer userId) {
+    return usuarioRepository.findById(userId).map(usuario -> {
+      Set<Usuario> followedUsers = usuario.getSeguidos();
+      List<Map<String, Object>> followedUsersDetails = new ArrayList<>();
+
+      for (Usuario followedUser : followedUsers) {
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("nombre", followedUser.getNombre());
+        userDetails.put("sexo", followedUser.getSexo());
+        userDetails.put("peso_actual", followedUser.getPeso_actual());
+        userDetails.put("foto", followedUser.getFoto());
+        userDetails.put("altura", followedUser.getAltura());
+        userDetails.put("descripcion", followedUser.getDescripcion());
+        userDetails.put("redes_sociales", followedUser.getRedes_sociales());
+        followedUsersDetails.add(userDetails);
+      }
+
+      return ResponseEntity.ok(followedUsersDetails);
     }).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
