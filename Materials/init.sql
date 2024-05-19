@@ -112,6 +112,16 @@ CREATE TABLE registro (
   FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE comentario (
+  comentarioID INT AUTO_INCREMENT PRIMARY KEY,
+  userID INT NOT NULL,
+  nombre VARCHAR(255) NOT NULL,
+  descripcion TEXT NOT NULL,
+  correo VARCHAR(255) NOT NULL,
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userID) REFERENCES usuario(userID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Inserts para Usuario Repositorio
 INSERT INTO usuario (userID, correo, password, is_first_login) VALUES
 (0, 'repositorio@tuapp.com', 'password_segura', FALSE);
