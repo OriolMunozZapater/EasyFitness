@@ -13,8 +13,8 @@
         android:background="#A8711D"
         app:titleEnabled="false">
 
-        <!-- Custom TextView for the title -->
         <TextView
+            android:id="@+id/tvProfileTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PERFIL DEL USUARIO"
@@ -38,6 +38,7 @@
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/layout1"
         android:padding="16dp">
 
         <LinearLayout
@@ -63,18 +64,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
-                android:paddingBottom="30dp" />
+                android:paddingBottom="10dp" />
 
-            <!-- Gender -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sexo"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -88,15 +88,13 @@
                 android:textColor="@color/EasyFitnessColor"
                 android:textSize="20sp"
                 android:layout_gravity="center"
-                android:layout_below="@id/exName"
                 android:paddingBottom="30dp" />
 
-            <!-- Weight -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Peso Actual"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -108,16 +106,15 @@
                 android:layout_height="wrap_content"
                 android:text="Peso Actual"
                 android:textColor="@color/EasyFitnessColor"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:paddingBottom="30dp" />
+                android:paddingBottom="10dp" />
 
-            <!-- Height -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Altura"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -129,16 +126,15 @@
                 android:layout_height="wrap_content"
                 android:text="Altura"
                 android:textColor="@color/EasyFitnessColor"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:paddingBottom="30dp" />
+                android:paddingBottom="10dp" />
 
-            <!-- Description -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Descripción"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -150,16 +146,15 @@
                 android:layout_height="wrap_content"
                 android:text="Descripción"
                 android:textColor="@color/EasyFitnessColor"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:paddingBottom="30dp" />
+                android:paddingBottom="10dp" />
 
-            <!-- Social Links -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Redes Sociales"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -171,8 +166,19 @@
                 android:layout_height="wrap_content"
                 android:text="Redes Sociales"
                 android:textColor="@color/EasyFitnessColor"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/btnTrainingRecords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registros de Entrenamiento"
+                android:background="@color/lightBlack"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </ScrollView>
@@ -193,7 +199,6 @@
             android:background="#A8711D"
             app:titleEnabled="false">
 
-            <!-- Icons for the bottom bar -->
             <ImageView
                 android:id="@+id/home"
                 android:layout_width="wrap_content"
