@@ -195,7 +195,7 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         Integer rutinaId=Integer.parseInt(rutinaID);
         Intent intent = new Intent(TrainingRoutinesActivity.this, EditRoutineActivity.class);
         intent.putExtra("ROUTINE_ID", rutinaId);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_EXERCISE_REQUEST);
     }
 
     @Override
