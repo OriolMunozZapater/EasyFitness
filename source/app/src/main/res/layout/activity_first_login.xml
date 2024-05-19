@@ -11,8 +11,6 @@
         android:layout_height="70dp"
         android:background="#A8711D"
         app:titleEnabled="false">
-
-        <!-- TextView personalizado para el título -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,8 +19,9 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:layout_gravity="center" />
-
     </androidx.appcompat.widget.Toolbar>
+
+    <!-- Main Content Layout -->
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
@@ -34,95 +33,96 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="550dp">
-
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:id="@+id/welcomeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thanks for registering into Easy Fitness. Please fill the following camps in order to register you're progress."
-                    android:textSize="20dp"
-                    android:textAlignment="center"
-                    android:textColor="#A8711D" />
-
-                <View
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/EasyFitnessColor"
-                    android:layout_marginTop="25dp" />
+                    android:layout_height="wrap_content"
+                    android:text="Thanks for registering into Easy Fitness. Please fill the following fields in order to register your progress."
+                    android:textSize="20dp"
+                    android:textColor="#A8711D"
+                    android:textAlignment="center"
+                    android:layout_marginTop="16dp"/>
 
                 <EditText
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Name"
-                    android:layout_marginBottom="10dp"
                     android:inputType="text"
                     android:textColor="@android:color/white"
                     android:textColorHint="#A8711D"
                     android:backgroundTint="#A8711D"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="16dp"/>
 
                 <EditText
                     android:id="@+id/etSecondName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Second Name"
-                    android:layout_marginBottom="10dp"
                     android:inputType="text"
                     android:textColor="@android:color/white"
                     android:textColorHint="#A8711D"
                     android:backgroundTint="#A8711D"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="16dp"/>
 
                 <EditText
-                    android:id="@+id/etWeight"
+                    android:id="@+id/etCurrentWeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Weight"
-                    android:layout_marginBottom="10dp"
+                    android:hint="Current Weight"
                     android:inputType="numberDecimal"
                     android:textColor="@android:color/white"
                     android:textColorHint="#A8711D"
                     android:backgroundTint="#A8711D"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="16dp"/>
+
+                <EditText
+                    android:id="@+id/etTargetWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Target Weight"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#A8711D"
+                    android:backgroundTint="#A8711D"
+                    android:layout_marginTop="16dp"/>
 
                 <EditText
                     android:id="@+id/etHeight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Height"
-                    android:layout_marginBottom="10dp"
                     android:inputType="numberDecimal"
                     android:textColor="@android:color/white"
                     android:textColorHint="#A8711D"
                     android:backgroundTint="#A8711D"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="16dp"/>
 
                 <TextView
                     android:id="@+id/etDateOfBirth"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Born Date"
-                    android:textColor="#A8711D"
+                    android:hint="Date of Birth"
+                    android:textColor="@android:color/white"
                     android:textColorHint="#A8711D"
                     android:backgroundTint="#A8711D"
-                    android:textSize="19dp"
+                    android:textSize="18sp"
                     android:drawableEnd="@drawable/ic_calendar"
                     android:drawablePadding="20dp"
-                    android:inputType="none"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="16dp"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@color/EasyFitnessColor"
-                    android:layout_marginTop="30dp" />
+                    android:layout_marginTop="24dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -149,16 +149,16 @@
                         android:textColor="@color/EasyFitnessColor"
                         android:onClick="showSexoOptions"/>
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@color/EasyFitnessColor"
-                    android:layout_below="@id/layout2"
                     android:layout_marginTop="10dp" />
             </LinearLayout>
-
         </ScrollView>
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -172,17 +172,13 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
-
             <ImageButton
                 android:id="@+id/forwardArrow"
                 android:layout_width="82dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_forward_arrow"/>
-
+                android:src="@drawable/ic_forward_arrow"/>
         </LinearLayout>
     </RelativeLayout>
-
-
 </RelativeLayout>

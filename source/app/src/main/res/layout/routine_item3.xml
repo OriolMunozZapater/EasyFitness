@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:background="@drawable/rounded_background">
+
+    <TextView
+        android:id="@+id/textViewRoutineName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Routine Name"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Name"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:layout_below="@id/textViewRoutineName"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/textViewRoutineId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+    android:layout_alignParentBottom="true"/>
+
+    <ImageButton
+        android:id="@+id/buttonCopyRoutine"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:background="@null"
+        android:src="@drawable/ic_add"
+        android:onClick="onCopyRoutineClicked" />
+
+</RelativeLayout>

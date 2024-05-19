@@ -70,7 +70,12 @@
         <activity
             android:name=".CheckTrainingsActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".AppReviewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EditProfile"
+            android:exported="true" />
     </application>
 
 </manifest>

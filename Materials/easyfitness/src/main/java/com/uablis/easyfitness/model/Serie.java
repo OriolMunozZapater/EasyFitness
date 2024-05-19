@@ -13,7 +13,7 @@ public class Serie {
   @Column(nullable = false)
   private Integer ejercicioID;
 
-  private Integer nRepeticiones;
+  private Integer n_repeticiones;
 
   private Double peso;
 
@@ -31,11 +31,11 @@ public class Serie {
   }
 
   public Integer getNRepeticiones() {
-    return nRepeticiones;
+    return n_repeticiones;
   }
 
   public void setNRepeticiones(Integer nRepeticiones) {
-    this.nRepeticiones = nRepeticiones;
+    this.n_repeticiones = n_repeticiones;
   }
 
   public Double getPeso() {
