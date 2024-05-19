@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
     private ImageButton edit_profile;
     private String userDescription;
-    private ImageView training_session;
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
 
     @Override
@@ -37,13 +37,41 @@ public class ProfileActivity extends AppCompatActivity {
         getUserData();
         getObjectiveData();
         setupListeners();
+        profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         training_session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 // Lógica para el botón de seguir usuarios
                 Intent intent = new Intent(ProfileActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ProfileActivity.this, TrainingRoutinesActivity.class);
                 startActivity(intent);
             }
         });

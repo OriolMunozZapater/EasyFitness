@@ -1,8 +1,7 @@
 package com.uablis.easyfitness;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,85 +15,189 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class DiscoverUsersActivity extends AppCompatActivity {
 
-    private static final String TAG = "DiscoverUsersActivity";
-
-    private ImageView homeButton, trainingRoutinesButton, trainingSessionButton, profileButton, back_arrow;
     private LinearLayout usersContainer;
-    private Integer userId;
-    private Set<Integer> followedUserIds = new HashSet<>();
+    private ImageView back_arrow;
+    private Integer userId = Integer.parseInt(UsuarioActual.getInstance().getUserId());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover_users);
+        setContentView(R.layout.activity_discover_users);  // Ensure this layout has a LinearLayout (usersContainer)
 
         back_arrow = findViewById(R.id.back_arrow);
-        homeButton = findViewById(R.id.home);
-        trainingRoutinesButton = findViewById(R.id.training_routines);
-        trainingSessionButton = findViewById(R.id.training_session);
-        profileButton = findViewById(R.id.profile);
         usersContainer = findViewById(R.id.usersContainer);
 
-        // Set up click listeners for buttons
-        homeButton.setOnClickListener(new View.OnClickListener() {
+        back_arrow.setOnClickListener(v -> finish());
+
+        fetchAllUsers();
+    }
+
+    private void fetchAllUsers() {
+        ApiUrlBuilder apiUrlBuilder = new ApiUrlBuilder();
+        String url = apiUrlBuilder.buildUrl("usuarios/all_users");
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject userObject = response.getJSONObject(i);
+                            int retrievedUserId = userObject.getInt("userID");
+                            if (retrievedUserId != this.userId && retrievedUserId != 0) {  // Compara el userID con el del usuario actual
+                                addUserToContainer(userObject);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Toast.makeText(DiscoverUsersActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
+                    }
+                }, error -> Toast.makeText(DiscoverUsersActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show());
+
+        queue.add(jsonArrayRequest);
+    }
+
+
+    private void addUserToContainer(JSONObject userObject) throws JSONException {
+        String userName = userObject.getString("nombre") + " " + userObject.getString("apellido");
+        int userId = userObject.getInt("userID");
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View rowView = inflater.inflate(R.layout.row_user_followers, usersContainer, false);  // Make sure this layout file exists and is suitable
+
+        TextView userNameTextView = rowView.findViewById(R.id.userName);
+        userNameTextView.setText(userName);
+
+        Button followButton = rowView.findViewById(R.id.follow_button);
+        checkFollowStatus(userId, followButton);
+
+        usersContainer.addView(rowView);
+    }
+
+    private void checkFollowStatus(int followerId, Button followButton) {
+        ApiUrlBuilder apiUrlBuilder = new ApiUrlBuilder();
+        String url = apiUrlBuilder.buildUrl("usuarios/" + userId + "/seguidos");
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        boolean isFollowing = false;
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject followedUser = response.getJSONObject(i);
+                                if (followedUser.getInt("userID") == followerId) {
+                                    isFollowing = true;
+                                    break;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (isFollowing) {
+                            setupUnfollowButton(followButton, followerId);
+                        } else {
+                            setupFollowButton(followButton, followerId);
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onClick(View v) {
-                // Logic for home button
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(DiscoverUsersActivity.this, "Error checking follow status", Toast.LENGTH_SHORT).show();
             }
         });
 
-        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+        queue.add(jsonArrayRequest);
+    }
+
+    private void setupFollowButton(Button followButton, int followerId) {
+        followButton.setText("Follow");
+        followButton.setBackgroundColor(Color.LTGRAY);
+        followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Logic for training routines button
+                followUser(followerId, followButton);
+            }
+        });
+    }
+
+    private void setupUnfollowButton(Button followButton, int followerId) {
+        followButton.setText("Unfollow");
+        followButton.setBackgroundColor(Color.DKGRAY);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unfollowUser(followerId, followButton);
+            }
+        });
+    }
+
+    private void followUser(int followedId, Button followButton) {
+        ApiUrlBuilder apiUrlBuilder = new ApiUrlBuilder();
+        String url = apiUrlBuilder.buildUrl("usuarios/" + userId + "/seguir/" + followedId);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(DiscoverUsersActivity.this, "Now following", Toast.LENGTH_SHORT).show();
+                        // Update button state to unfollow
+                        setupUnfollowButton(followButton, followedId);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Log the error details
+                String errorMessage = "Error following user: " + error.toString();
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    errorMessage += ", Response: " + new String(error.networkResponse.data);
+                }
+                Toast.makeText(DiscoverUsersActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                error.printStackTrace();
             }
         });
 
-        trainingSessionButton.setOnClickListener(new View.OnClickListener() {
+        queue.add(stringRequest);
+    }
+
+    private void unfollowUser(int followedId, Button followButton) {
+        ApiUrlBuilder apiUrlBuilder = new ApiUrlBuilder();
+        String url = apiUrlBuilder.buildUrl("usuarios/" + userId + "/dejarSeguir/" + followedId);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(DiscoverUsersActivity.this, "Unfollowed", Toast.LENGTH_SHORT).show();
+                        // Update button state to follow
+                        setupFollowButton(followButton, followedId);
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onClick(View v) {
-                // Logic for training session button
+            public void onErrorResponse(VolleyError error) {
+                // Log the error details
+                String errorMessage = "Error unfollowing user: " + error.toString();
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    errorMessage += ", Response: " + new String(error.networkResponse.data);
+                }
+                Toast.makeText(DiscoverUsersActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                error.printStackTrace();
             }
         });
 
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Logic for profile button
-            }
-        });
-
-        back_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        // Get userId from UsuarioActual instance
-        try {
-            String userIdStr = UsuarioActual.getInstance().getUserId();
-            if (userIdStr == null || userIdStr.isEmpty()) {
-                throw new NumberFormatException("userId is null or empty");
-            }
-            userId = Integer.parseInt(userIdStr);
-            Log.d(TAG, "User ID: " + userId);
-        } catch (NumberFormatException e) {
-            Log.e(TAG, "Invalid user ID: " + e.getMessage(), e);
-            Toast.makeText(this, "Invalid user ID", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
+        queue.add(stringRequest);
     }
 }
