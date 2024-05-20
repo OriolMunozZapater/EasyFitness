@@ -73,7 +73,7 @@ CREATE TABLE valoracion_ejercicio (
   valoracionID INT AUTO_INCREMENT PRIMARY KEY,
   userID INT NOT NULL,
   ejercicioID INT NOT NULL,
-  valoracion INT,
+  valoracion BOOLEAN,
   comentario VARCHAR(255),
   FOREIGN KEY (userID) REFERENCES usuario(userID),
   FOREIGN KEY (ejercicioID) REFERENCES ejercicio(ejercicioID)
