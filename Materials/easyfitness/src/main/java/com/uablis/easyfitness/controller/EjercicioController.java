@@ -124,7 +124,12 @@ public class EjercicioController {
 
   @GetMapping("/sugerencias/{userID}")
   public ResponseEntity<List<Ejercicio>> getSugerencias(@PathVariable Integer userID) {
+
     List<Ejercicio> ejerciciosUsuario = ejercicioRepository.findByUserID(userID);
+
+    if (ejerciciosUsuario.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
 
     // Contar los grupos musculares trabajados
     Map<String, Integer> muscleGroupCount = new HashMap<>();
@@ -159,7 +164,7 @@ public class EjercicioController {
     for (String muscleGroup : leastWorkedMuscleGroups) {
       List<Ejercicio> ejerciciosSugeridos = ejercicioRepository.findByGrupoMuscular(muscleGroup);
       for (Ejercicio ejercicio : ejerciciosSugeridos) {
-        if (!ejerciciosUsuario.contains(ejercicio)) {
+        if (!ejerciciosUsuario.contains(ejercicio) && ejercicio.getUserID().equals(userID)) {
           sugerencias.add(ejercicio);
         }
         if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
