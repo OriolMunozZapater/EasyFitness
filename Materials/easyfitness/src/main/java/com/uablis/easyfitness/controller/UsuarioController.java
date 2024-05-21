@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.uablis.easyfitness.repository.ObjetivoRepository;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Base64;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -75,17 +76,28 @@ public class UsuarioController {
           if (usuarioDetails.getDescripcion() != null) {
             existingUsuario.setDescripcion(usuarioDetails.getDescripcion());
           }
+          if (usuarioDetails.getGimnasio() != null) {
+            existingUsuario.setGimnasio(usuarioDetails.getGimnasio());
+          }
           if (usuarioDetails.getRedes_sociales() != null) {
             existingUsuario.setRedes_sociales(usuarioDetails.getRedes_sociales());
           }
           if (usuarioDetails.getTiempo_entrenamiento() != null) {
             existingUsuario.setTiempo_entrenamiento(usuarioDetails.getTiempo_entrenamiento());
           }
-          existingUsuario.setFirstLogin(false); // Directly set to false
 
-          return ResponseEntity.ok(usuarioRepository.save(existingUsuario));
+          // Manejo de la foto
+          if (usuarioDetails.getFotoUrl() != null) {
+            existingUsuario.setFotoUrl(usuarioDetails.getFotoUrl());
+          }
+
+          existingUsuario.setFirstLogin(false); // Directly set to false
+          Usuario updatedUser = usuarioRepository.save(existingUsuario);
+          return ResponseEntity.ok(updatedUser);
         }).orElseGet(() -> ResponseEntity.notFound().build());
   }
+
+
 
   // Eliminar un usuario
   @DeleteMapping("/{id}")
@@ -139,6 +151,7 @@ public class UsuarioController {
     Optional.ofNullable(updateData.get("descripcion")).ifPresent(value -> user.setDescripcion(value.toString()));
     Optional.ofNullable(updateData.get("redes_sociales")).ifPresent(value -> user.setRedes_sociales(value.toString()));
     Optional.ofNullable(updateData.get("tiempo_entrenamiento")).ifPresent(value -> user.setTiempo_entrenamiento(value.toString()));
+    Optional.ofNullable(updateData.get("gimnasio")).ifPresent(value -> user.setGimnasio(value.toString()));
     user.setFirstLogin(false);
   }
 
@@ -230,7 +243,7 @@ public class UsuarioController {
         userDetails.put("nombre", followedUser.getNombre());
         userDetails.put("sexo", followedUser.getSexo());
         userDetails.put("peso_actual", followedUser.getPeso_actual());
-        userDetails.put("foto", followedUser.getFoto());
+        userDetails.put("foto", followedUser.getFotoUrl());
         userDetails.put("altura", followedUser.getAltura());
         userDetails.put("descripcion", followedUser.getDescripcion());
         userDetails.put("redes_sociales", followedUser.getRedes_sociales());

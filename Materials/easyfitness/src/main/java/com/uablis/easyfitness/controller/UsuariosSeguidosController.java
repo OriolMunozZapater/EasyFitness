@@ -62,7 +62,7 @@ public class UsuariosSeguidosController {
         seguidoMap.put("altura", seguido.getAltura());
         seguidoMap.put("descripcion", seguido.getDescripcion());
         seguidoMap.put("redes_sociales", seguido.getRedes_sociales());
-        seguidoMap.put("foto", seguido.getFoto());
+        seguidoMap.put("foto", seguido.getFotoUrl());
         seguidosList.add(seguidoMap);
       }
       return ResponseEntity.ok(seguidosList);
