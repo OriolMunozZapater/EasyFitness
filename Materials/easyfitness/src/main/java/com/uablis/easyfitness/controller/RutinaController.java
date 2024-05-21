@@ -199,4 +199,30 @@ public class RutinaController {
           return ResponseEntity.ok(rutinaRepository.save(existingRutina));
         }).orElseGet(() -> ResponseEntity.notFound().build());
   }
+
+  @PutMapping("/compartir/{rutinaId}")
+  public ResponseEntity<Rutina> compartirRutina(@PathVariable Integer rutinaId) {
+    return rutinaRepository.findById(rutinaId)
+        .map(rutina -> {
+          rutina.setPublico(true);
+          rutinaRepository.save(rutina);
+          return ResponseEntity.ok(rutina);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @PutMapping("/noCompartir/{rutinaId}")
+  public ResponseEntity<Rutina> noCompartirRutina(@PathVariable Integer rutinaId) {
+    return rutinaRepository.findById(rutinaId)
+        .map(rutina -> {
+          rutina.setPublico(false);
+          rutinaRepository.save(rutina);
+          return ResponseEntity.ok(rutina);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/publicas")
+  public List<Rutina> getPublicRoutines() {
+    return rutinaRepository.findByPublicoTrue();
+  }
+
 }

@@ -14,5 +14,6 @@ public interface RutinaRepository extends JpaRepository<Rutina, Integer> {
   List<Rutina> findByUserIDAndNombre(Integer userID, String nombre);
   //@Query("SELECT r FROM Rutina r WHERE r.userID = :userId ORDER BY r.rutinaID DESC")
   Optional<Rutina> findTopByUserIDOrderByRutinaIDDesc(Integer userID);
+  List<Rutina> findByPublicoTrue();
 }
 

@@ -1,9 +1,11 @@
 package com.uablis.easyfitness;
 
 import android.annotation.SuppressLint;
+import androidx.core.content.ContextCompat;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrainingRoutinesActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
@@ -49,6 +55,15 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
         home = findViewById(R.id.home);
+        training_routines = findViewById(R.id.training_routines);
+        //TODO: QUITAR COSA TRAINING_ROUTINES PROVISIONAL
+        training_routines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainingRoutinesActivity.this, RecommendedActivitiesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +105,15 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
                             JSONArray jsonArray = new JSONArray(response);
                             String[] routineNames = new String[jsonArray.length()];
                             String[] routineIDs = new String[jsonArray.length()];
+                            boolean[] isPublic = new boolean[jsonArray.length()]; // Array to hold the public state of each routine
+
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 routineNames[i] = jsonObject.getString("nombre");
                                 routineIDs[i] = jsonObject.getString("rutinaID");
+                                isPublic[i] = jsonObject.getBoolean("publico"); // Assuming 'publico' is the JSON field
                             }
-                            updateUIWithRoutines(routineNames, routineIDs);
+                            updateUIWithRoutines(routineNames, routineIDs, isPublic);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(TrainingRoutinesActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
@@ -112,26 +130,88 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void updateUIWithRoutines(String[] routineNames, String[] routineIDs) {
+    private void updateUIWithRoutines(String[] routineNames, String[] routineIDs, boolean[] isPublic) {
         LinearLayout routinesLayout = findViewById(R.id.routinesContainer);
+        routinesLayout.removeAllViews();
         for (int i = 0; i < routineNames.length; i++) {
-            View routineView = getLayoutInflater().inflate(R.layout.routine_item, routinesLayout, false);
+            View routineView = getLayoutInflater().inflate(R.layout.routine_item2, routinesLayout, false);
             TextView textView = routineView.findViewById(R.id.textViewRoutineName);
-            ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
 
+            // Inside updateUIWithRoutines method
+            View statusIndicator = routineView.findViewById(R.id.status_indicator);
             textView.setText(routineNames[i]);
-            // Guardar el ID de la rutina como un tag en el ImageButton
+            statusIndicator.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), isPublic[i] ? R.color.sharedGreen : R.color.notSharedRed));
+
+            ImageButton menuButton = routineView.findViewById(R.id.menu_button_routine);
+            ImageButton shareButton = routineView.findViewById(R.id.share_button_routine);
+            ImageButton unshareButton = routineView.findViewById(R.id.unshare_button_routine);
+
             menuButton.setTag(routineIDs[i]);
-            menuButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    menuPopUpRoutine(v);
-                }
-            });
+            shareButton.setTag(routineIDs[i]);
+            unshareButton.setTag(routineIDs[i]);
+
+            shareButton.setVisibility(isPublic[i] ? View.GONE : View.VISIBLE);
+            unshareButton.setVisibility(isPublic[i] ? View.VISIBLE : View.GONE);
+
+            shareButton.setOnClickListener(v -> shareRoutine(v.getTag().toString()));
+            unshareButton.setOnClickListener(v -> unshareRoutine(v.getTag().toString()));
+            menuButton.setOnClickListener(v -> menuPopUpRoutine(v));
+
             routinesLayout.addView(routineView);
         }
     }
 
+
+    private void shareRoutine(String routineID) {
+        String path = "rutinas/compartir/" + routineID;
+        String url = urlBase.buildUrl(path);
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                response -> {
+                    // La rutina ahora es pública y puede ser compartida
+                    Toast.makeText(getApplicationContext(), "Routine shared successfully!", Toast.LENGTH_SHORT).show();
+                    loadUserRoutines();
+                },
+                error -> {
+                    Toast.makeText(getApplicationContext(), "Failed to share the routine", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", error.toString());
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(putRequest);
+    }
+
+    private void unshareRoutine(String routineID) {
+        String path = "rutinas/noCompartir/" + routineID;
+        String url = urlBase.buildUrl(path);
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                response -> {
+                    Toast.makeText(getApplicationContext(), "Routine is now private!", Toast.LENGTH_SHORT).show();
+                    loadUserRoutines();
+                },
+                error -> {
+                    Toast.makeText(getApplicationContext(), "Failed to change the routine status", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", error.toString());
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(putRequest);
+    }
     public void menuPopUpRoutine(View view) {
         final String routineID = view.getTag().toString();
         PopupMenu popupMenu = new PopupMenu(this, view);

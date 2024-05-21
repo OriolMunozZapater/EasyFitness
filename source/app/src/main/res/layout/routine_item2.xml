@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="20dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/EasyFitnessColor" />
+
+    <!-- Status indicator -->
+    <View
+        android:id="@+id/status_indicator"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/holo_red_dark" /> <!-- Default color, will be set programmatically -->
+
+    <TextView
+        android:id="@+id/textViewRoutineName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rutina"
+        android:textColor="@color/EasyFitnessColor"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/status_indicator"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"/>
+
+    <ImageButton
+        android:id="@+id/menu_button_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow"
+        android:background="@color/transparent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
+
+    <ImageButton
+        android:id="@+id/share_button_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share"
+        android:background="@color/transparent"
+        android:layout_toLeftOf="@id/menu_button_routine"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"/>
+
+    <ImageButton
+        android:id="@+id/unshare_button_routine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_unshare"
+        android:background="@color/transparent"
+        android:layout_toLeftOf="@id/share_button_routine"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"/>
+</RelativeLayout>
