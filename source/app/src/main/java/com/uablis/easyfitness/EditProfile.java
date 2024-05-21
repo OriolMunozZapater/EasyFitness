@@ -1,12 +1,10 @@
 package com.uablis.easyfitness;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,79 +17,140 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-
 public class EditProfile extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    private ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private CharSequence[] genderOptions = {"Masculino", "Femenino", "Otros", "Prefiero no decirlo"};
-    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser;
-    private ImageView imagePerfilUser;
+    private EditText nameUser, cognomUser, pesActualUser, alturaUser, descripcioUser, gimnasioUser;
+    private ImageView imagePerfilUser, back_arrow;
     private Button btnSexSelect, btnSaveUserChanges, btnSocialUser;
-    private Bitmap selectedBitmap = null;  // To hold the image from gallery
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        initializeViews();
+        getUserData();
+    }
 
-        // Initialize views
+    private void initializeViews() {
         nameUser = findViewById(R.id.nameUser);
         cognomUser = findViewById(R.id.cognomUser);
         pesActualUser = findViewById(R.id.pesActualUser);
         alturaUser = findViewById(R.id.alturaUser);
         descripcioUser = findViewById(R.id.descripcioUser);
+        gimnasioUser = findViewById(R.id.descripcioGimnas);
         imagePerfilUser = findViewById(R.id.imagePerfilUser);
         btnSexSelect = findViewById(R.id.btnSexSelect);
         btnSocialUser = findViewById(R.id.btnSocialUser);
         btnSaveUserChanges = findViewById(R.id.btnSaveUserChanges);
 
-        // Set click listeners
         imagePerfilUser.setOnClickListener(v -> selectImageFromGallery());
         btnSexSelect.setOnClickListener(this::showGenderOptions);
         btnSocialUser.setOnClickListener(this::showSocialOptions);
-        btnSaveUserChanges.setOnClickListener(v -> saveUserData());
-
-        getUserData();
+        btnSaveUserChanges.setOnClickListener(v -> uploadImageToFirebaseStorage(null));
+        back_arrow = findViewById(R.id.back_arrow);
+        back_arrow.setOnClickListener(v -> volver());
     }
 
     private void getUserData() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        nameUser.setText(jsonObject.getString("nombre"));
-                        cognomUser.setText(jsonObject.getString("apellido"));
-                        pesActualUser.setText(jsonObject.getString("peso_actual"));
-                        alturaUser.setText(jsonObject.getString("altura"));
-                        descripcioUser.setText(jsonObject.getString("descripcion"));
-                        btnSexSelect.setText(jsonObject.getString("sexo"));
-                        String encodedImage = jsonObject.optString("foto");
-                        if (!encodedImage.isEmpty()) {
-                            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            imagePerfilUser.setImageBitmap(decodedByte);
-                        }
+                        updateUIWithUserData(jsonObject);
                     } catch (JSONException e) {
                         Toast.makeText(EditProfile.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(EditProfile.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show());
+                error -> Toast.makeText(EditProfile.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show()
+        );
 
         queue.add(stringRequest);
+    }
+
+    private void updateUIWithUserData(JSONObject jsonObject) throws JSONException {
+        if (!jsonObject.optString("nombre").isEmpty()) {
+            nameUser.setText(jsonObject.optString("nombre", ""));
+        }
+        if (!jsonObject.optString("apellido").isEmpty()) {
+            cognomUser.setText(jsonObject.optString("apellido", ""));
+        }
+        if (!jsonObject.optString("peso_actual").isEmpty()) {
+            pesActualUser.setText(jsonObject.optString("peso_actual", ""));
+        }
+        if (!jsonObject.optString("altura").isEmpty()) {
+            alturaUser.setText(jsonObject.optString("altura", ""));
+        }
+        if (!jsonObject.optString("descripcion").isEmpty()){
+            descripcioUser.setText(jsonObject.optString("descripcion", "Introduce una descripción"));
+        }
+        if (!jsonObject.optString("gimnasio").isEmpty()) {
+            gimnasioUser.setText(jsonObject.optString("gimnasio", "Introduce el nombre"));
+        }
+        if (!jsonObject.optString("sexo").isEmpty()) {
+            btnSexSelect.setText(jsonObject.optString("sexo", ""));
+        }
+        if (!jsonObject.optString("redes_sociales").isEmpty()) {
+            btnSocialUser.setText(jsonObject.optString("redes_sociales", "Select"));
+        }
+
+        if (nameUser.getText().toString().equals("null")) {
+            nameUser.setText("");
+        }
+        if (cognomUser.getText().toString().equals("null")) {
+            cognomUser.setText("");
+        }
+        if (pesActualUser.getText().toString().equals("null")) {
+            pesActualUser.setText("");
+        }
+        if (alturaUser.getText().toString().equals("null")) {
+            alturaUser.setText("");
+        }
+        if (descripcioUser.getText().toString().equals("null")) {
+            descripcioUser.setText("");
+        }
+        if (gimnasioUser.getText().toString().equals("null")) {
+            gimnasioUser.setText("");
+        }
+        if (btnSexSelect.getText().toString().equals("null")) {
+            btnSexSelect.setText("");
+        }
+        if (btnSocialUser.getText().toString().equals("null")) {
+            btnSocialUser.setText("");
+        }
+
+        loadImageFromFirebase();
+    }
+
+    private void loadImageFromFirebase() {
+        String userId = UsuarioActual.getInstance().getUserId();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("images/userID" + userId);
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.default_image)
+                    .into(imagePerfilUser);
+        }).addOnFailureListener(e -> {
+            imagePerfilUser.setImageResource(R.drawable.default_image);
+        });
     }
 
     private void showGenderOptions(View view) {
@@ -105,15 +164,16 @@ public class EditProfile extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Selecciona tu RED SOCIAL");
         builder.setItems(new CharSequence[]{"Instagram", "Facebook", "Twitter"}, (dialog, which) -> {
-            // Handle selection
+            if (which == 0) btnSocialUser.setText("Instagram");
+            else if (which == 1) btnSocialUser.setText("Facebook");
+            else btnSocialUser.setText("Twitter");
         });
         builder.show();
     }
 
     private void selectImageFromGallery() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_PICK);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
@@ -122,19 +182,36 @@ public class EditProfile extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
-            try {
-                selectedBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imagePerfilUser.setImageBitmap(selectedBitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            imagePerfilUser.setImageURI(uri); // Set image temporarily
+            btnSaveUserChanges.setOnClickListener(v -> uploadImageToFirebaseStorage(uri));
         }
     }
 
-    private void saveUserData() {
+    private void uploadImageToFirebaseStorage(Uri fileUri) {
+        if (fileUri != null) {
+            String userId = UsuarioActual.getInstance().getUserId();
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/userID" + userId);
+
+            storageReference.putFile(fileUri)
+                    .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        String imageUrl = downloadUri.toString();
+                        imagePerfilUser.setImageURI(Uri.parse(imageUrl));
+                        saveProfileData(imageUrl);  // Llamar a la función para guardar los datos
+                    }))
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(EditProfile.this, "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Firebase", "Error uploading image", e);
+                    });
+        } else {
+            saveProfileData(null);
+        }
+    }
+
+    private void saveProfileData(String imageUrl) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
+        String path = "usuarios/" + userId;
+        String url = urlBase.buildUrl(path);
 
         JSONObject requestBody = new JSONObject();
         try {
@@ -144,33 +221,24 @@ public class EditProfile extends AppCompatActivity {
             requestBody.put("altura", alturaUser.getText().toString());
             requestBody.put("descripcion", descripcioUser.getText().toString());
             requestBody.put("sexo", btnSexSelect.getText().toString());
-            requestBody.put("firstLogin", 0);
-            if (selectedBitmap != null) {
-                requestBody.put("foto", convertBitmapToString(selectedBitmap));
-            }
+            requestBody.put("gimnasio", gimnasioUser.getText().toString());
+            requestBody.put("redes_sociales", btnSocialUser.getText().toString());
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody,
+                    response -> {
+                        Toast.makeText(EditProfile.this, "Perfil actualizado correctamente.", Toast.LENGTH_SHORT).show();
+                        volver();
+                    },
+                    error -> Toast.makeText(EditProfile.this, "Error updating profile: " + error.toString(), Toast.LENGTH_SHORT).show());
+
+            queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             e.printStackTrace();
-            return;
         }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody,
-                response -> Toast.makeText(EditProfile.this, "Perfil actualizado correctamente.", Toast.LENGTH_SHORT).show(),
-                error -> Toast.makeText(EditProfile.this, "Error updating profile: " + error.toString(), Toast.LENGTH_SHORT).show());
-
-        queue.add(jsonObjectRequest);
-        goBack();
     }
 
-    public void goBack() {
-        Intent intent = new Intent(EditProfile.this, ProfileActivity.class);
+    public void volver(){
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-        finish();
-    }
-
-    private String convertBitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }

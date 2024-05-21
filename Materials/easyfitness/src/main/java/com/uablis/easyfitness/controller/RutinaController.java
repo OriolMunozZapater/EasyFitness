@@ -54,7 +54,7 @@ public class RutinaController {
         nuevaRutina.setPublico(false);
         Rutina savedRutina = rutinaRepository.save(nuevaRutina);
 
-        copiarEjerciciosYRelaciones(original.getRutinaID(), savedRutina.getRutinaID());
+        copiarEjerciciosYRelaciones(original.getRutinaID(), savedRutina.getRutinaID(), userId);  // Include userId here
         return ResponseEntity.ok(savedRutina);
       } catch (DataAccessException e) {
         log.error("Error de acceso a datos: {}", e.getMessage());
@@ -65,7 +65,7 @@ public class RutinaController {
       }
     }
 
-    private void copiarEjerciciosYRelaciones(Integer originalRutinaId, Integer nuevaRutinaId) {
+    private void copiarEjerciciosYRelaciones(Integer originalRutinaId, Integer nuevaRutinaId, Integer userId) {
       List<RutinaEjercicio> rutinaEjercicios = rutinaEjercicioRepository.findByRutinaID(originalRutinaId);
       for (RutinaEjercicio re : rutinaEjercicios) {
         Ejercicio originalEjercicio = ejercicioRepository.findById(re.getEjercicioId())
@@ -78,6 +78,7 @@ public class RutinaController {
         nuevoEjercicio.setValoracion(originalEjercicio.getValoracion());
         nuevoEjercicio.setGrupoMuscular(originalEjercicio.getGrupoMuscular());
         nuevoEjercicio.setVideo(originalEjercicio.getVideo());
+        nuevoEjercicio.setUserID(userId);
         nuevoEjercicio.setRutinaID(nuevaRutinaId);
         Ejercicio savedEjercicio = ejercicioRepository.save(nuevoEjercicio);
 
@@ -100,7 +101,9 @@ public class RutinaController {
       }
     }
 
-    // Obtener todas las rutinas
+
+
+  // Obtener todas las rutinas
     @GetMapping
     public List<Rutina> getAllRutinas() {
         return rutinaRepository.findAll();
@@ -115,8 +118,19 @@ public class RutinaController {
 
     // Crear una nueva rutina
     @PostMapping
-    public Rutina createRutina(@RequestBody Rutina rutina) {
-        return rutinaRepository.save(rutina);
+    public ResponseEntity<Object> createRutina(@RequestBody Rutina rutina) {
+      log.info("Received Rutina: " + rutina.toString());
+      if (rutina.getUserID() == null) {
+        log.error("UserID is null");
+        return ResponseEntity.badRequest().body(null);
+      }
+      try {
+        Rutina savedRutina = rutinaRepository.save(rutina);
+        return ResponseEntity.ok(savedRutina);
+      } catch (Exception e) {
+        log.error("Error saving Rutina: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+      }
     }
 
     // Actualizar una rutina
@@ -158,9 +172,14 @@ public class RutinaController {
     }
 
   @GetMapping("/last/{userId}")
-  public ResponseEntity<Rutina> getRutinaMasGrandeByUserId(@PathVariable Integer userId) {
-    Optional<Rutina> rutinaMasGrande = rutinaRepository.findTopByUserIdOrderByRutinaIdDesc(userId);
-    return rutinaMasGrande.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  public ResponseEntity<Integer> getRutinaMasGrandeByUserId(@PathVariable Integer userId) {
+    Optional<Rutina> rutinaMasGrande = rutinaRepository.findTopByUserIDOrderByRutinaIDDesc(userId);
+
+    if (rutinaMasGrande.isPresent()) {
+      return ResponseEntity.ok(rutinaMasGrande.get().getRutinaID());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @GetMapping("/buscar/userID/{userID}/nombre/{nombre}")
@@ -170,6 +189,40 @@ public class RutinaController {
       return ResponseEntity.notFound().build();
     }
     return ResponseEntity.ok(rutinas);
+  }
+
+  @PutMapping("/actualizarNombre/{id}/{nombre}")
+  public ResponseEntity<Rutina> updateRutinaName(@PathVariable String nombre, @PathVariable Integer id) {
+    return rutinaRepository.findById(id)
+        .map(existingRutina -> {
+          existingRutina.setNombre(nombre);
+          return ResponseEntity.ok(rutinaRepository.save(existingRutina));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @PutMapping("/compartir/{rutinaId}")
+  public ResponseEntity<Rutina> compartirRutina(@PathVariable Integer rutinaId) {
+    return rutinaRepository.findById(rutinaId)
+        .map(rutina -> {
+          rutina.setPublico(true);
+          rutinaRepository.save(rutina);
+          return ResponseEntity.ok(rutina);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @PutMapping("/noCompartir/{rutinaId}")
+  public ResponseEntity<Rutina> noCompartirRutina(@PathVariable Integer rutinaId) {
+    return rutinaRepository.findById(rutinaId)
+        .map(rutina -> {
+          rutina.setPublico(false);
+          rutinaRepository.save(rutina);
+          return ResponseEntity.ok(rutina);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/publicas")
+  public List<Rutina> getPublicRoutines() {
+    return rutinaRepository.findByPublicoTrue();
   }
 
 }

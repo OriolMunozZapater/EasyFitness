@@ -12,16 +12,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class CreateNewExercise extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageExercise, backArrow;
     private EditText etExerciseName, etExerciseDescrp;
     private Button btnMuscleSelect, btnCreate;
-    private CharSequence[] muscle_options = {"chest", "Back", "Biceps", "Triceps", "shoulders", "quads", "abs", "isquios"};
+    private CharSequence[] muscle_options = {"Chest", "Back", "Biceps", "Triceps", "Shoulders", "Quads", "Abs", "Isquios"};
 
 
     @Override
@@ -57,8 +76,15 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                //Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
+                //startActivity(intent);
+
                 //afegir exercici a la bd
+
+                setNewExerciseNoVideo();
+
+                //Toast.makeText(CreateNewExercise.this, "Ejercicio creado correctamente", Toast.LENGTH_SHORT).show();
+
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -66,6 +92,7 @@ public class CreateNewExercise extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // No hacer nada, simplemente cerrar el diálogo
                 dialog.dismiss();
+                Toast.makeText(CreateNewExercise.this, "Error al crear el ejercicio", Toast.LENGTH_SHORT).show();
             }
         });
         builder.show();
@@ -77,6 +104,8 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
@@ -114,14 +143,110 @@ public class CreateNewExercise extends AppCompatActivity {
 
     public void showMuscleOptions(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Selecciona tu sexo");
+        builder.setTitle("Selecciona el grupo muscular");
         builder.setItems(muscle_options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String selectedSexo = muscle_options[which].toString();
-                btnMuscleSelect.setText(selectedSexo);
+                String selectedMuscle = muscle_options[which].toString();
+                btnMuscleSelect.setText(selectedMuscle);
             }
         });
         builder.show();
     }
+
+    private boolean validateFields() {
+        return (etExerciseName.getText() != null &&
+                etExerciseDescrp.getText() != null && btnMuscleSelect.getText() != null ||
+                imageExercise.getDrawable() != null);
+    }
+
+    private void setNewExercise() {
+        JSONObject jsonBody = new JSONObject();
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        try {
+            jsonBody.put("userID", userID);
+            jsonBody.put("nombre", etExerciseName.getText().toString().trim());
+            jsonBody.put("descripcion", etExerciseDescrp.getText().toString().trim());
+            jsonBody.put("grupo_muscular", btnMuscleSelect.getText().toString().trim());
+            //jsonBody.put("video", imageExercise.getDrawable().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+        sendUpdateRequest(jsonBody);
+    }
+
+    private void setNewExerciseNoVideo() {
+        JSONObject jsonBody = new JSONObject();
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        String nombre = etExerciseName.getText().toString().trim();
+        String descripcion = etExerciseDescrp.getText().toString().trim();
+        String grupoMuscular = btnMuscleSelect.getText().toString().trim();
+
+        if(nombre.isEmpty() || descripcion.isEmpty() || grupoMuscular.equals("Select Muscle")) {
+            Toast.makeText(CreateNewExercise.this, "Es necesario rellenar todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            jsonBody.put("userID", userID);
+            jsonBody.put("nombre", nombre);
+            jsonBody.put("descripcion", descripcion);
+            jsonBody.put("grupoMuscular", grupoMuscular);
+            jsonBody.put("tipo","a"); //TODO ELIMINAR
+            //IF VIDEO/FOTO
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+        sendUpdateRequest(jsonBody);
+    }
+
+    private void sendUpdateRequest(JSONObject requestBody) {
+        //String url = "http://192.168.100.1:8080/api/ejercicio/";
+        String path = "ejercicios/crear";
+        String url = urlBase.buildUrl(path);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(CreateNewExercise.this, "Ejercicio creado correctamente", Toast.LENGTH_SHORT).show();
+                        Intent returnIntent = new Intent();
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Ocurrió un error al hacer la solicitud
+                        error.printStackTrace();
+                        Log.e("VolleyError", "Error: " + error.toString());
+                        if (error.networkResponse != null) {
+                            Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                            Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                        }
+                        Toast.makeText(CreateNewExercise.this, "Error al crear el ejercicio: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        ) {
+            @Override
+            public byte[] getBody() {
+                return requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+
 }

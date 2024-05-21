@@ -1,6 +1,5 @@
 package com.uablis.easyfitness;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,16 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONException;
 
 public class LoginActivity extends AppCompatActivity {
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private EditText etEmail, etPassword;
     private Button btnLogin, btnCreateAccount, btnRecoverPassword;
     private Toolbar toolbar;
@@ -102,7 +96,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserIdFromDatabase(String email) {
-        String url = "http://172.17.176.1:8080/api/usuarios/findUserIdByEmail?email=" + email;
+        String path = "usuarios/findUserIdByEmail?email=" + email;
+        String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -128,7 +123,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void checkFirstLogin(String email) {
-        String url = "http://172.17.176.1:8080/api/usuarios/firstlogin?email=" + email;
+        String path = "usuarios/firstlogin?email=" + email;
+        String url = urlBase.buildUrl(path);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,

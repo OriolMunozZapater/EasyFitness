@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,13 +41,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StartingRoutineActivity extends AppCompatActivity {
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private Chronometer trainingDuration;
     private Button endTraining;
     private LinearLayout routinesLayout;
+    private ImageButton stopTime;
+    private ImageButton goTime;
     private long startTime;
     private int rutinaId;
     private String rutinaID;
+    private boolean isChronometerRunning;
     private String routineName;
+    private long pauseOffset;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -57,9 +63,13 @@ public class StartingRoutineActivity extends AppCompatActivity {
         trainingDuration = findViewById(R.id.chronometer);
         endTraining = findViewById(R.id.btnEndTraining);
         routinesLayout = findViewById(R.id.exerciseTrainContainer);
-
+        rutinaID = getIntent().getStringExtra("ROUTINE_ID");
         rutinaId = Integer.parseInt(getIntent().getStringExtra("ROUTINE_ID"));
+        stopTime = findViewById(R.id.stopTime);
+        goTime = findViewById(R.id.goTime);
         obtenerEjerciciosPorRutinaId(rutinaId);
+        isChronometerRunning = true;
+        pauseOffset = 0;
 
         endTraining.setOnClickListener(v -> endRoutine());
 
@@ -72,6 +82,35 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
         trainingDuration.setBase(SystemClock.elapsedRealtime());
         trainingDuration.start();
+
+        stopTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pauseChronometer();
+            }
+        });
+
+        goTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resumeChronometer();
+            }
+        });
+
+    }
+
+    private void pauseChronometer() {
+        if (isChronometerRunning) {
+            trainingDuration.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - trainingDuration.getBase();
+            isChronometerRunning = false;
+        }
+    }
+
+    private void resumeChronometer() {
+        trainingDuration.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+        trainingDuration.start();
+        isChronometerRunning = true;
     }
 
     private void updateUIWithExercises(JSONArray ejercicios) {
@@ -124,6 +163,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 ImageButton eliminateExercise = exerciseView.findViewById(R.id.eliminate_cross);
                 eliminateExercise.setOnClickListener(v -> deleteExercise(exerciseView));
 
+                ImageButton typeSerie = exerciseView.findViewById(R.id.typeSerie);
+                typeSerie.setOnClickListener(v -> showMessage(typeSerie));
+
                 // Añadir la vista del ejercicio al layout principal
                 routinesLayout.addView(exerciseView);
             }
@@ -135,9 +177,10 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerEjerciciosPorRutinaId(int rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://172.17.176.1:8080/api/ejercicios/rutina/" + rutinaID;
+        String path = "ejercicios/rutina/" + rutinaID;
+        String url = urlBase.buildUrl(path);
 
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, getUrl, null,
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> updateUIWithExercises(response),
                 error -> {
                     error.printStackTrace();
@@ -150,10 +193,11 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void obtenerEjercicioId(String ejercicioNombre, String peso, String reps, String rutinaID) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String getUrl = "http://172.17.176.1:8080/api/ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+        String path = "ejercicios/getEjercicioID?nom=" + ejercicioNombre + "&rutinaID=" + rutinaID;
+        String url = urlBase.buildUrl(path);
 
         // Realiza la solicitud GET para obtener el ejercicioid
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, getUrl, null,
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener <JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -197,10 +241,11 @@ public class StartingRoutineActivity extends AppCompatActivity {
         }
 
         // URL para la solicitud POST
-        String postUrl = "http://172.17.176.1:8080/api/serie";
+        String path = "serie";
+        String url = urlBase.buildUrl(path);
 
         // Crea una solicitud POST
-        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, postUrl, jsonBody,
+        JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
                 new Response.Listener <JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -274,6 +319,56 @@ public class StartingRoutineActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // Función para mostrar un mensaje
+    private void showMessage(ImageButton typeSerie) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_type_serie, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        // Obtener las vistas del cuadro de diálogo
+        LinearLayout warmupSeries = dialogView.findViewById(R.id.warmup_series);
+        LinearLayout normalSeries = dialogView.findViewById(R.id.normal_series);
+        LinearLayout descendingSeries = dialogView.findViewById(R.id.descending_series);
+        LinearLayout failureSeries = dialogView.findViewById(R.id.failure_series);
+
+        // Configurar los clics en las opciones
+        warmupSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_warmup_serie);
+            Toast.makeText(this, "Serie de calentamiento seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        LinearLayout effectiveSeries = dialogView.findViewById(R.id.effective_series);
+        effectiveSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.green_check);
+            Toast.makeText(this, "Serie efectiva seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        normalSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_normal_serie);
+            Toast.makeText(this, "Serie normal seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        descendingSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_descending_serie);
+            Toast.makeText(this, "Serie descendente seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        failureSeries.setOnClickListener(v -> {
+            typeSerie.setImageResource(R.drawable.ic_failure_serie);
+            Toast.makeText(this, "Serie al fallo seleccionada", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
     private void addNewSerie(LinearLayout seriesContainer) {
         // Obtener el número de serie de la última fila agregada al contenedor
         int lastSerieNumber = seriesContainer.getChildCount();
@@ -312,7 +407,6 @@ public class StartingRoutineActivity extends AppCompatActivity {
                 String peso = etPesSerie.getText().toString();
                 String reps = etRepsSerie.getText().toString();
                 String ejercicioNombre = textViewExerciseName.getText().toString();
-                String rutinaID = "6";
 
                 if (peso.isEmpty() || reps.isEmpty()) {
                     Toast.makeText(StartingRoutineActivity.this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show();
@@ -325,31 +419,25 @@ public class StartingRoutineActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton typeSerie = newRow.findViewById(R.id.typeSerie);
+        typeSerie.setOnClickListener(v -> showMessage(typeSerie));
+
         // Agregar la nueva fila al contenedor
         seriesContainer.addView(newRow);
     }
-
     public void endRoutine() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to end this training session?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //guardar les vaines a la bd
-                long elapsedMillis = SystemClock.elapsedRealtime() - trainingDuration.getBase();
-                String tiempoTardado = formatElapsedTime(elapsedMillis);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            long elapsedMillis = SystemClock.elapsedRealtime() - trainingDuration.getBase();
+            String tiempoTardado = formatElapsedTime(elapsedMillis);
+            obtenerRutinaName(rutinaId, () -> {
                 insertRegistro(routineName, tiempoTardado);
                 trainingDuration.stop();
                 finish();
-            }
+            });
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // No hacer nada, simplemente cerrar el diálogo
-                dialog.dismiss();
-            }
-        });
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
@@ -362,7 +450,9 @@ public class StartingRoutineActivity extends AppCompatActivity {
 
     private void insertRegistro(final String nombreRutina, final String tiempoTardado) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/registros";
+        String path = "registros";
+        String url = urlBase.buildUrl(path);
+
         int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -398,28 +488,26 @@ public class StartingRoutineActivity extends AppCompatActivity {
         queue.add(postRequest);
     }
 
-    private void obtenerRutinaName(int rutinaId) {
+    private void obtenerRutinaName(int rutinaId, Runnable callback) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/rutinas/" + rutinaId;
+        String path = "rutinas/" + rutinaId;
+        String url = urlBase.buildUrl(path);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            routineName = response.getString("nombre");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Solo notifica al usuario que hubo un error
+                response -> {
+                    try {
+                        routineName = response.getString("nombre");
+                        callback.run();  // Execute callback after name is fetched
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                         Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
                     }
+                },
+                error -> {
+                    // Log error or notify user
+                    Toast.makeText(StartingRoutineActivity.this, "Error al obtener el nombre de la rutina.", Toast.LENGTH_SHORT).show();
                 });
         queue.add(jsonObjectRequest);
     }
+
 }

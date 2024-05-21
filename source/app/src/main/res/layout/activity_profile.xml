@@ -50,69 +50,71 @@
 
                     <RelativeLayout
                         android:id="@+id/boxint1"
-                        android:layout_width="0dp"
+                        android:layout_width="159dp"
                         android:layout_height="300dp"
                         android:layout_marginRight="20dp"
-                        android:layout_weight="1"
+                        android:background="@drawable/rounded_corner_background"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="onBoxInt1Clicked"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:background="@drawable/rounded_corner_background">
+                        android:paddingRight="20dp">
 
                         <TextView
-                            android:id="@+id/pesObjectiuTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center|top"
-                            android:layout_marginTop="15dp"
-                            android:text="Pes Objectiu"
-                            android:textColor="#A8711D"
-                            android:textSize="25sp" />
-
-                        <TextView
-                            android:id="@+id/pesObjectiu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/pesObjectiuTitle"
-                            android:layout_marginTop="16dp"
-                            android:layout_centerHorizontal="true"
-                            android:text="75 Kg"
-                            android:textColor="@color/white"
-                            android:textSize="25sp" />
-
-                        <TextView
-                            android:id="@+id/pesPropiTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center|top"
-                            android:layout_marginTop="16dp"
-                            android:text="Pes Actual"
-                            android:layout_below="@id/pesObjectiu"
-                            android:textColor="#A8711D"
-                            android:textSize="25sp" />
-
-                        <TextView
-                            android:id="@+id/pesPropi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/pesPropiTitle"
-                            android:layout_marginTop="16dp"
-                            android:layout_centerHorizontal="true"
-                            android:text="68 Kg"
-                            android:textColor="#FF0000"
-                            android:textSize="25sp" />
-
-                        <ImageButton
-                            android:id="@+id/btnEditPes"
+                            android:id="@+id/objectiveTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/edit_button"
-                            android:gravity="center_horizontal"
-                            android:background="?android:selectableItemBackground"
-                            android:contentDescription="@string/login_button"
-                            android:layout_marginTop="22dp"
-                            android:layout_below="@id/pesPropi"/>
+                            android:layout_marginTop="15dp"
+                            android:gravity="center"
+                            android:text="Objective"
+                            android:textColor="#A8711D"
+                            android:textSize="25sp" />
 
+                        <TextView
+                            android:id="@+id/objectiveSubtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/objectiveTitle"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:text="Your Goal Weight"
+                            android:textColor="#A8711D"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/targetWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/objectiveSubtitle"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:text="75 Kg"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/currentWeightTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/targetWeight"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:text="Current Weight"
+                            android:textColor="#A8711D"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/currentWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentWeightTitle"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="16dp"
+                            android:text="68 Kg"
+                            android:textColor="#FF0000"
+                            android:textSize="20sp" />
                     </RelativeLayout>
+
 
                     <RelativeLayout
                         android:id="@+id/boxint2"

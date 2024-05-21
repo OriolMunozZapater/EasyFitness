@@ -1,19 +1,15 @@
 package com.uablis.easyfitness;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +18,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirstLoginActivity extends AppCompatActivity {
-    private EditText etWeight, etName, etSecondName, etHeight;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private EditText etCurrentWeight, etTargetWeight, etName, etSecondName, etHeight;
     private TextView etDateOfBirth;
     private Button btnSexSelect;
     private ImageButton forwardArrow;
@@ -54,7 +47,8 @@ public class FirstLoginActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        etWeight = findViewById(R.id.etWeight);
+        etCurrentWeight = findViewById(R.id.etCurrentWeight);
+        etTargetWeight = findViewById(R.id.etTargetWeight);
         etName = findViewById(R.id.etName);
         etSecondName = findViewById(R.id.etSecondName);
         etHeight = findViewById(R.id.etHeight);
@@ -102,7 +96,8 @@ public class FirstLoginActivity extends AppCompatActivity {
     private boolean validateFields() {
         return !etName.getText().toString().trim().isEmpty() &&
                 !etSecondName.getText().toString().trim().isEmpty() &&
-                !etWeight.getText().toString().trim().isEmpty() &&
+                !etCurrentWeight.getText().toString().trim().isEmpty() &&
+                !etTargetWeight.getText().toString().trim().isEmpty() &&
                 !etHeight.getText().toString().trim().isEmpty() &&
                 !etDateOfBirth.getText().toString().isEmpty() &&
                 !btnSexSelect.getText().toString().equals("Select");
@@ -114,7 +109,8 @@ public class FirstLoginActivity extends AppCompatActivity {
         try {
             jsonBody.put("nombre", etName.getText().toString().trim());
             jsonBody.put("apellido", etSecondName.getText().toString().trim());
-            jsonBody.put("peso_actual", etWeight.getText().toString().trim());
+            jsonBody.put("peso_actual", etCurrentWeight.getText().toString().trim());
+            jsonBody.put("peso_objetivo", etTargetWeight.getText().toString().trim());
             jsonBody.put("altura", etHeight.getText().toString().trim());
             jsonBody.put("fecha_nacimiento", etDateOfBirth.getText().toString());
             jsonBody.put("sexo", btnSexSelect.getText().toString());
@@ -128,25 +124,32 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     private void sendUpdateRequest(JSONObject jsonBody) {
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/usuarios/" + userId;
+        String url = urlBase.buildUrl("usuarios/" + userId + "/updateWithObjective");
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, response -> {
-            Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
-            startActivity(intent);
-            finish();
-        }, error -> error.printStackTrace()) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, jsonBody,
+                response -> {
+                    Toast.makeText(FirstLoginActivity.this, "User and Objective updated successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
+                    startActivity(intent);
+                    finish();
+                },
+                error -> {
+                    Log.e("API Error", "Error: " + error.toString());
+                    if (error.networkResponse != null) {
+                        Log.e("API Error Status Code", String.valueOf(error.networkResponse.statusCode));
+                    }
+                    Toast.makeText(FirstLoginActivity.this, "Failed to update user and create objective: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                }) {
             @Override
-            public byte[] getBody() {
-                return jsonBody.toString().getBytes();
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
         };
 
-        queue.add(stringRequest);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
+
 }

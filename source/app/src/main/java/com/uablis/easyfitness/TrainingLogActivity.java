@@ -24,11 +24,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TrainingLogActivity extends AppCompatActivity {
-
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private LinearLayout routinesLayout;
     private TextView totalHoursTextView;
-    private ImageView training_routines;
     private int totalSeconds = 0; // Total time in seconds
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class TrainingLogActivity extends AppCompatActivity {
         // Initialize your Views
         routinesLayout = findViewById(R.id.llRoutineList);
         totalHoursTextView = findViewById(R.id.tvTotalHours);
-        training_routines = findViewById(R.id.training_routines);
 
         // Edge to edge UI handling
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout1), (v, insets) -> {
@@ -47,10 +46,42 @@ public class TrainingLogActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED;
         });
 
-        training_routines.setOnClickListener(new View.OnClickListener() {
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMyRoutines();
+                Intent intent = new Intent(TrainingLogActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainingLogActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(TrainingLogActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(TrainingLogActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -66,8 +97,9 @@ public class TrainingLogActivity extends AppCompatActivity {
     private void loadTrainingLogs() {
         totalSeconds = 0; // Reset the total seconds
         routinesLayout.removeAllViews(); // Clear all routine views
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId()); // Get the current user ID
-        String url = "http://172.17.176.1:8080/api/registros/user/" + userID; // Your API endpoint
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        String path = "registros/user/" + userID;
+        String url = urlBase.buildUrl(path);
 
         // Instantiate the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);

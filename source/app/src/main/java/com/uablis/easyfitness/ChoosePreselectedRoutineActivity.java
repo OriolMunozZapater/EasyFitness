@@ -43,6 +43,7 @@ import java.util.Map;
 
 public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private ImageView home, training_routines, training, profile, backArrow;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +68,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private void loadPredifinedRoutine() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String userId = UsuarioActual.getInstance().getUserId();
-        String url = "http://172.17.176.1:8080/api/rutinas/usuario/" + 0;
+        String path = "rutinas/usuario/" + 0;
+        String url = urlBase.buildUrl(path);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -131,7 +133,8 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
     private void copyRoutineToUser(String routineID, String userID) {
         showAddingRoutinePopup();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://172.17.176.1:8080/api/rutinas/copiar/" + routineID;
+        String path = "rutinas/copiar/" + routineID;
+        String url = urlBase.buildUrl(path);
 
         JSONObject jsonBody = new JSONObject();
         try {
