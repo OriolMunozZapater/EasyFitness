@@ -32,9 +32,12 @@ public class Usuario {
   private Double peso_actual;
 
   private Integer altura;
+  
   @Lob
-  @Column
   private byte[] foto;
+
+  @Column(name = "foto")
+  private String foto;
 
   @Column
   private String descripcion;
@@ -44,6 +47,8 @@ public class Usuario {
 
   @Column
   private String tiempo_entrenamiento;
+
+  private String gimnasio;
 
   @JsonIgnore
   @ManyToMany(mappedBy = "seguidos")
@@ -162,12 +167,12 @@ public class Usuario {
     this.altura = altura;
   }
 
-  public byte[] getFoto() {
+  public String getFotoUrl() {
     return foto;
   }
 
-  public void setFoto(byte[] foto) {
-    this.foto = foto;
+  public void setFotoUrl(String fotoUrl) {
+    this.foto = fotoUrl;
   }
 
   public String getDescripcion() {
@@ -193,6 +198,9 @@ public class Usuario {
   public void setTiempo_entrenamiento(String tiempo_entrenamiento) {
     this.tiempo_entrenamiento = tiempo_entrenamiento;
   }
+
+  public String getGimnasio() {return gimnasio;}
+  public void setGimnasio(String gimnasio) { this.gimnasio = gimnasio; }
 
   public Objetivo getObjetivo() {
     return objetivo;
@@ -226,9 +234,10 @@ public class Usuario {
         ", sexo='" + sexo + '\'' +
         ", peso_actual=" + peso_actual +
         ", altura=" + altura +
-        ", foto=" + Arrays.toString(foto) +
+        ", foto=" + foto +
         ", descripcion='" + descripcion + '\'' +
         ", redes_sociales='" + redes_sociales + '\'' +
+        ", gimnasio='" + gimnasio + '\'' +
         ", tiempo_entrenamiento='" + tiempo_entrenamiento + '\'' +
         ", objetivo=" + objetivo +
         '}';

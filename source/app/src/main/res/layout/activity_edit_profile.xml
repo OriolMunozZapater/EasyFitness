@@ -165,6 +165,37 @@
                             android:onClick="showSocialOptions"/>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/conjuntGimnasLoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="20dp"
+                        android:layout_below="@id/conjuntSocialUser">
+
+                        <TextView
+                            android:id="@+id/textGimnas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gimnas:"
+                            android:textSize="18sp"
+                            android:textColor="@color/EasyFitnessColor"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="80dp"/>
+
+                        <EditText
+                            android:id="@+id/descripcioGimnas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Introduce el nombre"
+                            android:inputType="textEmailAddress"
+                            android:layout_marginTop="15dp"
+                            android:textColor="@android:color/white"
+                            android:textColorHint="#A8711D"
+                            android:backgroundTint="#A8711D"
+                            android:layout_gravity="center_horizontal"/>
+                    </LinearLayout>
+
                     <Button
                         android:id="@+id/btnSaveUserChanges"
                         android:layout_width="match_parent"
@@ -176,7 +207,7 @@
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:layout_marginTop="40dp"
-                        android:layout_below="@+id/conjuntSocialUser"/>
+                        android:layout_below="@id/conjuntGimnasLoc"/>
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

@@ -14,6 +14,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView pesObjectiu, pesPropi, nomUser, sexe, altura;
     private ImageButton edit_profile;
     private String userDescription;
-    private ImageView home, trainingRoutinesButton, profile, training_session;
+    private ImageView home, trainingRoutinesButton, profile, training_session, profile_image;
 
 
     @Override
@@ -41,6 +45,9 @@ public class ProfileActivity extends AppCompatActivity {
         training_session = findViewById(R.id.training_session);
         trainingRoutinesButton = findViewById(R.id.training_routines);
         home = findViewById(R.id.home);
+        profile_image = findViewById(R.id.profile_image);
+        loadImageFromFirebase();
+
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +81,22 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, TrainingRoutinesActivity.class);
                 startActivity(intent);
             }
+        });
+    }
+
+    private void loadImageFromFirebase() {
+        String userId = UsuarioActual.getInstance().getUserId();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("images/userID" + userId);
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.default_image)
+                    .into(profile_image);
+            profile_image.setBackground(null);
+        }).addOnFailureListener(e -> {
+            profile_image.setBackground(null);
+            profile_image.setImageResource(R.drawable.default_image);
         });
     }
 
