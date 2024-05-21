@@ -29,7 +29,7 @@ CREATE TABLE usuario (
   sexo VARCHAR(10),
   peso_actual DECIMAL(5,2),
   altura INT,
-  foto_url VARCHAR(510),
+  foto VARCHAR(510),
   descripcion VARCHAR(255),
   gimnasio VARCHAR(255),
   redes_sociales VARCHAR(255),
