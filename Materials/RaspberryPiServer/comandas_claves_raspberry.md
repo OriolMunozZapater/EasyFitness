@@ -39,3 +39,4 @@ ssh backend@easyfitness-uab.duckdns.org
 
 - user: root
 - contra: cnet1342
+

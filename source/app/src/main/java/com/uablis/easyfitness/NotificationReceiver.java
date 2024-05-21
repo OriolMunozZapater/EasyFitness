@@ -1,3 +1,4 @@
+
 package com.uablis.easyfitness;
 
 import android.app.NotificationChannel;

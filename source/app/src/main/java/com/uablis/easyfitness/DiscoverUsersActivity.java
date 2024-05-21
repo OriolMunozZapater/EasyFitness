@@ -200,4 +200,5 @@ public class DiscoverUsersActivity extends AppCompatActivity {
 
         queue.add(stringRequest);
     }
+
 }

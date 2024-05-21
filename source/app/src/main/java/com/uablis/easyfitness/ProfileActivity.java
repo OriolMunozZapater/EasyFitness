@@ -116,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void goToEditData() {
-        Intent intent = new Intent(this, RankingActivity.class);
+        Intent intent = new Intent(this, EditProfile.class);
         startActivity(intent);
     }
 
