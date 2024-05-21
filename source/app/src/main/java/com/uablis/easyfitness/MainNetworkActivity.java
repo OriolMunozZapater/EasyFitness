@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainNetworkActivity extends AppCompatActivity {
-    ImageButton botonSeguidos,botonSeguidores, botonConsultaRutinas, botonUsersSeguir;
+    ImageButton botonSeguidos,botonSeguidores, botonConsultaRutinas, botonUsersSeguir, botonReforzarPartes;
     private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
@@ -25,6 +25,15 @@ public class MainNetworkActivity extends AppCompatActivity {
         training_session = findViewById(R.id.training_session);
         trainingRoutinesButton = findViewById(R.id.training_routines);
         home = findViewById(R.id.home);
+        botonReforzarPartes = findViewById(R.id.botonReforzarPartes);
+
+        botonReforzarPartes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainNetworkActivity.this, RecommendedActivitiesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
