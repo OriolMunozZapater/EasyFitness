@@ -8,8 +8,21 @@
       <entry key="DiscoverUsersActivity">
         <State />
       </entry>
-      <entry key="MainNetworkActivity">
-        <State />
+      <entry key="RecommendedActivitiesActivity">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="29eb4bcd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-18T19:03:48.991953400Z" />
+        </State>
       </entry>
       <entry key="ShowProfileActivity">
         <State />

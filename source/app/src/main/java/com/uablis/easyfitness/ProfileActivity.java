@@ -38,15 +38,6 @@ public class ProfileActivity extends AppCompatActivity {
         getObjectiveData();
         setupListeners();
         training_session = findViewById(R.id.training_session);
-
-        training_session.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para el botón de seguir usuarios
-                Intent intent = new Intent(ProfileActivity.this, MainNetworkActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initializeViews() {
