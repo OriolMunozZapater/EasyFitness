@@ -1,8 +1,10 @@
 package com.uablis.easyfitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +60,17 @@ public class ShowProfileActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        Button btnTrainingRecords = findViewById(R.id.btnTrainingRecords);
+        btnTrainingRecords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inicia una nueva actividad o realiza una acción
+                Intent intent = new Intent(ShowProfileActivity.this, TrainingRecordsActivity.class);
+                intent.putExtra("userID", userId);
+                startActivity(intent);
+            }
+        });
 
         // Fetch and display user profile
         fetchUserProfile();

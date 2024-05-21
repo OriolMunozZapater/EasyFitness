@@ -3,14 +3,14 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="5dp" />
-            <solid android:color="#D3D3D3" /> <!-- Color de fondo de la barra -->
+            <solid android:color="#FFFFFF" /> <!-- Color de fondo para la parte no completada -->
         </shape>
     </item>
     <item android:id="@android:id/progress">
         <clip>
             <shape>
                 <corners android:radius="5dp" />
-                <solid android:color="#00FF00" /> <!-- Nuevo color verde fosforito -->
+                <solid android:color="#00FF00" /> <!-- Color verde para la parte completada -->
             </shape>
         </clip>
     </item>

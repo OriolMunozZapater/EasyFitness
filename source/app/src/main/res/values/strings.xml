@@ -27,5 +27,6 @@
     </string-array>
 
     <string name="comment_hint">Escribe un comentario...</string>
+    <string name="rutinas">RUTINAS</string>
 
 </resources>

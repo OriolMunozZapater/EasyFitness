@@ -11,5 +11,7 @@
     <color name="layout_type2">#BD8D46</color>
     <color name="green">#33FF66</color>
     <color name="warning_color">#FF0000</color>
+    <color name="sharedGreen">#00FF00</color>
+    <color name="notSharedRed">#FF0000</color>
 
 </resources>

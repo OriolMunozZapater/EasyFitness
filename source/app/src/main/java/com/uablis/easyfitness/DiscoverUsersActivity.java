@@ -42,7 +42,7 @@ public class DiscoverUsersActivity extends AppCompatActivity {
 
     private void fetchAllUsers() {
         ApiUrlBuilder apiUrlBuilder = new ApiUrlBuilder();
-        String url = apiUrlBuilder.buildUrl("usuarios");
+        String url = apiUrlBuilder.buildUrl("usuarios/all_users");
 
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -51,7 +51,7 @@ public class DiscoverUsersActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject userObject = response.getJSONObject(i);
                             int retrievedUserId = userObject.getInt("userID");
-                            if (retrievedUserId != this.userId) {  // Compara el userID con el del usuario actual
+                            if (retrievedUserId != this.userId && retrievedUserId != 0) {  // Compara el userID con el del usuario actual
                                 addUserToContainer(userObject);
                             }
                         }
