@@ -188,7 +188,50 @@
                         />
 
                 </LinearLayout>
+
             </LinearLayout>
+
+            <!-- Nuevo botón "Reforzar Partes" -->
+            <LinearLayout
+                android:id="@+id/boton5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:layout_below="@id/boton4"
+                android:layout_marginTop="20dp"
+                android:background="@color/layout_type1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reforzar Partes"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonReforzarPartes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="120dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </RelativeLayout>
 
     </ScrollView>

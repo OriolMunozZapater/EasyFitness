@@ -55,15 +55,6 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
         home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        //TODO: QUITAR COSA TRAINING_ROUTINES PROVISIONAL
-        training_routines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TrainingRoutinesActivity.this, RecommendedActivitiesActivity.class);
-                startActivity(intent);
-            }
-        });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
