@@ -54,6 +54,8 @@
         <activity android:name=".ShowProfileActivity" android:exported="true" />
         <activity android:name=".DiscoverUsersActivity" android:exported="true"/>
         <activity android:name=".RecommendedActivitiesActivity" android:exported="true"/>
+        <activity android:name=".ViewRoutinesActivity" android:exported="true"/>
+        <activity android:name=".CommentsActivity" android:exported="true"/>
         <receiver android:name=".NotificationReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="com.uablis.easyfitness.ACTION_OBJECTIVE_REMINDER" />

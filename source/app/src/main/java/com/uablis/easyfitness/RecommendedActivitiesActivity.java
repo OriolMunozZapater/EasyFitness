@@ -30,7 +30,7 @@ public class RecommendedActivitiesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_activities);
 
-        int userID = 4; // Reemplaza esto con el ID del usuario real
+        int userID = UsuarioActual.getInstance().getUserIdAsInteger();
         obtenerRegistrosUser(userID);
 
         // Configurar el botón de regreso

@@ -110,8 +110,16 @@ public class ViewRoutinesActivity extends AppCompatActivity {
         textViewRoutineName.setText(routineName);
         textViewUserName.setText("Autor: " + userName);
 
+        TextView commentsTextView = routineView.findViewById(R.id.textViewComments);
+        commentsTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewRoutinesActivity.this, CommentsActivity.class);
+            intent.putExtra("ROUTINE_ID", routineId);
+            startActivity(intent);
+        });
+
         routinesContainer.addView(routineView);
     }
+
 
     public void onCopyRoutineClicked(View view) {
         ViewGroup parent = (ViewGroup) view.getParent();
