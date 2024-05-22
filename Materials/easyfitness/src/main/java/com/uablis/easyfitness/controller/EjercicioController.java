@@ -28,6 +28,11 @@ public class EjercicioController {
     return ejercicio.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  @GetMapping("/obtener")
+  public List<Ejercicio> getAllEjercicio() {
+    return ejercicioRepository.findAll();
+  }
+
   // Crear un nuevo ejercicio
   @PostMapping("/crear")
   public Ejercicio createEjercicio(@RequestBody Ejercicio ejercicio) {

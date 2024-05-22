@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
   // Añadir métodos personalizados si necesitas hacer consultas específicas,
   Optional<Usuario> findByCorreo(String email);
+  Usuario findByUserID(Integer userID);
 }
