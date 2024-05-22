@@ -1,4 +1,4 @@
-SET FOREIGN_KEY_CHECKS = 0; -- Desactiva la verificación de claves foráneas
+SET FOREIGN_KEY_CHECKS = 0; -- Disable foreign key checks
 
 DROP TABLE IF EXISTS rutina_ejercicio;
 DROP TABLE IF EXISTS valoracion_ejercicio;
@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS registro;
 DROP TABLE IF EXISTS comentario; 
 DROP TABLE IF EXISTS rutina_comentarios;
 
-SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
+SET FOREIGN_KEY_CHECKS = 1; -- Enable foreign key checks
 
 CREATE TABLE objetivo (
   objetivoID INT AUTO_INCREMENT PRIMARY KEY,
@@ -123,27 +123,28 @@ CREATE TABLE comentario (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE rutina_comentarios (
-    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
-    id_rutina INT,
-    id_usuario INT,
-    comentario VARCHAR(1000),
-    FOREIGN KEY (id_rutina) REFERENCES rutina(rutinaID)  -- Correction here
+  id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+  id_rutina INT,
+  id_usuario INT,
+  comentario VARCHAR(1000),
+  FOREIGN KEY (id_rutina) REFERENCES rutina(rutinaID),
+  FOREIGN KEY (id_usuario) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Inserts para Usuario Repositorio
+-- Inserts for User Repository
 INSERT INTO usuario (userID, correo, password, is_first_login) VALUES
 (0, 'repositorio@tuapp.com', 'password_segura', FALSE);
 
--- Desactivar la verificación de clave foránea
+-- Disable foreign key checks
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Actualizar el userID
+-- Update the userID
 UPDATE `usuario` SET `userID` = '0' WHERE `userID` = '1';
 
--- Re-activar la verificación de clave foránea
+-- Enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
 
--- Inserts para Ejercicios
+-- Inserts for Exercises
 INSERT INTO ejercicio (userID, nombre, descripcion, tipo, grupo_muscular) VALUES
 (0, 'Sentadillas', 'Ejercicio completo para piernas', 'Fuerza', 'Piernas'),
 (0, 'Press de banca', 'Ejercicio para pecho', 'Fuerza', 'Pecho'),
@@ -152,7 +153,7 @@ INSERT INTO ejercicio (userID, nombre, descripcion, tipo, grupo_muscular) VALUES
 (0, 'Yoga', 'Sesión de yoga para mejorar flexibilidad', 'Flexibilidad', 'Todo el cuerpo'),
 (0, 'Tai Chi', 'Formas lentas y meditativas', 'Equilibrio', 'Todo el cuerpo');
 
--- Inserts para Rutinas
+-- Inserts for Routines
 INSERT INTO rutina (nombre, descripcion, userID, publico) VALUES
 ('Rutina de Fuerza', 'Rutina completa de fuerza para todo el cuerpo', 0, FALSE),
 ('Rutina de Calistenia', 'Rutina usando peso corporal', 0, FALSE),
@@ -160,7 +161,7 @@ INSERT INTO rutina (nombre, descripcion, userID, publico) VALUES
 ('Rutina de Flexibilidad', 'Mejora la flexibilidad general', 0, FALSE),
 ('Rutina de Equilibrio', 'Fomenta el equilibrio y la serenidad', 0, FALSE);
 
--- Inserts para Series sin la columna 'tipo'
+-- Inserts for Series
 INSERT INTO serie (ejercicioID, n_repeticiones, peso) VALUES
 (1, 10, 50),
 (2, 8, 70),
@@ -169,26 +170,27 @@ INSERT INTO serie (ejercicioID, n_repeticiones, peso) VALUES
 (5, 60, 0),
 (6, 20, 0);
 
--- Inserts para Rutina Ejercicio
--- Relaciones para Rutina de Fuerza
+-- Inserts for Routine Exercise
+-- Relationships for Strength Routine
 INSERT INTO rutina_ejercicio (rutinaID, ejercicioID, orden) VALUES
 (1, 1, 1),
 (1, 2, 2),
 (1, 3, 3);
 
--- Relaciones para Rutina de Calistenia
+-- Relationships for Calisthenics Routine
 INSERT INTO rutina_ejercicio (rutinaID, ejercicioID, orden) VALUES
 (2, 3, 1),
 (2, 1, 2);
 
--- Relaciones para Rutina de Cardio
+-- Relationships for Cardio Routine
 INSERT INTO rutina_ejercicio (rutinaID, ejercicioID, orden) VALUES
 (3, 4, 1);
 
--- Relaciones para Rutina de Flexibilidad
+-- Relationships for Flexibility Routine
 INSERT INTO rutina_ejercicio (rutinaID, ejercicioID, orden) VALUES
 (4, 5, 1);
 
--- Relaciones para Rutina de Equilibrio
+-- Relationships for Balance Routine
 INSERT INTO rutina_ejercicio (rutinaID, ejercicioID, orden) VALUES
 (5, 6, 1);
+
