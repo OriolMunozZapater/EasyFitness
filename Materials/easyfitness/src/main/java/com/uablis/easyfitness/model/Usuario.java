@@ -32,9 +32,6 @@ public class Usuario {
   private Double peso_actual;
 
   private Integer altura;
-  
-  @Lob
-  private byte[] foto;
 
   @Column(name = "foto")
   private String foto;
@@ -57,9 +54,9 @@ public class Usuario {
   @JsonIgnore
   @ManyToMany
   @JoinTable(
-      name = "usuarios_seguidos",
-      joinColumns = @JoinColumn(name = "seguidoID"),
-      inverseJoinColumns = @JoinColumn(name = "usuarioID")
+          name = "usuarios_seguidos",
+          joinColumns = @JoinColumn(name = "seguidoID"),
+          inverseJoinColumns = @JoinColumn(name = "usuarioID")
   )
   private Set<Usuario> seguidos;
 
@@ -226,20 +223,20 @@ public class Usuario {
   @Override
   public String toString() {
     return "Usuario{" +
-        "userID=" + userID +
-        ", nombre='" + nombre + '\'' +
-        ", apellido='" + apellido + '\'' +
-        ", correo='" + correo + '\'' +
-        ", password='" + password + '\'' +
-        ", sexo='" + sexo + '\'' +
-        ", peso_actual=" + peso_actual +
-        ", altura=" + altura +
-        ", foto=" + foto +
-        ", descripcion='" + descripcion + '\'' +
-        ", redes_sociales='" + redes_sociales + '\'' +
-        ", gimnasio='" + gimnasio + '\'' +
-        ", tiempo_entrenamiento='" + tiempo_entrenamiento + '\'' +
-        ", objetivo=" + objetivo +
-        '}';
+            "userID=" + userID +
+            ", nombre='" + nombre + '\'' +
+            ", apellido='" + apellido + '\'' +
+            ", correo='" + correo + '\'' +
+            ", password='" + password + '\'' +
+            ", sexo='" + sexo + '\'' +
+            ", peso_actual=" + peso_actual +
+            ", altura=" + altura +
+            ", foto=" + foto +
+            ", descripcion='" + descripcion + '\'' +
+            ", redes_sociales='" + redes_sociales + '\'' +
+            ", gimnasio='" + gimnasio + '\'' +
+            ", tiempo_entrenamiento='" + tiempo_entrenamiento + '\'' +
+            ", objetivo=" + objetivo +
+            '}';
   }
 }
