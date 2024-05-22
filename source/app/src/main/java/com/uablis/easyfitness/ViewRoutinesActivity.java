@@ -49,6 +49,10 @@ public class ViewRoutinesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         ImageView backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> finish());
 

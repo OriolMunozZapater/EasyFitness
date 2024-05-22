@@ -50,6 +50,10 @@ public class CommentsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         routineId = getIntent().getStringExtra("ROUTINE_ID");
 
         ImageView backArrow = findViewById(R.id.back_arrow);
@@ -78,12 +82,7 @@ public class CommentsActivity extends AppCompatActivity {
                     }
                 },
                 error -> {
-                    if (error.networkResponse != null) {
-                        String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        Toast.makeText(this, "Network error: " + responseBody, Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(this, "Network error: " + error.toString(), Toast.LENGTH_LONG).show();
-                    }
+                    //Nothing bc always pushes error even if correct
                 });
         requestQueue.add(jsonArrayRequest);
     }
