@@ -124,7 +124,12 @@ public class EjercicioController {
 
   @GetMapping("/sugerencias/{userID}")
   public ResponseEntity<List<Ejercicio>> getSugerencias(@PathVariable Integer userID) {
+
     List<Ejercicio> ejerciciosUsuario = ejercicioRepository.findByUserID(userID);
+
+    if (ejerciciosUsuario.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
 
     // Contar los grupos musculares trabajados
     Map<String, Integer> muscleGroupCount = new HashMap<>();
@@ -159,7 +164,7 @@ public class EjercicioController {
     for (String muscleGroup : leastWorkedMuscleGroups) {
       List<Ejercicio> ejerciciosSugeridos = ejercicioRepository.findByGrupoMuscular(muscleGroup);
       for (Ejercicio ejercicio : ejerciciosSugeridos) {
-        if (!ejerciciosUsuario.contains(ejercicio)) {
+        if (!ejerciciosUsuario.contains(ejercicio) && ejercicio.getUserID().equals(userID)) {
           sugerencias.add(ejercicio);
         }
         if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
@@ -170,51 +175,4 @@ public class EjercicioController {
     return ResponseEntity.ok(sugerencias);
   }
 
-  @GetMapping("/sugerencias/{userID}")
-  public ResponseEntity<List<Ejercicio>> getSugerencias(@PathVariable Integer userID) {
-    List<Ejercicio> ejerciciosUsuario = ejercicioRepository.findByUserID(userID);
-
-    // Contar los grupos musculares trabajados
-    Map<String, Integer> muscleGroupCount = new HashMap<>();
-    for (Ejercicio ejercicio : ejerciciosUsuario) {
-      String grupoMuscular = ejercicio.getGrupoMuscular();
-      muscleGroupCount.put(grupoMuscular, muscleGroupCount.getOrDefault(grupoMuscular, 0) + 1);
-    }
-
-    // Obtener todos los grupos musculares posibles
-    List<String> allMuscleGroups = Arrays.asList("Pecho", "Espalda", "Piernas", "Todo el cuerpo");
-
-    // Filtrar los grupos musculares menos trabajados
-    List<String> leastWorkedMuscleGroups = new ArrayList<>();
-    for (String muscleGroup : allMuscleGroups) {
-      if (!muscleGroupCount.containsKey(muscleGroup)) {
-        leastWorkedMuscleGroups.add(muscleGroup);
-      }
-    }
-
-    // Si todos los grupos musculares han sido trabajados, seleccionar los menos trabajados
-    if (leastWorkedMuscleGroups.isEmpty()) {
-      List<Map.Entry<String, Integer>> sortedMuscleGroups = new ArrayList<>(muscleGroupCount.entrySet());
-      sortedMuscleGroups.sort(Map.Entry.comparingByValue());
-      for (Map.Entry<String, Integer> entry : sortedMuscleGroups) {
-        leastWorkedMuscleGroups.add(entry.getKey());
-        if (leastWorkedMuscleGroups.size() >= 3) break; // Limitar a los 3 menos trabajados
-      }
-    }
-
-    // Obtener los ejercicios sugeridos para los grupos musculares menos trabajados
-    List<Ejercicio> sugerencias = new ArrayList<>();
-    for (String muscleGroup : leastWorkedMuscleGroups) {
-      List<Ejercicio> ejerciciosSugeridos = ejercicioRepository.findByGrupoMuscular(muscleGroup);
-      for (Ejercicio ejercicio : ejerciciosSugeridos) {
-        if (!ejerciciosUsuario.contains(ejercicio)) {
-          sugerencias.add(ejercicio);
-        }
-        if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
-      }
-      if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
-    }
-
-    return ResponseEntity.ok(sugerencias);
-  }
 }
