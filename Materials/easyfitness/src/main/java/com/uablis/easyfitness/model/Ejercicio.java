@@ -10,11 +10,13 @@ public class Ejercicio {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer ejercicioID;
 
-  @Column(nullable = false)
+  @Column
+  private Integer userID;
+  @Column
   private Integer rutinaID;
 
   @Column(nullable = false)
-  private String tipo; //normal, calentamiento, serie descendente y al fallo.
+  private String tipo;
 
   @Column(nullable = false)
   private String descripcion;
@@ -30,6 +32,13 @@ public class Ejercicio {
   private byte[] video;
 
   //Setters
+  public Integer getRutinaID() {
+    return rutinaID;
+  }
+
+  public void setRutinaID(Integer rutinaID) {
+    this.rutinaID = rutinaID;
+  }
 
   public void setVideo(byte[] video) {
     this.video = video;
@@ -39,8 +48,8 @@ public class Ejercicio {
     this.ejercicioID = ejercicioID;
   }
 
-  public void setRutinaID(Integer rutinaID) {
-    this.rutinaID = rutinaID;
+  public void setUserID(Integer userID) {
+    this.userID = userID;
   }
 
   public void setTipo(String tipo) {
@@ -72,8 +81,8 @@ public class Ejercicio {
     return ejercicioID;
   }
 
-  public Integer getRutinaID() {
-    return rutinaID;
+  public Integer getUserID() {
+    return userID;
   }
 
   public String getTipo() {
@@ -94,5 +103,16 @@ public class Ejercicio {
 
   public String getGrupoMuscular() {
     return grupoMuscular;
+  }
+
+  @Override
+  public String toString() {
+    return "Ejercicio{" +
+        "ejercicioID=" + ejercicioID +
+        ", userID='" + userID + '\'' +
+        ", nombre='" + nombre + '\'' +
+        ", descripcion='" + descripcion + '\'' +
+        ", grupo_muscular='" + grupoMuscular +
+        '}';
   }
 }
