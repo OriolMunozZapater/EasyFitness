@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainNetworkActivity extends AppCompatActivity {
-    ImageButton botonSeguidos,botonSeguidores, botonConsultaRutinas, botonUsersSeguir;
+    ImageButton botonSeguidos,botonSeguidores, botonConsultaRutinas, botonUsersSeguir, botonComentarioApp, botonValorarEjercicio;
     private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
@@ -21,6 +21,8 @@ public class MainNetworkActivity extends AppCompatActivity {
         botonSeguidos = findViewById(R.id.botonSeguidos);
         botonConsultaRutinas = findViewById(R.id.botonConsultaRutinas);
         botonUsersSeguir = findViewById(R.id.botonUsersSeguir);
+        botonComentarioApp=findViewById(R.id.botonComentarioApp);
+        botonValorarEjercicio=findViewById(R.id.ValorarEjercicio);
         profile = findViewById(R.id.profile);
         training_session = findViewById(R.id.training_session);
         trainingRoutinesButton = findViewById(R.id.training_routines);
@@ -92,6 +94,24 @@ public class MainNetworkActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Lógica para el botón de seguir usuarios
                 Intent intent = new Intent(MainNetworkActivity.this, DiscoverUsersActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        botonComentarioApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(MainNetworkActivity.this, AppReviewActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        botonValorarEjercicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(MainNetworkActivity.this, ViewExercisesActivity.class);
                 startActivity(intent);
             }
         });

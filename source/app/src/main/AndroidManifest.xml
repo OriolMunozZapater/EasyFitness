@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+
+
+
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -13,69 +22,50 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyFitness"
         tools:targetApi="31">
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+
+
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PasswordRecoveryActivity"
-            android:exported="true" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-        <!-- Create Account Activity -->
-        <activity
-            android:name=".CreateAccountActivity"
-            android:exported="true">
-        </activity>
-        <!-- first login activity -->
-        <activity
-            android:name=".FirstLoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".TrainingRoutinesActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ChooseExerciseActivity"
-            android:exported="true" />
-        <activity
-            android:name=".NewRoutineActivity"
-            android:exported="true" />
-        <activity
-            android:name=".EditRoutineActivity"
-            android:exported="true" />
-        <activity
-            android:name=".EditExerciseActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ChoosePreselectedRoutineActivity"
-            android:exported="true" />
-        <activity
-            android:name=".CreateNewExercise"
-            android:exported="true" />
-        <activity
-            android:name=".StartingRoutineActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true" />
-        <activity
-            android:name=".CheckTrainingsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".AppReviewActivity"
-            android:exported="true" />
-        <activity
-            android:name=".EditProfile"
-            android:exported="true" />
-    </application>
 
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".PasswordRecoveryActivity" android:exported="true" />
+        <activity android:name=".HomeActivity" android:exported="false" />
+        <activity android:name=".CreateAccountActivity" android:exported="true" />
+        <activity android:name=".FirstLoginActivity" android:exported="true" />
+        <activity android:name=".TrainingRoutinesActivity" android:exported="true" />
+        <activity android:name=".ChooseExerciseActivity" android:exported="true" />
+        <activity android:name=".NewRoutineActivity" android:exported="true" />
+        <activity android:name=".EditRoutineActivity" android:exported="true" />
+        <activity android:name=".EditExerciseActivity" android:exported="true" />
+        <activity android:name=".ChoosePreselectedRoutineActivity" android:exported="true" />
+        <activity android:name=".CreateNewExercise" android:exported="true" />
+        <activity android:name=".StartingRoutineActivity" android:exported="true" />
+        <activity android:name=".ProfileActivity" android:exported="true" />
+        <activity android:name=".CheckTrainingsActivity" android:exported="true" />
+        <activity android:name=".AppReviewActivity" android:exported="true" />
+        <activity android:name=".EditProfile" android:exported="true" />
+        <activity android:name=".SocialMediaActivity" android:exported="true" />
+        <activity android:name=".MainNetworkActivity" android:exported="true" />
+        <activity android:name=".FollowedUsersActivity" android:exported="true" />
+        <activity android:name=".FollowersUsersActivity" android:exported="true" />
+        <activity android:name=".ShowProfileActivity" android:exported="true" />
+        <activity android:name=".DiscoverUsersActivity" android:exported="true"/>
+        <receiver android:name=".NotificationReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.uablis.easyfitness.ACTION_OBJECTIVE_REMINDER" />
+                <action android:name="com.uablis.easyfitness.ACTION_DAILY_REMINDER" />
+            </intent-filter>
+        </receiver>
+        <activity android:name=".ViewRoutinesActivity" android:exported="true" />
+        <activity android:name=".TrainingRecordsActivity" android:exported="true"/>
+        <activity android:name=".TrainingLogActivity" android:exported="true" />
+        <activity
+            android:name=".AddComent" android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".ViewExercisesActivity" android:exported="true" />
+    </application>
 </manifest>

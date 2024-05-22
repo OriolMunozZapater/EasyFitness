@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,15 +11,7 @@
         android:background="#A8711D"
         app:titleEnabled="false">
 
-        <!-- TextView personalizado para el título -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="COMENTARIO APP"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_gravity="center" />
+        <!-- Custom TextView for the title -->
 
         <ImageView
             android:id="@+id/back_arrow"
@@ -28,93 +19,46 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back"
             android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:contentDescription="Back Arrow" />
+            android:layout_marginStart="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VALORAR EJERCICIO"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
 
     </androidx.appcompat.widget.Toolbar>
+
     <RelativeLayout
-        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        android:orientation="vertical"
-        android:layout_below="@+id/toolbar">
-
-
-        <RelativeLayout
-            android:id="@+id/warning_init"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:padding="30dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_warning_comment"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="Los comentarios enviados en esta página deben ser respetuosos con el equipo de desarrolladores, y deben ser constructivos y lo más aclaratorios posibles." />
-
-                <ImageButton
-                    android:id="@+id/removeInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_normal_cross"
-                    android:background="#00000000"
-                    android:padding="10dp">
-                </ImageButton>
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
+            android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/warning_init"
-            android:layout_marginTop="30dp"
             android:orientation="vertical"
-            android:paddingHorizontal="32dp">
-
-
-            <EditText
-                android:id="@+id/description"
+            android:padding="0dp">
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nameUser"
-                android:backgroundTint="#A8711D"
-                android:hint="Escribe el comentario:"
-                android:inputType="textEmailAddress"
-                android:paddingBottom="15dp"
-                android:layout_marginTop="25dp"
-                android:textColor="@android:color/white"
-                android:textColorHint="#A8711D" />
+                android:layout_marginBottom="0dp">
 
-            <Button
-                android:id="@+id/btnEnviarReview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                app:backgroundTint="@color/EasyFitnessColor"
-                android:background="@drawable/buton_background"
-                android:text="Enviar"
-                android:textColor="@color/black"
-                android:textSize="28sp"
-                android:layout_marginTop="60dp"
-                android:layout_below="@+id/descripcioUser"
-                />
+                <!-- Aixo és cada exercici-->
+                <LinearLayout
+                    android:id="@+id/exerciseContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                </LinearLayout>
+
+            </ScrollView>
 
         </LinearLayout>
 
@@ -124,8 +68,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            tools:ignore="NotSibling">
+            android:layout_below="@id/layout"
+            android:layout_alignParentBottom="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/lowBar"
@@ -195,7 +139,6 @@
             </androidx.appcompat.widget.Toolbar>
 
         </LinearLayout>
+
     </RelativeLayout>
-
-
 </RelativeLayout>
