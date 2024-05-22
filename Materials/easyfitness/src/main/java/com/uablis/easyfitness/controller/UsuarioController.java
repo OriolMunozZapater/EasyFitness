@@ -254,4 +254,14 @@ public class UsuarioController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<Usuario> getUsuarioByID(@PathVariable Integer id) {
+        Usuario usuario = usuarioRepository.findByUserID(id);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

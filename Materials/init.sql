@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS objetivo;
 DROP TABLE IF EXISTS rutina_compartida;
 DROP TABLE IF EXISTS registro;
 DROP TABLE IF EXISTS comentario; 
-DROP TABLE IF EXISTS rutina_comentarios;
 
 SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 

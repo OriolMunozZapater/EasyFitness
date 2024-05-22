@@ -30,10 +30,9 @@ public class ValoracionEjercicioController {
   }
 
   // Crear una nueva valoracion de ejercicio
-  @PostMapping
-  public ResponseEntity<ValoracionEjercicio> createValoracionEjercicio(@RequestBody ValoracionEjercicio valoracionEjercicio) {
-    ValoracionEjercicio newValoracion = valoracionEjercicioRepository.save(valoracionEjercicio);
-    return ResponseEntity.ok(newValoracion);
+  @PostMapping("/crear")
+  public ValoracionEjercicio createValoracionEjercicio(@RequestBody ValoracionEjercicio valoracionEjercicio) {
+    return valoracionEjercicioRepository.save(valoracionEjercicio);
   }
 
   // Actualizar una valoracion de ejercicio
