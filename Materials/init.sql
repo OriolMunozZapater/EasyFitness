@@ -121,6 +121,14 @@ CREATE TABLE comentario (
   FOREIGN KEY (userID) REFERENCES usuario(userID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE rutina_comentarios (
+    id_comentari INT AUTO_INCREMENT PRIMARY KEY,
+    id_rutina INT,
+    id_usuario INT,
+    comentario VARCHAR(1000),
+    FOREIGN KEY (id_rutina) REFERENCES rutina(id_rutina)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Inserts para Usuario Repositorio
 INSERT INTO usuario (userID, correo, password, is_first_login) VALUES
 (0, 'repositorio@tuapp.com', 'password_segura', FALSE);
