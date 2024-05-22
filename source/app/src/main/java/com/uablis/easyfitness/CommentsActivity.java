@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,8 +68,7 @@ public class CommentsActivity extends AppCompatActivity {
                             JSONObject comment = response.getJSONObject(i);
                             String userId = comment.getString("idUsuario");
                             String commentText = comment.getString("comentario");
-                            String commentId = comment.getString("idComentario"); // Suponiendo que este es el campo ID para el comentario
-                            fetchUserNameAndAddComment(userId, commentText, commentId);
+                            fetchUserNameAndAddComment(userId, commentText);
                         }
                     } catch (JSONException e) {
                         Toast.makeText(CommentsActivity.this, "Error parsing JSON data", Toast.LENGTH_SHORT).show();
@@ -88,13 +86,13 @@ public class CommentsActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void fetchUserNameAndAddComment(String userId, String commentText, String commentId) {
+    private void fetchUserNameAndAddComment(String userId, String commentText) {
         String userUrl = urlBase.buildUrl("usuarios/" + userId);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, userUrl, null,
                 response -> {
                     try {
                         String userName = response.getString("nombre");
-                        addCommentToLayout(userName, commentText, commentId);
+                        addCommentToLayout(userName, commentText);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -126,12 +124,8 @@ public class CommentsActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
                 response -> {
                     try {
-                        // Obtener el ID del usuario desde la respuesta o directamente desde UsuarioActual
-                        String userId = response.getString("idUsuario");
-                        // Obtener el ID del comentario desde la respuesta
-                        String commentId = response.getString("idComentario");
-                        // Utilizar fetchUserNameAndAddComment para obtener el nombre del usuario y añadir el comentario
-                        fetchUserNameAndAddComment(userId, commentText, commentId);
+                        String userName = response.getString("idUsuario");
+                        addCommentToLayout(userName, commentText);
                         editTextComment.setText("");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -157,22 +151,16 @@ public class CommentsActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-
-    private void addCommentToLayout(String userName, String commentText, String commentId) {
+    private void addCommentToLayout(String userName, String commentText) {
         View commentView = getLayoutInflater().inflate(R.layout.comment_routine_item, commentsContainer, false);
         TextView textViewUserName = commentView.findViewById(R.id.textViewUserName);
         TextView textViewComment = commentView.findViewById(R.id.textViewComment);
-        ImageButton buttonDeleteComment = commentView.findViewById(R.id.buttonDeleteComment); // Usar ImageButton
 
         textViewUserName.setText(userName);
         textViewComment.setText(commentText);
 
-        buttonDeleteComment.setOnClickListener(v -> deleteComment(commentId, commentView));
-
         commentsContainer.addView(commentView);
     }
-
-
 
     private void deleteComment(String commentId, View commentView) {
         String url = urlBase.buildUrl("rutina_comentarios/" + commentId);

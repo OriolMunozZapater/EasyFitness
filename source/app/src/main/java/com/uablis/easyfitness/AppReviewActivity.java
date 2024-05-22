@@ -1,6 +1,8 @@
 package com.uablis.easyfitness;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,20 +12,32 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AppReviewActivity extends AppCompatActivity {
-    private EditText nameUser, correuElectronic, description;
+    private EditText description;
     private ImageButton removeInfo;
     private Button btnEnviarReview;
     private ImageView backArrow;
     private Toolbar toolbar;
+    ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-
-        nameUser = findViewById(R.id.nameUser);
-        correuElectronic = findViewById(R.id.correuElectronic);
         description = findViewById(R.id.description);
         removeInfo = findViewById(R.id.removeInfo);
         btnEnviarReview = findViewById(R.id.btnEnviarReview);
@@ -57,13 +71,65 @@ public class AppReviewActivity extends AppCompatActivity {
     }
 
     private void enviarReview() {
-        String userName = nameUser.getText().toString();
-        String userEmail = correuElectronic.getText().toString();
+
         String reviewDescription = description.getText().toString();
 
-        // Aquí puedes agregar lógica para validar los campos (nombre de usuario, correo electrónico, descripción)
+        if(!reviewDescription.isEmpty())
+        {
+            JSONObject jsonBody = new JSONObject();
+            int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+            try {
+                jsonBody.put("userID", userID);
+                jsonBody.put("descripcion", reviewDescription);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
+            sendUpdateRequest(jsonBody);
+        }else
+            Toast.makeText(this, "ERROR: campo vacío, por favor rellene la descripcion", Toast.LENGTH_SHORT).show();
 
-        // Simplemente mostraremos un mensaje de toast para demostrar que la revisión se ha enviado
-        Toast.makeText(this, "Revisión enviada por: " + userName, Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendUpdateRequest(JSONObject requestBody) {
+        String path = "comentarios/crear";
+        String url = urlBase.buildUrl(path);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(AppReviewActivity.this, "Comentario enviado correctamente. Gracias!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Ocurrió un error al hacer la solicitud
+                        error.printStackTrace();
+                        Log.e("VolleyError", "Error: " + error.toString());
+                        if (error.networkResponse != null) {
+                            Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                            Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                        }
+                        Toast.makeText(AppReviewActivity.this, "Error al crear el comentario: " + error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        ) {
+            @Override
+            public byte[] getBody() {
+                return requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        queue.add(stringRequest);
     }
 }

@@ -16,7 +16,7 @@ public class ValoracionEjercicio {
   @Column(nullable = false)
   private Integer ejercicioID;
 
-  private Integer valoracion;
+  private Boolean valoracion;
 
   @Column(length = 255)
   private String comentario;
@@ -46,11 +46,11 @@ public class ValoracionEjercicio {
     this.ejercicioID = ejercicioID;
   }
 
-  public Integer getValoracion() {
+  public Boolean getValoracion() {
     return valoracion;
   }
 
-  public void setValoracion(Integer valoracion) {
+  public void setValoracion(Boolean valoracion) {
     this.valoracion = valoracion;
   }
 

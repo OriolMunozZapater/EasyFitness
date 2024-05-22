@@ -114,7 +114,7 @@ public class TrainingRoutinesActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(TrainingRoutinesActivity.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(TrainingRoutinesActivity.this, "No hay rutinas", Toast.LENGTH_SHORT).show();
             }
         });
 
