@@ -24,9 +24,11 @@
         <item>Quads</item>
         <item>Abs</item>
         <item>Isquios</item>
+        <item>All</item>
     </string-array>
 
     <string name="comment_hint">Escribe un comentario...</string>
     <string name="rutinas">RUTINAS</string>
+    <string name="valorar_ejercicios">VALORAR EJERCICIOS</string>
 
 </resources>

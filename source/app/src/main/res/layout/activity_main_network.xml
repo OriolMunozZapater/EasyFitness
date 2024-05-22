@@ -28,13 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_marginBottom="70dp">
+        android:layout_above="@id/layout1">
 
-        <RelativeLayout
-            android:id="@+id/layout_boto_xx"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp">
+            android:orientation="vertical"
+            android:padding="30dp">
 
             <LinearLayout
                 android:id="@+id/boton1"
@@ -42,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:background="@color/layout_type1">
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -67,8 +68,7 @@
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="178dp"
-                        />
+                        android:layout_marginStart="178dp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -79,9 +79,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:layout_below="@id/boton1"
-                android:layout_marginTop="20dp"
-                android:background="@color/layout_type1">
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -106,8 +105,7 @@
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="160dp"
-                        />
+                        android:layout_marginStart="160dp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -118,9 +116,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:layout_below="@id/boton2"
-                android:layout_marginTop="20dp"
-                android:background="@color/layout_type1">
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -145,8 +142,7 @@
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="20dp"
-                        />
+                        android:layout_marginStart="20dp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -157,9 +153,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:layout_below="@id/boton3"
-                android:layout_marginTop="20dp"
-                android:background="@color/layout_type1">
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -184,11 +179,9 @@
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="90dp"
-                        />
+                        android:layout_marginStart="90dp" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <!-- Nuevo botón "Reforzar Partes" -->
@@ -198,9 +191,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="32dp"
-                android:layout_below="@id/boton4"
-                android:layout_marginTop="20dp"
-                android:background="@color/layout_type1">
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -225,15 +217,159 @@
                         android:background="@android:color/transparent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="120dp"
-                        />
+                        android:layout_marginStart="120dp" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/boton6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Publicar Videos"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonPublicarVideos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_add"
+                        android:background="@android:color/transparent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="120dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Nuevo botón para añadir comentario sobre la App -->
+            <LinearLayout
+                android:id="@+id/boton7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Añadir Comentario sobre App"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonComentarioApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_centerVertical="true" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/boton8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Valorar un Ejercicio"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/ValorarEjercicio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_centerVertical="true" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Nuevo botón para mostrar ranking -->
+            <LinearLayout
+                android:id="@+id/boton9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:background="@color/layout_type1"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Mostrar Ranking"
+                        android:textColor="@color/white"
+                        android:background="@color/layout_type1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_gravity="center" />
+
+                    <ImageButton
+                        android:id="@+id/botonMostrarRanking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow"
+                        android:background="@android:color/transparent"
+                        android:layout_centerVertical="true" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
     </ScrollView>
 
     <!-- Linear layout para la barra de abajo -->
@@ -262,14 +398,14 @@
                 android:src="@drawable/ic_home"
                 android:layout_gravity="start"
                 android:paddingLeft="20dp"
-                android:paddingRight="25dp"/>
+                android:paddingRight="25dp" />
 
             <View
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:background="#000000"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
 
             <ImageView
                 android:id="@+id/training_routines"
@@ -278,14 +414,14 @@
                 android:src="@drawable/ic_training_routines"
                 android:layout_gravity="start|right"
                 android:paddingLeft="20dp"
-                android:paddingRight="25dp"/>
+                android:paddingRight="25dp" />
 
             <View
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:background="#000000"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
 
             <ImageView
                 android:id="@+id/training_session"
@@ -294,14 +430,14 @@
                 android:src="@drawable/ic_training"
                 android:layout_gravity="left|end"
                 android:paddingLeft="25dp"
-                android:paddingRight="20dp"/>
+                android:paddingRight="20dp" />
 
             <View
                 android:layout_width="3dp"
                 android:layout_height="match_parent"
                 android:background="#000000"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
 
             <ImageView
                 android:id="@+id/profile"
@@ -310,7 +446,7 @@
                 android:src="@drawable/ic_profile"
                 android:layout_gravity="end"
                 android:paddingRight="20dp"
-                android:paddingLeft="20dp"/>
+                android:paddingLeft="20dp" />
 
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
