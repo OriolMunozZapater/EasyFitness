@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,7 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyFitness"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Ranking"
+            android:exported="false" />
+        <activity
+            android:name=".ViewVideosActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -23,6 +36,31 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".RecommendedActivitiesActivity"
+            android:exported="true" />
+
+        <receiver
+            android:name=".NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.uablis.easyfitness.ACTION_OBJECTIVE_REMINDER" />
+                <action android:name="com.uablis.easyfitness.ACTION_DAILY_REMINDER" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ViewRoutinesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TrainingRecordsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TrainingLogActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ObjectiveDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -31,12 +69,9 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-        <!-- Create Account Activity -->
         <activity
             android:name=".CreateAccountActivity"
-            android:exported="true">
-        </activity>
-        <!-- first login activity -->
+            android:exported="true" />
         <activity
             android:name=".FirstLoginActivity"
             android:exported="true" />
@@ -65,16 +100,47 @@
             android:name=".StartingRoutineActivity"
             android:exported="true" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="true" />
-        <activity
             android:name=".CheckTrainingsActivity"
             android:exported="true" />
         <activity
             android:name=".AppReviewActivity"
             android:exported="true" />
         <activity
+            android:name=".SocialMediaActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainNetworkActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FollowedUsersActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FollowersUsersActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ShowProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DiscoverUsersActivity"
+            android:exported="true" />
+        <activity
             android:name=".EditProfile"
+            android:exported="true" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CommentsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AddComent"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ViewExercisesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RankingActivity"
             android:exported="true" />
     </application>
 
