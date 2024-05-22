@@ -8,7 +8,8 @@ public class RutinaComentario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_comentari;
+    @Column(name = "id_comentario")
+    private Long idComentario;
 
     @Column(name = "id_rutina", nullable = false)
     private Long idRutina;
@@ -20,12 +21,12 @@ public class RutinaComentario {
     private String comentario;
 
     // Getters and Setters
-    public Long getId_comentari() {
-        return id_comentari;
+    public Long getIdComentario() {
+        return idComentario;
     }
 
-    public void setId_comentari(Long id_comentari) {
-        this.id_comentari = id_comentari;
+    public void setIdComentario(Long idComentario) {
+        this.idComentario = idComentario;
     }
 
     public Long getIdRutina() {
