@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS objetivo;
 DROP TABLE IF EXISTS rutina_compartida;
 DROP TABLE IF EXISTS registro;
 DROP TABLE IF EXISTS comentario; 
+DROP TABLE IF EXISTS rutina_comentarios;
 
 SET FOREIGN_KEY_CHECKS = 1; -- Reactiva la verificación de claves foráneas
 
@@ -119,6 +120,14 @@ CREATE TABLE comentario (
   descripcion TEXT NOT NULL,
   fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userID) REFERENCES usuario(userID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE rutina_comentarios (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    id_rutina INT,
+    id_usuario INT,
+    comentario VARCHAR(1000),
+    FOREIGN KEY (id_rutina) REFERENCES rutina(rutinaID)  -- Correction here
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Inserts para Usuario Repositorio
