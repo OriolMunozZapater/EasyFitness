@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/ejercicios")
@@ -18,6 +16,11 @@ public class EjercicioController {
   private EjercicioRepository ejercicioRepository;
 
   // Obtener todos los ejercicios
+  @GetMapping("/obtener")
+  public List<Ejercicio> getAllEjercicio() {
+    return ejercicioRepository.findAll();
+  }
+
   @GetMapping
   public List<Ejercicio> getAllEjercicios() {
     return ejercicioRepository.findAll();
@@ -31,11 +34,10 @@ public class EjercicioController {
   }
 
   // Crear un nuevo ejercicio
-  @PostMapping
+  @PostMapping("/crear")
   public Ejercicio createEjercicio(@RequestBody Ejercicio ejercicio) {
     return ejercicioRepository.save(ejercicio);
   }
-
   // Actualizar un ejercicio
   @PutMapping("/{id}")
   public ResponseEntity<Ejercicio> updateObjetivo(@PathVariable Integer id, @RequestBody Ejercicio ejercicioDetails) {
@@ -46,7 +48,7 @@ public class EjercicioController {
           existingEjercicio.setTipo(ejercicioDetails.getTipo());
           existingEjercicio.setValoracion(ejercicioDetails.getValoracion());
           existingEjercicio.setGrupoMuscular(ejercicioDetails.getGrupoMuscular());
-          existingEjercicio.setRutinaID(ejercicioDetails.getRutinaID());
+          existingEjercicio.setUserID(ejercicioDetails.getUserID());
           existingEjercicio.setVideo(ejercicioDetails.getVideo());
 
 
@@ -65,15 +67,6 @@ public class EjercicioController {
   }
 
   // Métodos personalizados:
-
-  @GetMapping("/rutina/{rutinaID}")
-  public ResponseEntity<?> findExercisesByRutinaID(@PathVariable Integer rutinaID) {
-    List<Ejercicio> ejercicios = ejercicioRepository.findByRutinaID(rutinaID);
-    if (ejercicios.isEmpty()) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(ejercicios);
-  }
 
   @GetMapping("/name/{ejercicioID}")
   public ResponseEntity<?> findExercisesByExerciseID(@PathVariable String ejercicioID) {
@@ -99,4 +92,85 @@ public class EjercicioController {
     return ResponseEntity.ok(ejercicios);
   }
 
+  @GetMapping("/user/{userID}")
+  public ResponseEntity<?> findExercisesByUserID(@PathVariable Integer userID) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByUserID(userID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
+
+  @GetMapping("/user/{userID}/muscle/{selectedMuscle}")
+  public ResponseEntity<?> findExercisesByUserIDAndMuscles(@PathVariable Integer userID, @PathVariable String selectedMuscle) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByUserIDAndGrupoMuscular(userID, selectedMuscle);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(ejercicios);
+  }
+
+  @GetMapping("/getEjercicioID")
+  public ResponseEntity<?> getEjercicioByNomAndRutinaId(@RequestParam String nom, @RequestParam Integer rutinaID) {
+    Optional<Ejercicio> ejercicio = ejercicioRepository.findByNombreAndRutinaID(nom, rutinaID);
+    return ejercicio.map(e -> ResponseEntity.ok(Collections.singletonMap("ejercicioID", e.getEjercicioID())))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+  @GetMapping("/rutina/{rutinaID}")
+  public ResponseEntity<List<Ejercicio>> getEjerciciosByRutinaId(@PathVariable Integer rutinaID) {
+    List<Ejercicio> ejercicios = ejercicioRepository.findByRutinaID(rutinaID);
+    if (ejercicios.isEmpty()) {
+      return ResponseEntity.noContent().build();
+    } else {
+      return ResponseEntity.ok(ejercicios);
+    }
+  }
+
+  @GetMapping("/sugerencias/{userID}")
+  public ResponseEntity<List<Ejercicio>> getSugerencias(@PathVariable Integer userID) {
+    List<Ejercicio> ejerciciosUsuario = ejercicioRepository.findByUserID(userID);
+
+    // Contar los grupos musculares trabajados
+    Map<String, Integer> muscleGroupCount = new HashMap<>();
+    for (Ejercicio ejercicio : ejerciciosUsuario) {
+      String grupoMuscular = ejercicio.getGrupoMuscular();
+      muscleGroupCount.put(grupoMuscular, muscleGroupCount.getOrDefault(grupoMuscular, 0) + 1);
+    }
+
+    // Obtener todos los grupos musculares posibles
+    List<String> allMuscleGroups = Arrays.asList("Pecho", "Espalda", "Piernas", "Todo el cuerpo");
+
+    // Filtrar los grupos musculares menos trabajados
+    List<String> leastWorkedMuscleGroups = new ArrayList<>();
+    for (String muscleGroup : allMuscleGroups) {
+      if (!muscleGroupCount.containsKey(muscleGroup)) {
+        leastWorkedMuscleGroups.add(muscleGroup);
+      }
+    }
+
+    // Si todos los grupos musculares han sido trabajados, seleccionar los menos trabajados
+    if (leastWorkedMuscleGroups.isEmpty()) {
+      List<Map.Entry<String, Integer>> sortedMuscleGroups = new ArrayList<>(muscleGroupCount.entrySet());
+      sortedMuscleGroups.sort(Map.Entry.comparingByValue());
+      for (Map.Entry<String, Integer> entry : sortedMuscleGroups) {
+        leastWorkedMuscleGroups.add(entry.getKey());
+        if (leastWorkedMuscleGroups.size() >= 3) break; // Limitar a los 3 menos trabajados
+      }
+    }
+
+    // Obtener los ejercicios sugeridos para los grupos musculares menos trabajados
+    List<Ejercicio> sugerencias = new ArrayList<>();
+    for (String muscleGroup : leastWorkedMuscleGroups) {
+      List<Ejercicio> ejerciciosSugeridos = ejercicioRepository.findByGrupoMuscular(muscleGroup);
+      for (Ejercicio ejercicio : ejerciciosSugeridos) {
+        if (!ejerciciosUsuario.contains(ejercicio)) {
+          sugerencias.add(ejercicio);
+        }
+        if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
+      }
+      if (sugerencias.size() >= 5) break; // Limitar a 5 sugerencias
+    }
+
+    return ResponseEntity.ok(sugerencias);
+  }
 }
