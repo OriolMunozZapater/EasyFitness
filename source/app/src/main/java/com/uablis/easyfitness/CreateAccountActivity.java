@@ -104,6 +104,9 @@ public class CreateAccountActivity extends AppCompatActivity {
                     }
                 });
     }
+    public void testCreateAccount(final String email, String password, String confirmPassword){
+        createAccount(email,password,confirmPassword);
+    }
 
     private void insertUserIntoApi(final String email, final String password) {
         RequestQueue queue = Volley.newRequestQueue(this);

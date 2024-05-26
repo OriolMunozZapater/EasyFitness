@@ -1,5 +1,7 @@
 package com.uablis.easyfitness;
 
+import static com.google.common.base.Verify.verify;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,7 +13,14 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void testCreateAccount() {
+        CreateAccountActivity activity = new CreateAccountActivity();
+
+        activity.testCreateAccount("", "password", "confirmPassword");
+
+        // Verify showAlert is called with the expected message for empty email
+        verify(activity, times(1)).showAlert(eq("Error"), eq("All fields are required."));
+
+        // Repeat for empty password and confirm password
     }
 }
