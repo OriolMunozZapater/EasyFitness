@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Training Log"
+            android:text="Registro de entrenamiento"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@android:color/black" />
     </androidx.appcompat.widget.Toolbar>
@@ -41,13 +41,23 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/holo_blue_dark"
-            android:text="Total Hours: 00" />
+            android:text="Horas totales: 00" />
+
+        <!-- Gráfico de entrenamiento -->
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/tvTotalHours"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white" />
+
 
         <!-- ScrollView para la lista de rutinas y su tiempo -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tvTotalHours"
+            android:layout_below="@id/barChart"
             android:layout_marginTop="20dp">
 
             <!-- LinearLayout para contener los registros de las rutinas -->

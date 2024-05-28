@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MY ROUTINES"
+            android:text="MIS RUTINAS"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -59,7 +59,7 @@
                 android:layout_gravity="bottom|center"
                 android:background="@drawable/buton_background"
                 app:backgroundTint="@color/EasyFitnessColor"
-                android:text="+ Add routine"
+                android:text="+ Añadir rutina"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:onClick="menuPopUpAddRoutine"/>

@@ -66,7 +66,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="15dp"
                             android:gravity="center"
-                            android:text="Objective"
+                            android:text="Objetivo"
                             android:textColor="#A8711D"
                             android:textSize="25sp" />
 
@@ -77,7 +77,7 @@
                             android:layout_below="@id/objectiveTitle"
                             android:layout_marginTop="8dp"
                             android:gravity="center"
-                            android:text="Your Goal Weight"
+                            android:text="Tu peso objetivo"
                             android:textColor="#A8711D"
                             android:textSize="18sp" />
 
@@ -99,7 +99,7 @@
                             android:layout_below="@id/targetWeight"
                             android:layout_marginTop="16dp"
                             android:gravity="center"
-                            android:text="Current Weight"
+                            android:text="Peso actual"
                             android:textColor="#A8711D"
                             android:textSize="18sp" />
 
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center|top"
                             android:layout_marginTop="24dp"
-                            android:text="Parts mes entrenades: setmana"
+                            android:text="Músculos para entrenar"
                             android:textColor="#A8711D"
                             android:textSize="18sp" />
 

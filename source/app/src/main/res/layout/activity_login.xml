@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LOG IN"
+            android:text="Iniciar Sesión"
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:textSize="20sp"
@@ -45,7 +45,7 @@
             android:id="@+id/textLogIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log In"
+            android:text="Iniciar Sesión"
             android:textSize="20dp"
             android:textColor="#A8711D"
             android:textAlignment="center" />
@@ -68,7 +68,7 @@
             android:id="@+id/etNewPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="Contraseña"
             android:inputType="textPassword"
             android:layout_below="@id/etNewEmail"
             android:layout_marginTop="20dp"
@@ -81,7 +81,7 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="Iniciar"
             android:background="@drawable/buton_background"
             app:backgroundTint="@color/EasyFitnessColor"
             android:textColor="@color/black"
@@ -96,7 +96,7 @@
             android:layout_below="@id/btnLogin"
             android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
-            android:text="Recover Password"
+            android:text="Recuperar Contraseña"
             android:textColor="#A8711D" />
 
         <!-- Botón de Crear Cuenta -->
@@ -107,7 +107,7 @@
             android:layout_below="@id/btnRecoverPassword"
             android:layout_marginTop="5dp"
             android:background="@android:color/transparent"
-            android:text="Create Account"
+            android:text="Crear cuenta"
             android:textColor="#A8711D" />
 
     </RelativeLayout>

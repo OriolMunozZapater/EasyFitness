@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@android:color/black"
+    android:layout_marginBottom="10dp">
+
+    <Button
+        android:id="@+id/downloadButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commentInput"
+        android:layout_marginTop="8dp"
+        android:text="Ver Video"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white" />
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Escribe un comentario..."
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"/>
+
+    <Button
+        android:id="@+id/sendCommentButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/downloadButton"
+        android:layout_marginTop="8dp"
+        android:text="Enviar Comentario"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white" />
+</RelativeLayout>

@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CREATING EXERCISE"
+                android:text="CREACIÓN DE EJERCICIO"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="20sp"
@@ -48,30 +48,87 @@
                 android:orientation="vertical"
                 android:padding="32dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Selecciona uno:"
+                    android:textSize="20sp"
+                    android:textColor="@color/EasyFitnessColor"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="450dp">
 
-                    <ImageView
-                        android:id="@+id/imageExercise"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                    <LinearLayout
+                        android:id="@+id/mediaLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
                         android:layout_centerHorizontal="true"
-                        android:background="@drawable/circle_background"
-                        android:src="@drawable/ic_add_image"
-                        android:contentDescription="Exercise Image"
-                        android:scaleType="centerCrop"
-                        android:onClick="selectImageFromGallery" />
+                        android:paddingBottom="25dp">
 
-                    <!-- Aixo és nom de l'exercici-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:paddingRight="16dp">
+
+                            <ImageView
+                                android:id="@+id/imageExercise"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                android:background="@drawable/circle_background"
+                                android:src="@drawable/ic_add_image"
+                                android:contentDescription="Exercise Image"
+                                android:scaleType="centerCrop"
+                                android:onClick="selectImageFromGallery" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Foto"
+                                android:textAlignment="center"
+                                android:textColor="@color/EasyFitnessColor"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+
+                            <VideoView
+                                android:id="@+id/videoExercise"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                android:contentDescription="Exercise Video"
+                                android:onClick="selectVideoFromGallery"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vídeo"
+                                android:textAlignment="center"
+                                android:textColor="@color/EasyFitnessColor"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <EditText
                         android:id="@+id/exName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Exercise name"
-                        android:layout_below="@id/imageExercise"
-                        android:inputType="textEmailAddress"
+                        android:hint="Nombre del ejercicio"
+                        android:layout_below="@id/mediaLayout"
                         android:layout_marginTop="25dp"
+                        android:inputType="text"
                         android:textColor="@android:color/white"
                         android:textColorHint="#A8711D"
                         android:backgroundTint="#A8711D" />
@@ -81,7 +138,7 @@
                         android:id="@+id/exDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Descripcio"
+                        android:hint="Descripción"
                         android:inputType="textEmailAddress"
                         android:layout_marginTop="30dp"
                         android:textColor="@android:color/white"
@@ -101,7 +158,7 @@
                             android:id="@+id/textViewMuscle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Muscle:"
+                            android:text="Músculo:"
                             android:textSize="18sp"
                             android:textColor="@color/EasyFitnessColor"/>
 
@@ -109,16 +166,13 @@
                             android:id="@+id/btnMuscleSelect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Select Muscle"
+                            android:text="Seleccionar músculo"
                             android:layout_marginStart="8dp"
                             android:textSize="18sp"
                             android:background="@android:color/transparent"
                             android:textColor="@color/EasyFitnessColor"
                             android:onClick="showMuscleOptions"/>
                     </LinearLayout>
-
-
-
                 </RelativeLayout>
 
                 <Button
@@ -128,7 +182,7 @@
                     android:layout_gravity="bottom|center"
                     app:backgroundTint="@color/EasyFitnessColor"
                     android:background="@drawable/buton_background"
-                    android:text="Save"
+                    android:text="Guardar"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 

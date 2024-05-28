@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Training Log"
+            android:text="Registro de entrenamiento"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@android:color/black" />
     </androidx.appcompat.widget.Toolbar>
@@ -41,7 +41,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/holo_blue_dark"
-            android:text="Total Hours: 00" />
+            android:text="Horas totales: 00" />
 
         <!-- ScrollView para la lista de rutinas y su tiempo -->
         <ScrollView
