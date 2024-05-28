@@ -173,4 +173,16 @@ public class EjercicioController {
 
     return ResponseEntity.ok(sugerencias);
   }
+
+  @GetMapping("/last/{userID}")
+  public ResponseEntity<Integer> getEjercicioMasGrandeByUserId(@PathVariable Integer userID) {
+    Optional<Ejercicio> ejercicioMasGrande = ejercicioRepository.findTopByUserIDOrderByEjercicioIDDesc(userID);
+
+    if (ejercicioMasGrande.isPresent()) {
+      return ResponseEntity.ok(ejercicioMasGrande.get().getEjercicioID());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
+
 }
