@@ -20,9 +20,9 @@
         android:theme="@style/Theme.EasyFitness"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
+        <!--<activity
             android:name=".Ranking"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".ViewVideosActivity"
             android:exported="false" />
@@ -141,6 +141,18 @@
             android:exported="true" />
         <activity
             android:name=".RankingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TutoStep1Activity"
+            android:exported="true" />
+        <activity
+            android:name=".TutoStep2Activity"
+            android:exported="true" />
+        <activity
+            android:name=".TutoStep3Activity"
+            android:exported="true" />
+        <activity
+            android:name=".TutoStep4Activity"
             android:exported="true" />
     </application>
 
