@@ -37,20 +37,60 @@ public class ViewRoutinesActivity extends AppCompatActivity {
     private LinearLayout routinesContainer;
     private RequestQueue requestQueue;
     private ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_routines);
-
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
         routinesContainer = findViewById(R.id.routinesContainer);
         requestQueue = Volley.newRequestQueue(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         ImageView backArrow = findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> finish());
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewRoutinesActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewRoutinesActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ViewRoutinesActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ViewRoutinesActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loadRoutines();
     }
@@ -109,6 +149,7 @@ public class ViewRoutinesActivity extends AppCompatActivity {
 
         textViewRoutineName.setText(routineName);
         textViewUserName.setText("Autor: " + userName);
+
         TextView commentsTextView = routineView.findViewById(R.id.textViewComments);
         commentsTextView.setOnClickListener(v -> {
             Intent intent = new Intent(ViewRoutinesActivity.this, CommentsActivity.class);
@@ -118,6 +159,7 @@ public class ViewRoutinesActivity extends AppCompatActivity {
 
         routinesContainer.addView(routineView);
     }
+
 
     public void onCopyRoutineClicked(View view) {
         ViewGroup parent = (ViewGroup) view.getParent();

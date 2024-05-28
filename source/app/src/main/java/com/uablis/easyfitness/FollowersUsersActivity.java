@@ -1,5 +1,6 @@
 package com.uablis.easyfitness;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,15 +30,54 @@ public class FollowersUsersActivity extends AppCompatActivity {
     private LinearLayout usersContainer;
     private ImageView back_arrow;
     private Integer userId = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers_users);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
 
         back_arrow = findViewById(R.id.back_arrow);
 
         usersContainer = findViewById(R.id.usersContainer);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowersUsersActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowersUsersActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(FollowersUsersActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(FollowersUsersActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override

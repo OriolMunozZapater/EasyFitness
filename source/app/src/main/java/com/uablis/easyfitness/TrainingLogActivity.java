@@ -1,6 +1,7 @@
 package com.uablis.easyfitness;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,10 +19,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrainingLogActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
@@ -29,6 +40,7 @@ public class TrainingLogActivity extends AppCompatActivity {
     private TextView totalHoursTextView;
     private int totalSeconds = 0; // Total time in seconds
     private ImageView home, trainingRoutinesButton, profile, training_session;
+    private BarChart barChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,8 @@ public class TrainingLogActivity extends AppCompatActivity {
         // Initialize your Views
         routinesLayout = findViewById(R.id.llRoutineList);
         totalHoursTextView = findViewById(R.id.tvTotalHours);
+        barChart = findViewById(R.id.barChart);
+
 
         // Edge to edge UI handling
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout1), (v, insets) -> {
@@ -88,12 +102,6 @@ public class TrainingLogActivity extends AppCompatActivity {
         loadTrainingLogs();
     }
 
-    private void openMyRoutines() {
-        // Open the TrainingRoutinesActivity
-        Intent intent = new Intent(TrainingLogActivity.this, TrainingRoutinesActivity.class);
-        startActivity(intent);
-    }
-
     private void loadTrainingLogs() {
         totalSeconds = 0; // Reset the total seconds
         routinesLayout.removeAllViews(); // Clear all routine views
@@ -101,30 +109,28 @@ public class TrainingLogActivity extends AppCompatActivity {
         String path = "registros/user/" + userID;
         String url = urlBase.buildUrl(path);
 
-        // Instantiate the RequestQueue
         RequestQueue queue = Volley.newRequestQueue(this);
-
-        // Request a jsonArray response from the provided URL
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
+                        List<BarEntry> entries = new ArrayList<>();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
                                 JSONObject registro = response.getJSONObject(i);
                                 String routineName = registro.getString("nombreRutina");
                                 String timeSpent = registro.getString("tiempoTardado");
-
-                                // Parse time and accumulate total seconds
-                                totalSeconds += parseTime(timeSpent);
+                                int timeInSeconds = parseTime(timeSpent);
+                                totalSeconds += timeInSeconds;
 
                                 addRoutineView(routineName, timeSpent);
+                                entries.add(new BarEntry(i, timeInSeconds));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            // Update total hours after processing all routines
-                            updateTotalHoursView();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+                        updateTotalHoursView();
+                        loadBarChart(entries);
                     }
                 },
                 new Response.ErrorListener() {
@@ -134,8 +140,50 @@ public class TrainingLogActivity extends AppCompatActivity {
                     }
                 });
 
-        // Add the request to the RequestQueue
         queue.add(jsonArrayRequest);
+    }
+
+    private void loadBarChart(List<BarEntry> entries) {
+        BarDataSet dataSet = new BarDataSet(entries, "Tiempo de Entrenamiento");
+        dataSet.setColor(Color.BLUE);
+
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
+        barChart.getDescription().setEnabled(false);
+        barChart.animateY(500);
+        barChart.setBackgroundColor(Color.WHITE); // Establece el fondo del gráfico a blanco
+
+        // Configuración de los ejes
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(entries.size());
+        xAxis.setLabelRotationAngle(0); // Sin rotación para números
+
+        YAxis leftAxis = barChart.getAxisLeft();
+        YAxis rightAxis = barChart.getAxisRight();
+        leftAxis.setDrawGridLines(true);
+        rightAxis.setDrawGridLines(false);
+
+        // Configuración de texto para los ejes
+        leftAxis.setAxisMinimum(0f); // Empieza desde cero
+        leftAxis.setDrawLabels(true); // Muestra las etiquetas
+        xAxis.setDrawLabels(true); // Muestra las etiquetas en el eje X
+        rightAxis.setDrawLabels(false); // No muestra etiquetas en el eje derecho
+
+        // Formateador para el eje X para usar solo índices
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(getXAxisValues(entries.size())));
+
+        barChart.invalidate(); // Refresh
+    }
+
+    private List<String> getXAxisValues(int count) {
+        List<String> labels = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            labels.add("Registro " + i);
+        }
+        return labels;
     }
 
     private int parseTime(String time) {

@@ -21,6 +21,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import android.util.Log;
 import android.widget.Toast;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -36,11 +39,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CreateNewExercise extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView imageExercise, backArrow;
     private EditText etExerciseName, etExerciseDescrp;
     private Button btnMuscleSelect, btnCreate;
     private CharSequence[] muscle_options = {"Chest", "Back", "Biceps", "Triceps", "Shoulders", "Quads", "Abs", "Isquios"};
+    private ImageView home, trainingRoutinesButton, profile, training_session;
+    private Integer exerciseID;
+    private static final int PICK_VIDEO_REQUEST = 1, PICK_IMAGE_REQUEST = 2;
+    private ImageView backArrow, imageExercise;
+    private VideoView videoExercise;
 
 
     @Override
@@ -51,9 +57,48 @@ public class CreateNewExercise extends AppCompatActivity {
         btnMuscleSelect = findViewById(R.id.btnMuscleSelect);
         etExerciseDescrp = findViewById(R.id.exDesc);
         etExerciseName = findViewById(R.id.exName);
+        videoExercise = findViewById(R.id.videoExercise);
         imageExercise = findViewById(R.id.imageExercise);
         btnCreate = findViewById(R.id.btnSaveExercise);
         backArrow = findViewById(R.id.backArrow);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateNewExercise.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateNewExercise.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(CreateNewExercise.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(CreateNewExercise.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,15 +121,7 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Intent intent = new Intent(CreateNewExercise.this, ChooseExerciseActivity.class);
-                //startActivity(intent);
-
-                //afegir exercici a la bd
-
-                setNewExerciseNoVideo();
-
-                //Toast.makeText(CreateNewExercise.this, "Ejercicio creado correctamente", Toast.LENGTH_SHORT).show();
-
+                setNewExercise();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -118,26 +155,129 @@ public class CreateNewExercise extends AppCompatActivity {
         });
         builder.show();
     }
+
+    public void selectVideoFromGallery(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("video/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), PICK_VIDEO_REQUEST);
+    }
+
     public void selectImageFromGallery(View view) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_PICK);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Aquí puedes setear el bitmap en tu ImageView
-                imageExercise.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                e.printStackTrace();
+            videoExercise.setVideoURI(uri);
+            videoExercise.start();
+            btnCreate.setOnClickListener(v -> uploadMediaVideo(uri));
+        } else  if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            imageExercise.setImageURI(uri); // Set image temporarily
+            btnCreate.setOnClickListener(v -> uploadMedia(uri));
+        }
+    }
+
+    private void getNewExerciseID(Uri fileUri) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        String path = "ejercicios/last/" + userID;
+        String url = urlBase.buildUrl(path);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        exerciseID = Integer.parseInt(response);
+                        uploadImageToFirebaseStorage(fileUri);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(CreateNewExercise.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null) {
+                    Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                    Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                }
             }
+        });
+        queue.add(stringRequest);
+    }
+
+    private void getNewExerciseIDVideo(Uri fileUri) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
+        String path = "ejercicios/last/" + userID;
+        String url = urlBase.buildUrl(path);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        exerciseID = Integer.parseInt(response);
+                        uploadVideoToFirebaseStorage(fileUri);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(CreateNewExercise.this, "Error making API call: " + error.toString(), Toast.LENGTH_SHORT).show();
+                if (error.networkResponse != null) {
+                    Log.e("VolleyError", "Status Code: " + error.networkResponse.statusCode);
+                    Log.e("VolleyError", "Response Data: " + new String(error.networkResponse.data));
+                }
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+    private void uploadVideoToFirebaseStorage(Uri fileUri) {
+        if (fileUri != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("videos/exerciseID" + exerciseID);
+
+            storageReference.putFile(fileUri)
+                    .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        String videoUrl = downloadUri.toString();
+                        videoExercise.setVideoURI(Uri.parse(videoUrl)); }))
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(CreateNewExercise.this, "Error uploading video: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Firebase", "Error uploading video", e);
+                    });
+        }
+    }
+
+    private void uploadMedia(Uri fileUri) {
+        setNewExercise();
+        getNewExerciseID(fileUri);
+    }
+
+    private void uploadMediaVideo(Uri fileUri) {
+        setNewExercise();
+        getNewExerciseIDVideo(fileUri);
+    }
+
+
+    private void uploadImageToFirebaseStorage(Uri fileUri) {
+        if (fileUri != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/exerciseID" + exerciseID);
+
+            storageReference.putFile(fileUri)
+                    .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        String imageUrl = downloadUri.toString();
+                        imageExercise.setImageURI(Uri.parse(imageUrl)); }))
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(CreateNewExercise.this, "Error uploading image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Firebase", "Error uploading image", e);
+                    });
         }
     }
 
@@ -154,29 +294,7 @@ public class CreateNewExercise extends AppCompatActivity {
         builder.show();
     }
 
-    private boolean validateFields() {
-        return (etExerciseName.getText() != null &&
-                etExerciseDescrp.getText() != null && btnMuscleSelect.getText() != null ||
-                imageExercise.getDrawable() != null);
-    }
-
     private void setNewExercise() {
-        JSONObject jsonBody = new JSONObject();
-        int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
-        try {
-            jsonBody.put("userID", userID);
-            jsonBody.put("nombre", etExerciseName.getText().toString().trim());
-            jsonBody.put("descripcion", etExerciseDescrp.getText().toString().trim());
-            jsonBody.put("grupo_muscular", btnMuscleSelect.getText().toString().trim());
-            //jsonBody.put("video", imageExercise.getDrawable().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-        sendUpdateRequest(jsonBody);
-    }
-
-    private void setNewExerciseNoVideo() {
         JSONObject jsonBody = new JSONObject();
         int userID = Integer.parseInt(UsuarioActual.getInstance().getUserId());
         String nombre = etExerciseName.getText().toString().trim();

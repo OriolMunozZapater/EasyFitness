@@ -43,7 +43,7 @@ public class NewRoutineActivity extends AppCompatActivity {
 
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private ImageButton eliminateCross;
-    private ImageView home, training_routines, training, profile;
+    private ImageView home, trainingRoutinesButton, profile, training_session;
     LinearLayout exerciseContainer;
     private EditText etEditRoutineName;
     private ImageView backArrow;
@@ -61,11 +61,45 @@ public class NewRoutineActivity extends AppCompatActivity {
         backArrow = findViewById(R.id.back_arrow);
         btnAddExercise = findViewById(R.id.btnAddExercise1);
         profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
         home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
         btnSaveRoutine = findViewById(R.id.btnSaveNewRoutine);
         etEditRoutineName=findViewById(R.id.etRoutineName);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewRoutineActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewRoutineActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(NewRoutineActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(NewRoutineActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
         SharedPreferences.Editor editor = tempExerciseIDs.edit();
@@ -74,13 +108,6 @@ public class NewRoutineActivity extends AppCompatActivity {
         // Guarda los cambios
         editor.apply();
         loadExercisesID();
-
-        training_routines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToRoutines();
-            }
-        });
 
         btnSaveRoutine.setOnClickListener(new View.OnClickListener() {
             @Override

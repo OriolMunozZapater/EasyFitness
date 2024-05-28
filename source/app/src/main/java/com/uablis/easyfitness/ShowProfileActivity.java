@@ -26,6 +26,7 @@ public class ShowProfileActivity extends AppCompatActivity {
     private ImageView profileImageView, back_arrow;
     private TextView userNameTextView, userGenderTextView, userWeightTextView, userHeightTextView, userDescriptionTextView, userSocialLinksTextView;
     private Integer userId;
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,45 @@ public class ShowProfileActivity extends AppCompatActivity {
         userDescriptionTextView = findViewById(R.id.user_description);
         userSocialLinksTextView = findViewById(R.id.user_social_links);
         back_arrow = findViewById(R.id.back_arrow);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShowProfileActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShowProfileActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ShowProfileActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ShowProfileActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //TODO: arreglar vista. Se ve con el usuario con el que tienes logueado.
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override

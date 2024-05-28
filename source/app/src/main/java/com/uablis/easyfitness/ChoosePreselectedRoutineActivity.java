@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
-    private ImageView home, training_routines, training, profile, backArrow;
+    private ImageView home, trainingRoutinesButton, profile, training_session, backArrow;
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +50,45 @@ public class ChoosePreselectedRoutineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_preselected_routine);
 
         profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
         home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
         backArrow = findViewById(R.id.back_arrow);
 
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ChoosePreselectedRoutineActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override

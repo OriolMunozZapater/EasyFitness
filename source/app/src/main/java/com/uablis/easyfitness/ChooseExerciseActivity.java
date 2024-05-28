@@ -47,6 +47,7 @@ public class ChooseExerciseActivity extends AppCompatActivity {
     private List<Integer> currentExerciseIds = new ArrayList<>();
     private Integer userID=Integer.parseInt(UsuarioActual.getInstance().getUserId());
     private static final int ADD_EXERCISE_REQUEST = 1; // Constante de código de solicitud
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,45 @@ public class ChooseExerciseActivity extends AppCompatActivity {
         selectMuscle = findViewById(R.id.selectMuscle);
         backArrow = findViewById(R.id.back_arrow);
         newExercise = findViewById(R.id.btnNewExercise);
+
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChooseExerciseActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChooseExerciseActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ChooseExerciseActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ChooseExerciseActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         tempExerciseIDs = getSharedPreferences("ArrayExerciseIDs", MODE_PRIVATE);
         loadArray(); //Inicializar lista con ID de BD

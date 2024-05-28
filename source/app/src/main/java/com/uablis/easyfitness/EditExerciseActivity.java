@@ -28,10 +28,10 @@ public class EditExerciseActivity extends AppCompatActivity {
     private EditText exDesc;
     private EditText exTipo;
     private RatingBar exExerciseRatingBar;
-    private ImageView home, training_routines, training, profile;
     private Button btnAddExercise;
     private Toolbar toolbar;
     private ImageView backArrow;
+    private ImageView home, trainingRoutinesButton, profile, training_session;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,47 @@ public class EditExerciseActivity extends AppCompatActivity {
         exTipo = findViewById(R.id.exTipo);
         exExerciseRatingBar = findViewById(R.id.exExerciseRating);
         btnAddExercise = findViewById(R.id.btnSaveExeriseEdit);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
 
         toolbar = findViewById(R.id.toolbar);
         backArrow = findViewById(R.id.backArrow);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditExerciseActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditExerciseActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(EditExerciseActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(EditExerciseActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override

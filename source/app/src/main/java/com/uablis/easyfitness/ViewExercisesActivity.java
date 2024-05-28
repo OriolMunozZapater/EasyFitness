@@ -36,7 +36,7 @@ import java.util.function.Consumer;
 public class ViewExercisesActivity extends AppCompatActivity {
     private LinearLayout exercisesContainer;
     private RequestQueue requestQueue;
-    private ImageView home, training_routines, training, profile;
+    private ImageView home, trainingRoutinesButton, profile, training_session;
     private ApiUrlBuilder urlBase = new ApiUrlBuilder();
     private ImageView backArrow;
     List<String> NameList = new ArrayList<>();
@@ -49,11 +49,44 @@ public class ViewExercisesActivity extends AppCompatActivity {
 
         backArrow = findViewById(R.id.back_arrow);
         profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
         home = findViewById(R.id.home);
-        training_routines = findViewById(R.id.training_routines);
-        training = findViewById(R.id.training_session);
         loadInfoEjercicios();
 
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewExercisesActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewExercisesActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(ViewExercisesActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(ViewExercisesActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,9 +147,12 @@ public class ViewExercisesActivity extends AppCompatActivity {
                         for (int i = 0; i < exerciseUserID.size(); i++) {
                             final int index = i;
                             loadUserIDNames(exerciseUserID.get(i), name -> {
-                                combinedNames.set(index, exerciseNameList.get(index) + " por " + name);
-                                if (counter.decrementAndGet() == 0) {
-                                    updateUIWithExercises(combinedNames.toArray(new String[0]), exerciseIDList.toArray(new Integer[0]));
+                                if (name != null && !name.isEmpty())
+                                {
+                                    combinedNames.set(index, exerciseNameList.get(index) + " por " + name);
+                                    if (counter.decrementAndGet() == 0) {
+                                        updateUIWithExercises(combinedNames.toArray(new String[0]), exerciseIDList.toArray(new Integer[0]));
+                                    }
                                 }
                             });
                         }

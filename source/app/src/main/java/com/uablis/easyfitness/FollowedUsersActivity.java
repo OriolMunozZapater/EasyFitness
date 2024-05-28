@@ -17,15 +17,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.time.Instant;
 
 public class FollowedUsersActivity extends AppCompatActivity {
 
     private static final String TAG = "FollowedUsersActivity";
 
-    private ImageView homeButton, trainingRoutinesButton, trainingSessionButton, profileButton, back_arrow;
+    private ImageView home, trainingRoutinesButton, profile, training_session, back_arrow;
     private LinearLayout usersContainer;
     private Integer userId = Integer.parseInt(UsuarioActual.getInstance().getUserId());
 
@@ -35,17 +43,35 @@ public class FollowedUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_followed_users);
 
         back_arrow = findViewById(R.id.back_arrow);
-        homeButton = findViewById(R.id.home);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
         trainingRoutinesButton = findViewById(R.id.training_routines);
-        trainingSessionButton = findViewById(R.id.training_session);
-        profileButton = findViewById(R.id.profile);
+        home = findViewById(R.id.home);
         usersContainer = findViewById(R.id.usersContainer);
 
         // Configurar los listeners de clic para los botones
-        homeButton.setOnClickListener(new View.OnClickListener() {
+        profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lógica para el botón de inicio
+                Intent intent = new Intent(FollowedUsersActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowedUsersActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(FollowedUsersActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -53,20 +79,8 @@ public class FollowedUsersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Lógica para el botón de rutinas de entrenamiento
-            }
-        });
-
-        trainingSessionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para el botón de sesión de entrenamiento
-            }
-        });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para el botón de perfil
+                Intent intent = new Intent(FollowedUsersActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -95,36 +109,40 @@ public class FollowedUsersActivity extends AppCompatActivity {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject userObject = response.getJSONObject(i);
                                 String userName = userObject.getString("nombre") + " " + userObject.getString("apellido");
-                                String userProfileImage = userObject.getString("foto"); // Assuming the photo URL is provided
+                                String userProfileImage = userObject.getString("foto");
                                 int followedId = userObject.getInt("userID");
 
-                                // Log the followedId
-                                Log.d(TAG, "Followed userID: " + followedId);
-
-                                // Inflar el layout row_user_followed.xml
                                 LayoutInflater inflater = LayoutInflater.from(FollowedUsersActivity.this);
                                 View rowView = inflater.inflate(R.layout.row_user_followed, usersContainer, false);
 
-                                // Rellenar los datos del usuario
                                 TextView userNameTextView = rowView.findViewById(R.id.userName);
                                 userNameTextView.setText(userName);
 
-                                ImageView profileImageView = rowView.findViewById(R.id.profile_image);
-                                // Load the user profile image (assume a method loadImage is available)
-                                loadImage(userProfileImage, profileImageView);
-
                                 Button viewProfileButton = rowView.findViewById(R.id.view_profile_button);
+                                Button viewVideosButton = rowView.findViewById(R.id.view_videos_button);
+
                                 viewProfileButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         Intent intent = new Intent(FollowedUsersActivity.this, ShowProfileActivity.class);
                                         intent.putExtra("userID", followedId);
-                                        Log.d(TAG, "Passing userID: " + followedId + " to ShowProfileActivity");
                                         startActivity(intent);
                                     }
                                 });
 
-                                // Añadir la vista inflada al contenedor
+                                viewVideosButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(FollowedUsersActivity.this, ViewVideosActivity.class);
+                                        intent.putExtra("userID", followedId);
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                ImageView profileImageView = rowView.findViewById(R.id.profile_image);
+                                String stringID = followedId + "";
+
+                                loadImage(stringID, profileImageView);
                                 usersContainer.addView(rowView);
                             }
                         } catch (JSONException e) {
@@ -142,9 +160,17 @@ public class FollowedUsersActivity extends AppCompatActivity {
         queue.add(jsonArrayRequest);
     }
 
-    private void loadImage(String url, ImageView imageView) {
-        // Implement image loading logic here (e.g., using Glide or Picasso)
-        // Example with Glide:
-        // Glide.with(this).load(url).into(imageView);
+    private void loadImage(String userId, ImageView imageView) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("images/" + "userID" + userId);
+
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Glide.with(this)
+                    .load(uri)
+                    .placeholder(R.drawable.default_image)
+                    .into(imageView);
+        }).addOnFailureListener(e -> {
+            imageView.setImageResource(R.drawable.default_image);
+        });
     }
+
 }

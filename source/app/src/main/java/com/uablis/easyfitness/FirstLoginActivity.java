@@ -138,9 +138,8 @@ public class FirstLoginActivity extends AppCompatActivity {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, jsonBody,
                 response -> {
                     Toast.makeText(FirstLoginActivity.this, "User and Objective updated successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(FirstLoginActivity.this, TrainingRoutinesActivity.class);
+                    Intent intent = new Intent(FirstLoginActivity.this, TutoStep1Activity.class);
                     startActivity(intent);
-                    finish();
                 },
                 error -> {
                     Log.e("API Error", "Error: " + error.toString());

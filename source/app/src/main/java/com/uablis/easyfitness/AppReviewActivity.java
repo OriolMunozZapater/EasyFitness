@@ -33,6 +33,7 @@ public class AppReviewActivity extends AppCompatActivity {
     private ImageView backArrow;
     private Toolbar toolbar;
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,44 @@ public class AppReviewActivity extends AppCompatActivity {
         btnEnviarReview = findViewById(R.id.btnEnviarReview);
         toolbar = findViewById(R.id.toolbar);
         backArrow = findViewById(R.id.back_arrow);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppReviewActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppReviewActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(AppReviewActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(AppReviewActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnEnviarReview.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package com.uablis.easyfitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,14 +25,53 @@ import java.util.Map;
 
 public class RecommendedActivitiesActivity extends AppCompatActivity {
     ApiUrlBuilder urlBase = new ApiUrlBuilder();
+    private ImageView home, trainingRoutinesButton, profile, training_session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_activities);
+        profile = findViewById(R.id.profile);
+        training_session = findViewById(R.id.training_session);
+        trainingRoutinesButton = findViewById(R.id.training_routines);
+        home = findViewById(R.id.home);
 
         int userID = UsuarioActual.getInstance().getUserIdAsInteger();
         obtenerRegistrosUser(userID);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecommendedActivitiesActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        training_session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecommendedActivitiesActivity.this, TrainingLogActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de seguir usuarios
+                Intent intent = new Intent(RecommendedActivitiesActivity.this, MainNetworkActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        trainingRoutinesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lógica para el botón de rutinas de entrenamiento
+                Intent intent = new Intent(RecommendedActivitiesActivity.this, TrainingRoutinesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Configurar el botón de regreso
         ImageView backArrow = findViewById(R.id.back_arrow);
